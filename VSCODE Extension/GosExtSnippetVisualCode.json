@@ -1,0 +1,2034 @@
+{
+    "Menu_":{
+        "body":"MenuElement({})",
+        "prefix":"MenuElement",
+        "description":"(MenuElement({}))--initial call; returns instance",
+        "scope":"source.lua"
+    },
+    "Menu_Menu":{
+        "body":"MenuElement({type = MENU, id = \"${1:id}\", name = \"${2:nameOnMenu}\"${3:, leftIcon = \"${4:url}\"}})",
+        "prefix":"Menu_Menu",
+        "description":"(MenuElement({type == MENU,...}))",
+        "scope":"source.lua"
+    },
+    "Menu_Boolean":{
+        "body":"MenuElement({id = \"${1:id}\", name = \"${2:nameOnMenu}\", value = ${3:true}${4:, callback = function(v) $5 end}})",
+        "prefix":"Menu_Boolean",
+        "description":"(MenuElement({...}))",
+        "scope":"source.lua"
+    },
+    "Menu_Slider":{
+        "body":"MenuElement({id = \"${1:id}\", name = \"${2:nameOnMenu}\", value = ${3:3}, min = ${4:1}, max = ${5:5}, step = ${6:1}${7:, callback = function(v) $8 end}})",
+        "prefix":"Menu_Slider",
+        "description":"(MenuElement({...}))",
+        "scope":"source.lua"
+    },
+    "Menu_DropDown":{
+        "body":"MenuElement({id = \"${1:id}\", name = \"${2:nameOnMenu}\", value = ${3:dropTable_index}, drop = ${4:{\\}}${5:, callback = function(v) $6 end}})",
+        "prefix":"Menu_DropDown",
+        "description":"(MenuElement({...}))",
+        "scope":"source.lua"
+    },
+    "Menu_Key":{
+        "body":"MenuElement({id = \"${1:id}\", name = \"${2:nameOnMenu}\", key = ${3:number}, value = ${4:togge?[true/false]${5:, callback = function(v) $6 end}})",
+        "prefix":"Menu_Key",
+        "description":"(MenuElement({...}))",
+        "scope":"source.lua"
+    },
+    "Menu_Color":{
+        "body":"MenuElement({id = \"${1:id}\", name = \"${2:nameOnMenu}\", color = Draw.Color(${3:alphaColor}, ${4:redColor}, ${5:greenColor}, ${6:blueColor})})",
+        "prefix":"Menu_Color",
+        "description":"(MenuElement({...}))",
+        "scope":"source.lua"
+    },
+    "Menu_Empty":{
+        "body":"MenuElement({type = SPACE, name = \"$1\"})",
+        "prefix":"Menu_Empty",
+        "description":"(MenuElement({...}))",
+        "scope":"source.lua"
+    },
+    "Vector(...)":{
+        "body":"Vector(${1:x}, ${2:y}, ${3:z})",
+        "prefix":"Vector",
+        "description":"((Vector(x, y ,z))/(Vector(GameObject.OnScreen))--For 2D vectors",
+        "scope":"source.lua"
+    },
+    "ToScreen()":{
+        "body":"ToScreen()",
+        "prefix":"ToScreen",
+        "description":"(Vector3D:ToScreen())--fct, returns screenpos from 3d Vector, alias To2D()",
+        "scope":"source.lua"
+    },
+    "To2D()":{
+        "body":"To2D()",
+        "prefix":"To2D",
+        "description":"(Vector3D:To2D())--fct, returns screenpos from 3d Vector, alias ToScreen()",
+        "scope":"source.lua"
+    },
+    "ToMM()":{
+        "body":"ToMM()",
+        "prefix":"ToMM",
+        "description":"(Vector3D:ToMM())--fct, returns minimap position from 3d Vector",
+        "scope":"source.lua"
+    },
+    "Clone()":{
+        "body":"Clone()",
+        "prefix":"Clone",
+        "description":"(Vector:Clone())--fct, returns a new vector",
+        "scope":"source.lua"
+    },
+    "Unpack()":{
+        "body":"Unpack()",
+        "prefix":"Unpack",
+        "description":"(Vector:Unpack())--fct, returns x, y, z",
+        "scope":"source.lua"
+    },
+    "DistanceTo()":{
+        "body":"DistanceTo($1)",
+        "prefix":"DistanceTo",
+        "description":"(Vector:DistanceTo(newVec/nil))--fct, returns distance to newVec or myHero",
+        "scope":"source.lua"
+    },
+    "Len()":{
+        "body":"Len()",
+        "prefix":"Len",
+        "description":"(Vector:Len())--fct, returns length",
+        "scope":"source.lua"
+    },
+    "Len2()":{
+        "body":"Len2()",
+        "prefix":"Len2",
+        "description":"(Vector:Len2())--fct, returns squared length",
+        "scope":"source.lua"
+    },
+    "Normalize()":{
+        "body":"Normalize()",
+        "prefix":"Normalize",
+        "description":"(Vector:Normalize())--fct, normalizes current vec(not return)",
+        "scope":"source.lua"
+    },
+    "Normalized()":{
+        "body":"Normalized()",
+        "prefix":"Normalized",
+        "description":"(Vector:Normalize())--fct, creates newVec, normalizes and returns it",
+        "scope":"source.lua"
+    },
+    "Center(Vector)":{
+        "body":"Center($1)",
+        "prefix":"Center",
+        "description":"(Vector:Center(vector2))--fct, center between 2 vectors",
+        "scope":"source.lua"
+    },  
+    "CenCrossProductter(Vector)":{
+        "body":"CrossProduct($1)",
+        "prefix":"CrossProduct",
+        "description":"(Vector:CrossProduct(vector2))--fct, cross product of 2 vectors (alias: CrossP)",
+        "scope":"source.lua"
+    },
+    "CrossP(Vector)":{
+        "body":"CrossP($1)",
+        "prefix":"CrossP",
+        "description":"(Vector:CrossP(vector2))--fct, cross product of 2 vectors (alias: CenCrossProductter)",
+        "scope":"source.lua"
+    },   
+    "DotProduct(Vector)":{
+        "body":"DotProduct($1)",
+        "prefix":"DotProduct",
+        "description":"(Vector:DotProduct(vector2))--fct, dot product of 2 vectors (alias: DotP)",
+        "scope":"source.lua"
+    },
+    "DotP(Vector)":{
+        "body":"DotP($1)",
+        "prefix":"DotP",
+        "description":"(Vector:DotP(vector2))--fct, dot product of 2 vectors (alias: DotProduct)",
+        "scope":"source.lua"
+    },
+    "ProjectOn(Vector)":{
+        "body":"ProjectOn($1)",
+        "prefix":"ProjectOn",
+        "description":"(Vector:ProjectOn(vector2))--fct, projects a vector on a vector",
+        "scope":"source.lua"
+    },
+    "MirrorOn(Vector)":{
+        "body":"MirrorOn($1)",
+        "prefix":"MirrorOn",
+        "description":"(Vector:MirrorOn(vector2))--fct, mirrors a vector on a vector",
+        "scope":"source.lua"
+    },
+    "Sin(Vector)":{
+        "body":"Sin($1)",
+        "prefix":"Sin",
+        "description":"(Vector:Sin(vector2))--fct, sin of 2 vector",
+        "scope":"source.lua"
+    },
+    "Cos(Vector)":{
+        "body":"Cos($1)",
+        "prefix":"Cos",
+        "description":"(Vector:Cos(vector2))--fct, Cos of 2 vector",
+        "scope":"source.lua"
+    },
+    "Angle(Vector)":{
+        "body":"Angle($1)",
+        "prefix":"Angle",
+        "description":"(Vector:Angle(vector2))--fct, calculates angle between 2 vectors",
+        "scope":"source.lua"
+    },
+    "AffineArea(Vector)":{
+        "body":"AffineArea($1)",
+        "prefix":"AffineArea",
+        "description":"(Vector:AffineArea(vector2))--fct, calculates area between 2 vectors",
+        "scope":"source.lua"
+    },
+    "TriangleArea(Vector)":{
+        "body":"TriangleArea($1)",
+        "prefix":"TriangleArea",
+        "description":"(Vector:TriangleArea(vector2))--fct, calculates triangular area between 2 vectors",
+        "scope":"source.lua"
+    },
+    "RotateX(phi)":{
+        "body":"RotateX($1)",
+        "prefix":"RotateX",
+        "description":"(Vector:RotateX(phi))--fct, rotates vector by phi around x axis",
+        "scope":"source.lua"
+    },
+    "RotateY(phi)":{
+        "body":"RotateY($1)",
+        "prefix":"RotateY",
+        "description":"(Vector:RotateY(phi))--fct, rotates vector by phi around y axis",
+        "scope":"source.lua"
+    },
+    "RotateZ(phi)":{
+        "body":"RotateZ($1)",
+        "prefix":"RotateZ",
+        "description":"(Vector:RotateZ(phi))--fct,rotates vector by phi around z axis",
+        "scope":"source.lua"
+    },
+    "Rotate(phiX, phiY, phiZ)":{
+        "body":"Rotate($1)",
+        "prefix":"Rotate",
+        "description":"(Vector:Rotate(phiX, phiY, phiZ))--fct,rotates currentVec (not return)",
+        "scope":"source.lua"
+    },
+    "Rotated(phiX, phiY, phiZ)":{
+        "body":"Rotated($1)",
+        "prefix":"Rotated",
+        "description":"(Vector:Rotated(phiX, phiY, phiZ))--fct,creates newVec, rotates and returns it",
+        "scope":"source.lua"
+    },
+    "Polar()":{
+        "body":"Polar()",
+        "prefix":"Polar",
+        "description":"(Vector:Polar())--fct, returns polar value",
+        "scope":"source.lua"
+    },
+    "AngleBetween(Vector, Vector)":{
+        "body":"AngleBetween(${3:vector2}, ${4:vector3})",
+        "prefix":"AngleBetween",
+        "description":"(Vector:AngleBetween(vector2, vector3))--fct,returns the angle formed from a vector to both input vectors",
+        "scope":"source.lua"
+    },
+    "Compare(Vector)":{
+        "body":"Compare($1)",
+        "prefix":"Compare",
+        "description":"(Vector:Compare(vector2))--fct,compares both vectors, returns difference",
+        "scope":"source.lua"
+    },
+    "Perpendicular()":{
+        "body":"Perpendicular()",
+        "prefix":"Perpendicular",
+        "description":"(Vector:Perpendicular())--fct,creates a new vector that is rotated 90° right",
+        "scope":"source.lua"
+    },  
+    "Perpendicular2()":{
+        "body":"Perpendicular2()",
+        "prefix":"Perpendicular2",
+        "description":"(Vector:Perpendicular2())--fct,creates a new vector that is rotated 90° left",
+        "scope":"source.lua"
+    }, 
+    "Extend(Vector, distance)":{
+        "body":"Extend(${1:vec2}, ${2:distance})",
+        "prefix":"Extend",
+        "description":"(Vector:Extend(vec2, distance))--extends a vector towards a vector (not return)",
+        "scope":"source.lua"
+    },
+    "Extended(Vector, distance)":{
+        "body":"Extended(${1:vec2}, ${2:distance})",
+        "prefix":"Extended",
+        "description":"(Vector:Extended(vec2, distance))--create newVec, extends and returns it",
+        "scope":"source.lua"
+    },
+    "Shorten(Vector, distance)":{
+        "body":"Shorten(${1:vec2}, ${2:distance})",
+        "prefix":"Shorten",
+        "description":"(Vector:Shorten(vec2, distance))--shortens a vector towards a vector",
+        "scope":"source.lua"
+    },
+    "Shortened(Vector, distance)":{
+        "body":"Shortened(${1:vec2}, ${2:distance})",
+        "prefix":"Shortened",
+        "description":"(Vector:Shortened(vec2, distance))--creates newVec, shortens and returns it",
+        "scope":"source.lua"
+    },
+    "Lerp(Vector, delta)":{
+        "body":"Lerp(${1:vec2}, ${2:delta})",
+        "prefix":"Lerp",
+        "description":"(Vector:Lerp(vec2, delta))--creates a new vector, lerps it towards vector by delta",
+        "scope":"source.lua"
+    },
+    "Sprite(path)":{
+        "body":"Sprite(${1:path})",
+        "prefix":"Lerp",
+        "description":"(Sprite(path))--overloads:Sprite(path, scale)/Sprite(path, scaleX, scaleY)",
+        "scope":"source.lua"
+    },
+    "SpriteDraw()":{
+        "body":"Draw()",
+        "prefix":"Draw",
+        "description":"(Sprite:Draw())--draws the sprite at Sprite.pos",
+        "scope":"source.lua"
+    },
+    "SpriteSetScale(scale)":{
+        "body":"SetScale(${1:scale})",
+        "prefix":"SetScale",
+        "description":"(Sprite:SetScale(scale))--sets a sprite's scale",
+        "scope":"source.lua"
+    },
+    "SpriteSetPos(Vector2D)":{
+        "body":"SetPos(${1:vector2D})",
+        "prefix":"SetPos",
+        "description":"(Sprite:SetPos(vector2D))--sets a sprite's scale",
+        "scope":"source.lua"
+    },
+    "SpriteSetColor(Color)":{
+        "body":"SetColor(${1:Color})",
+        "prefix":"SetColor",
+        "description":"(Sprite:SetColor(Color))--sets a sprite's color",
+        "scope":"source.lua"
+    },
+    "networkID":{
+        "body":"networkID",
+        "prefix":"networkID",
+        "description":"(GameObject.networkID)",
+        "scope":"source.lua"
+    },
+    "handle":{
+        "body":"handle ",
+        "prefix":"handle ",
+        "description":"(GameObject.handle)--Use for Missile owner/target check ",
+        "scope":"source.lua"
+    },
+    "chnd":{
+        "body":"chnd",
+        "prefix":"chnd",
+        "description":"(GameObject.chnd)--Camp handle",
+        "scope":"source.lua"
+    },
+    "buffCount":{
+        "body":"buffCount",
+        "prefix":"buffCount",
+        "description":"(GameObject.buffCount)",
+        "scope":"source.lua"
+    },
+    "isMe":{
+        "body":"isMe",
+        "prefix":"isMe",
+        "description":"(GameObject.isMe)",
+        "scope":"source.lua"
+    },
+    "isAlly":{
+        "body":"isAlly",
+        "prefix":"isAlly",
+        "description":"(GameObject.isAlly)",
+        "scope":"source.lua"
+    },
+    "isEnemy":{
+        "body":"isEnemy",
+        "prefix":"isEnemy",
+        "description":"(GameObject.isEnemy)",
+        "scope":"source.lua"
+    },
+    "team":{
+        "body":"team",
+        "prefix":"team",
+        "description":"(GameObject.team)--100==blue,200==red,300==jungle",
+        "scope":"source.lua"
+    },
+    "owner":{
+        "body":"owner",
+        "prefix":"owner",
+        "description":"(GameObject.owner)",
+        "scope":"source.lua"
+    },
+    "targetID":{
+        "body":"targetID",
+        "prefix":"targetID",
+        "description":"(GameObject.targetID)--TurrentTarget",
+        "scope":"source.lua"
+    },
+    "type":{
+        "body":"type",
+        "prefix":"type",
+        "description":"(GameObject.type)--string",
+        "scope":"source.lua"
+    },
+    "name":{
+        "body":"name",
+        "prefix":"name",
+        "description":"(GameObject.name)--string",
+        "scope":"source.lua"
+    },
+    "charName":{
+        "body":"charName",
+        "prefix":"charName",
+        "description":"(GameObject.charName)",
+        "scope":"source.lua"
+    },
+    "health":{
+        "body":"health",
+        "prefix":"health",
+        "description":"(GameObject.health)",
+        "scope":"source.lua"
+    },
+    "maxHealth":{
+        "body":"maxHealth",
+        "prefix":"maxHealth",
+        "description":"(GameObject.maxHealth)",
+        "scope":"source.lua"
+    },
+    "mana":{
+        "body":"mana",
+        "prefix":"mana",
+        "description":"(GameObject.mana)",
+        "scope":"source.lua"
+    },
+    "maxMana":{
+        "body":"maxMana",
+        "prefix":"maxMana",
+        "description":"(GameObject.maxMana)",
+        "scope":"source.lua"
+    },
+    "hudAmmo":{
+        "body":"hudAmmo",
+        "prefix":"hudAmmo",
+        "description":"(GameObject.hudAmmo)",
+        "scope":"source.lua"
+    },
+    "hudMaxAmmo":{
+        "body":"hudMaxAmmo",
+        "prefix":"hudMaxAmmo",
+        "description":"(GameObject.hudMaxAmmo)--used for Jhin/Graves bullets or Annie stun or even Kled mount health",
+        "scope":"source.lua"
+    },    
+    "shieldAD":{
+        "body":"shieldAD",
+        "prefix":"shieldAD",
+        "description":"(GameObject.shieldAD)",
+        "scope":"source.lua"
+    },
+    "shieldAP":{
+        "body":"shieldAP",
+        "prefix":"shieldAP",
+        "description":"(GameObject.shieldAP)",
+        "scope":"source.lua"
+    },
+    "cdr":{
+        "body":"cdr",
+        "prefix":"cdr",
+        "description":"(GameObject.cdr)",
+        "scope":"source.lua"
+    },
+    "armorPen":{
+        "body":"armorPen",
+        "prefix":"armorPen",
+        "description":"(GameObject.armorPen)",
+        "scope":"source.lua"
+    },
+    "armorPenPercent":{
+        "body":"armorPenPercent",
+        "prefix":"armorPenPercent",
+        "description":"(GameObject.armorPenPercent)",
+        "scope":"source.lua"
+    },
+    "bonusArmorPenPercent":{
+        "body":"bonusArmorPenPercent",
+        "prefix":"bonusArmorPenPercent",
+        "description":"(GameObject.bonusArmorPenPercent)",
+        "scope":"source.lua"
+    },
+    "magicPen":{
+        "body":"magicPen",
+        "prefix":"magicPen",
+        "description":"(GameObject.magicPen)",
+        "scope":"source.lua"
+    },
+    "magicPenPercent":{
+        "body":"magicPenPercent",
+        "prefix":"magicPenPercent",
+        "description":"(GameObject.magicPenPercent)",
+        "scope":"source.lua"
+    },
+    "baseDamage":{
+        "body":"baseDamage",
+        "prefix":"baseDamage",
+        "description":"(GameObject.baseDamage)--base adDmg",
+        "scope":"source.lua"
+    },
+    "bonusDamage":{
+        "body":"bonusDamage",
+        "prefix":"bonusDamage",
+        "description":"(GameObject.bonusDamage)--bonus adDmg",
+        "scope":"source.lua"
+    },
+    "totalDamage":{
+        "body":"totalDamage",
+        "prefix":"totalDamage",
+        "description":"(GameObject.totalDamage)--base+bonus adDmg",
+        "scope":"source.lua"
+    },
+    "ap":{
+        "body":"ap",
+        "prefix":"ap",
+        "description":"(GameObject.ap)--apDmg",
+        "scope":"source.lua"
+    },
+    "lifeSteal":{
+        "body":"lifeSteal",
+        "prefix":"lifeSteal",
+        "description":"(GameObject.lifeSteal)",
+        "scope":"source.lua"
+    },
+    "spellVamp":{
+        "body":"spellVamp",
+        "prefix":"spellVamp",
+        "description":"(GameObject.spellVamp)",
+        "scope":"source.lua"
+    },
+    "attackSpeed":{
+        "body":"attackSpeed",
+        "prefix":"attackSpeed",
+        "description":"(GameObject.attackSpeed)",
+        "scope":"source.lua"
+    },
+    "critChance":{
+        "body":"critChance",
+        "prefix":"critChance",
+        "description":"(GameObject.critChance)",
+        "scope":"source.lua"
+    },
+    "armor":{
+        "body":"armor",
+        "prefix":"armor",
+        "description":"(GameObject.armor)",
+        "scope":"source.lua"
+    },
+    "bonusArmor":{
+        "body":"bonusArmor",
+        "prefix":"bonusArmor",
+        "description":"(GameObject.bonusArmor)",
+        "scope":"source.lua"
+    },
+    "magicResistap":{
+        "body":"magicResist",
+        "prefix":"magicResist",
+        "description":"(GameObject.magicResist)",
+        "scope":"source.lua"
+    },
+    "bonusMagicResist":{
+        "body":"bonusMagicResist",
+        "prefix":"bonusMagicResist",
+        "description":"(GameObject.bonusMagicResist)",
+        "scope":"source.lua"
+    },
+    "hpRegen":{
+        "body":"hpRegen",
+        "prefix":"hpRegen",
+        "description":"(GameObject.hpRegen)",
+        "scope":"source.lua"
+    },
+    "mpRegen":{
+        "body":"mpRegen",
+        "prefix":"mpRegen",
+        "description":"(GameObject.mpRegen)",
+        "scope":"source.lua"
+    },
+    "ms":{
+        "body":"ms",
+        "prefix":"ms",
+        "description":"(GameObject.ms)",
+        "scope":"source.lua"
+    },
+    "range":{
+        "body":"range",
+        "prefix":"range",
+        "description":"(GameObject.range)",
+        "scope":"source.lua"
+    },
+    "boundingRadius":{
+        "body":"boundingRadius",
+        "prefix":"boundingRadius",
+        "description":"(GameObject.boundingRadius)--GetHitBox",
+        "scope":"source.lua"
+    },
+    "gold":{
+        "body":"gold",
+        "prefix":"gold",
+        "description":"(GameObject.gold)",
+        "scope":"source.lua"
+    },
+    "totalGold":{
+        "body":"totalGold",
+        "prefix":"totalGold",
+        "description":"(GameObject.totalGold)",
+        "scope":"source.lua"
+    },
+    "dead":{
+        "body":"dead",
+        "prefix":"dead",
+        "description":"(GameObject.gold)",
+        "scope":"source.lua"
+    },
+    "visible":{
+        "body":"visible",
+        "prefix":"visiblegold",
+        "description":"(GameObject.visible)",
+        "scope":"source.lua"
+    },
+    "isImmortal":{
+        "body":"isImmortal",
+        "prefix":"isImmortal",
+        "description":"(GameObject.isImmortal)--works for zhonya and kayle ulti ++",
+        "scope":"source.lua"
+    },
+    "isTargetable":{
+        "body":"isTargetable",
+        "prefix":"isTargetable",
+        "description":"(GameObject.isTargetable)",
+        "scope":"source.lua"
+    },
+    "isTargetableToTeam":{
+        "body":"isTargetableToTeam",
+        "prefix":"isTargetableToTeam",
+        "description":"(GameObject.isTargetableToTeam)--works for turrets",
+        "scope":"source.lua"
+    },
+    "distance":{
+        "body":"distance",
+        "prefix":"distance",
+        "description":"(GameObject.distance)--obj:DistanceTo(myHero.pos)",
+        "scope":"source.lua"
+    },
+    "pos":{
+        "body":"pos",
+        "prefix":"pos",
+        "description":"(GameObject.pos)",
+        "scope":"source.lua"
+    },
+    "posTo":{
+        "body":"posTo",
+        "prefix":"posTo",
+        "description":"(GameObject.posTo)--endPos of walking",
+        "scope":"source.lua"
+    },
+    "pos2D":{
+        "body":"pos2D",
+        "prefix":"pos2D",
+        "description":"(GameObject.pos2D)",
+        "scope":"source.lua"
+    },
+    "posMM":{
+        "body":"posMM",
+        "prefix":"posMM",
+        "description":"(GameObject.posMM)--pos Minimap",
+        "scope":"source.lua"
+    },
+    "dir":{
+        "body":"dir",
+        "prefix":"dir",
+        "description":"(GameObject.dir)--GetDirection(obj)",
+        "scope":"source.lua"
+    },
+    "isCampUp":{
+        "body":"isCampUp",
+        "prefix":"isCampUp",
+        "description":"(GameObject.isCampUp)--for jungle camps only",
+        "scope":"source.lua"
+    },
+    "valid":{
+        "body":"valid",
+        "prefix":"valid",
+        "description":"(unit.valid) -- for units only",
+        "scope":"source.lua"
+    },
+    "attackData":{
+        "body":"attackData",
+        "prefix":"attackData",
+        "description":"(unit.attackData)--for units only",
+        "scope":"source.lua"
+    },
+    "state":{
+        "body":"state",
+        "prefix":"state",
+        "description":"(unit.attackData.state)--STATE_UNKNOWN, STATE_ATTACK, STATE_WINDUP, STATE_WINDDOWN",
+        "scope":"source.lua"
+    },
+    "windUpTime":{
+        "body":"windUpTime",
+        "prefix":"windUpTime",
+        "description":"(unit.attackData.windUpTime)--for units only",
+        "scope":"source.lua"
+    },
+    "windDownTime":{
+        "body":"windDownTime",
+        "prefix":"windDownTime",
+        "description":"(unit.attackData.windDownTime)--for units only",
+        "scope":"source.lua"
+    },
+    "animationTime":{
+        "body":"animationTime",
+        "prefix":"animationTime",
+        "description":"(unit.attackData.animationTime)--for units only",
+        "scope":"source.lua"
+    },
+    "endTime":{
+        "body":"endTime",
+        "prefix":"endTime",
+        "description":"(unit.attackData.endTime)--for units only",
+        "scope":"source.lua"
+    },
+    "castFrame":{
+        "body":"castFrame",
+        "prefix":"castFrame",
+        "description":"(unit.attackData.castFrame)--for units only",
+        "scope":"source.lua"
+    },
+    "projectileSpeed":{
+        "body":"projectileSpeed",
+        "prefix":"projectileSpeed",
+        "description":"(unit.attackData.projectileSpeed)--for units only",
+        "scope":"source.lua"
+    },
+    "target":{
+        "body":"target",
+        "prefix":"target",
+        "description":"(unit.attackData.target) -- GameObject handle",
+        "scope":"source.lua"
+    },
+    "levelData":{
+        "body":"levelData",
+        "prefix":"levelData",
+        "description":"(hero.levelData)--for heroes only",
+        "scope":"source.lua"
+    },
+    "exp":{
+        "body":"exp",
+        "prefix":"exp",
+        "description":"(hero.exp)--for heroes only",
+        "scope":"source.lua"
+    },
+    "lvl":{
+        "body":"lvl",
+        "prefix":"lvl",
+        "description":"(hero.lvl)--for heroes only",
+        "scope":"source.lua"
+    },
+    "lvlPts":{
+        "body":"lvlPts",
+        "prefix":"lvlPts",
+        "description":"(hero.lvlPts)--for heroes only",
+        "scope":"source.lua"
+    },
+    "activeSpell":{
+        "body":"activeSpell",
+        "prefix":"activeSpell",
+        "description":"(GameObject.activeSpell)",
+        "scope":"source.lua"
+    },
+    "level":{
+        "body":"level",
+        "prefix":"level",
+        "description":"(GameObject.activeSpell.level)",
+        "scope":"source.lua"
+    },
+    "range":{
+        "body":"range",
+        "prefix":"range",
+        "description":"(GameObject.activeSpell.range)",
+        "scope":"source.lua"
+    },
+    "width":{
+        "body":"width",
+        "prefix":"width",
+        "description":"(GameObject.activeSpell.width)",
+        "scope":"source.lua"
+    },
+    "speed":{
+        "body":"speed",
+        "prefix":"speed",
+        "description":"(GameObject.activeSpell.speed)",
+        "scope":"source.lua"
+    },
+    "coneAngle":{
+        "body":"coneAngle",
+        "prefix":"coneAngle",
+        "description":"(GameObject.activeSpell.coneAngle)",
+        "scope":"source.lua"
+    },
+    "coneDistance":{
+        "body":"coneDistance",
+        "prefix":"coneDistance",
+        "description":"(GameObject.activeSpell.coneDistance)",
+        "scope":"source.lua"
+    },
+    "acceleration":{
+        "body":"acceleration",
+        "prefix":"acceleration",
+        "description":"(GameObject.activeSpell.acceleration)",
+        "scope":"source.lua"
+    },
+    "castFrame":{
+        "body":"castFrame",
+        "prefix":"castFrame",
+        "description":"(GameObject.activeSpell.castFrame)",
+        "scope":"source.lua"
+    },
+    "maxSpeed":{
+        "body":"maxSpeed",
+        "prefix":"maxSpeed",
+        "description":"(GameObject.activeSpell.maxSpeed)",
+        "scope":"source.lua"
+    },
+    "minSpeed":{
+        "body":"minSpeed",
+        "prefix":"minSpeed",
+        "description":"(GameObject.activeSpell.minSpeed)",
+        "scope":"source.lua"
+    },
+    "spellWasCast":{
+        "body":"spellWasCast",
+        "prefix":"spellWasCast",
+        "description":"(GameObject.activeSpell.spellWasCast)",
+        "scope":"source.lua"
+    },
+    "isAutoAttack":{
+        "body":"isAutoAttack",
+        "prefix":"isAutoAttack",
+        "description":"(GameObject.activeSpell.isAutoAttack)",
+        "scope":"source.lua"
+    },
+    "isCharging":{
+        "body":"isCharging",
+        "prefix":"isCharging",
+        "description":"(GameObject.activeSpell.isCharging)",
+        "scope":"source.lua"
+    },
+    "isChanneling":{
+        "body":"isChanneling",
+        "prefix":"isChanneling",
+        "description":"(GameObject.activeSpell.isChanneling)",
+        "scope":"source.lua"
+    },
+    "startTime":{
+        "body":"startTime",
+        "prefix":"startTime",
+        "description":"(GameObject.activeSpell.startTime)",
+        "scope":"source.lua"
+    },
+    "endTime":{
+        "body":"endTime",
+        "prefix":"endTime",
+        "description":"(GameObject.activeSpell.endTime)",
+        "scope":"source.lua"
+    },
+    "isStopped":{
+        "body":"isStopped",
+        "prefix":"isStopped",
+        "description":"(GameObject.activeSpell.isStopped)",
+        "scope":"source.lua"
+    },
+    "castEndTime":{
+        "body":"castEndTime",
+        "prefix":"castEndTime",
+        "description":"(GameObject.activeSpell.castEndTime)",
+        "scope":"source.lua"
+    },
+    "valid":{
+        "body":"valid",
+        "prefix":"valid",
+        "description":"(GameObject.activeSpell.valid)--always use this to check if it's casting",
+        "scope":"source.lua"
+    },
+    "name":{
+        "body":"name",
+        "prefix":"name",
+        "description":"(GameObject.activeSpell.name)--string",
+        "scope":"source.lua"
+    },
+    "startPos":{
+        "body":"startPos",
+        "prefix":"startPos",
+        "description":"(GameObject.activeSpell.startPos) --Vector",
+        "scope":"source.lua"
+    },
+    "placementPos":{
+        "body":"placementPos",
+        "prefix":"placementPos",
+        "description":"(GameObject.activeSpell.placementPos)--Vector",
+        "scope":"source.lua"
+    },
+    "target":{
+        "body":"target",
+        "prefix":"target",
+        "description":"(GameObject.activeSpell.target) --GameObject handle",
+        "scope":"source.lua"
+    },
+    "windup":{
+        "body":"windup",
+        "prefix":"windup",
+        "description":"(GameObject.activeSpell.windup)",
+        "scope":"source.lua"
+    },
+    "animation":{
+        "body":"animation",
+        "prefix":"animation",
+        "description":"(GameObject.activeSpell.animation)",
+        "scope":"source.lua"
+    },
+    "activeSpellSlot":{
+        "body":"activeSpellSlot",
+        "prefix":"activeSpellSlot",
+        "description":"(GameObject.activeSpellSlot) -- use this to determine which spell slot was activated for '.activeSpell'",
+        "scope":"source.lua"
+    },
+    "isChanneling":{
+        "body":"isChanneling",
+        "prefix":"isChanneling",
+        "description":"(GameObject.isChanneling) -- use this to determine if '.activeSpell' is actually a spell, otherwise it's autoattack",
+        "scope":"source.lua"
+    },
+    "missileData":{
+        "body":"missileData",
+        "prefix":"missileData",
+        "description":"(missile.missileData)--for missiles only",
+        "scope":"source.lua"
+    },
+    "name":{
+        "body":"name",
+        "prefix":"name",
+        "description":"(missile.name)--string",
+        "scope":"source.lua"
+    },
+    "owner":{
+        "body":"owner",
+        "prefix":"owner",
+        "description":"(missile.owner) -- Game Object handle",
+        "scope":"source.lua"
+    },
+    "target":{
+        "body":"target",
+        "prefix":"targetowner",
+        "description":"(missile.target) -- Game Object handle",
+        "scope":"source.lua"
+    },
+    "startPos":{
+        "body":"startPos",
+        "prefix":"startPos",
+        "description":"(missile.missileData.startPos)--for missiles only",
+        "scope":"source.lua"
+    },
+    "endPos":{
+        "body":"endPos",
+        "prefix":"endPos",
+        "description":"(missile.missileData.endPos)--for missiles only",
+        "scope":"source.lua"
+    },
+    "placementPos":{
+        "body":"placementPos",
+        "prefix":"placementPos",
+        "description":"(missile.missileData.placementPos)--for missiles only",
+        "scope":"source.lua"
+    },
+    "range":{
+        "body":"range",
+        "prefix":"range",
+        "description":"(missile.missileData.range)--for missiles only",
+        "scope":"source.lua"
+    },
+    "delay":{
+        "body":"delay",
+        "prefix":"delay",
+        "description":"(missile.missileData.delay)--for missiles only",
+        "scope":"source.lua"
+    },
+    "speed":{
+        "body":"speed",
+        "prefix":"speed",
+        "description":"(missile.missileData.speed)--for missiles only",
+        "scope":"source.lua"
+    },
+    "width":{
+        "body":"width",
+        "prefix":"width",
+        "description":"(missile.missileData.speed)--for missiles only",
+        "scope":"source.lua"
+    },
+    "manaCost":{
+        "body":"manaCost",
+        "prefix":"manaCost",
+        "description":"(missile.missileData.manaCost)--for missiles only",
+        "scope":"source.lua"
+    },
+    "bonusDamagePercent":{
+        "body":"bonusDamagePercent",
+        "prefix":"bonusDamagePercent",
+        "description":"(minion.bonusDamagePercent)--for minions only",
+        "scope":"source.lua"
+    },
+    "flatDamageReduction":{
+        "body":"flatDamageReduction",
+        "prefix":"flatDamageReduction",
+        "description":"(minion.flatDamageReduction)--for minions only",
+        "scope":"source.lua"
+    },
+    "hpBar":{
+        "body":"hpBar",
+        "prefix":"hpBar",
+        "description":"(unit.hpBar)-- returns pos",
+        "scope":"source.lua"
+    },
+    "Onscreen":{
+        "body":"Onscreen",
+        "prefix":"Onscreen",
+        "description":"(unit.hpBar.Onscreen|Vector.Onscreen)",
+        "scope":"source.lua"
+    },
+    "GetSpellData":{
+        "body":"GetSpellData(${1:spell})",
+        "prefix":"GetSpellData",
+        "description":"(unit:GetSpellData(iSlot)--func for units only",
+        "scope":"source.lua"
+    },
+    "name":{
+        "body":"name",
+        "prefix":"name",
+        "description":"(unit:GetSpellData(iSlot).name)",
+        "scope":"source.lua"
+    },
+    "level":{
+        "body":"level",
+        "prefix":"level",
+        "description":"(unit:GetSpellData(iSlot).level)",
+        "scope":"source.lua"
+    },
+    "castTime":{
+        "body":"castTime",
+        "prefix":"castTime",
+        "description":"(unit:GetSpellData(iSlot).castTime)--time the spell was casted last",
+        "scope":"source.lua"
+    },
+    "cd":{
+        "body":"cd",
+        "prefix":"cd",
+        "description":"(unit:GetSpellData(iSlot).cd)",
+        "scope":"source.lua"
+    },
+    "currentCd":{
+        "body":"currentCd",
+        "prefix":"currentCd",
+        "description":"(unit:GetSpellData(iSlot).currentCd)",
+        "scope":"source.lua"
+    },
+    "ammo":{
+        "body":"ammo",
+        "prefix":"ammo",
+        "description":"(unit:GetSpellData(iSlot).ammo)",
+        "scope":"source.lua"
+    },
+    "ammoTime":{
+        "body":"ammoTime",
+        "prefix":"ammoTime",
+        "description":"(unit:GetSpellData(iSlot).ammoTime)",
+        "scope":"source.lua"
+    },
+    "ammoCd":{
+        "body":"ammoCd",
+        "prefix":"ammoCd",
+        "description":"(unit:GetSpellData(iSlot).ammoCd)",
+        "scope":"source.lua"
+    },
+    "ammoCurrentCd":{
+        "body":"ammoCurrentCd",
+        "prefix":"ammoCurrentCd",
+        "description":"(unit:GetSpellData(iSlot).ammoCurrentCd)",
+        "scope":"source.lua"
+    },
+    "toggleState":{
+        "body":"toggleState",
+        "prefix":"toggleState",
+        "description":"(unit:GetSpellData(iSlot).toggleState)",
+        "scope":"source.lua"
+    },
+    "range":{
+        "body":"range",
+        "prefix":"range",
+        "description":"(unit:GetSpellData(iSlot).range)",
+        "scope":"source.lua"
+    },
+    "mana":{
+        "body":"mana",
+        "prefix":"mana",
+        "description":"(unit:GetSpellData(iSlot).mana)",
+        "scope":"source.lua"
+    },
+    "width":{
+        "body":"width",
+        "prefix":"width",
+        "description":"(unit:GetSpellData(iSlot).width)",
+        "scope":"source.lua"
+    },
+    "speed":{
+        "body":"speed",
+        "prefix":"speed",
+        "description":"(unit:GetSpellData(iSlot).speed)",
+        "scope":"source.lua"
+    },
+    "targetingType":{
+        "body":"targetingType",
+        "prefix":"targetingType",
+        "description":"(unit:GetSpellData(iSlot).targetingType)",
+        "scope":"source.lua"
+    },
+    "coneAngle":{
+        "body":"coneAngle",
+        "prefix":"coneAngle",
+        "description":"(unit:GetSpellData(iSlot).coneAngle)",
+        "scope":"source.lua"
+    },
+    "coneDistance":{
+        "body":"coneDistance",
+        "prefix":"coneDistance",
+        "description":"(unit:GetSpellData(iSlot).coneDistance)",
+        "scope":"source.lua"
+    },
+    "acceleration":{
+        "body":"acceleration",
+        "prefix":"acceleration",
+        "description":"(unit:GetSpellData(iSlot).acceleration)",
+        "scope":"source.lua"
+    },
+    "castFrame":{
+        "body":"castFrame",
+        "prefix":"castFrame",
+        "description":"(unit:GetSpellData(iSlot).castFrame)",
+        "scope":"source.lua"
+    },
+    "maxSpeed":{
+        "body":"maxSpeed",
+        "prefix":"maxSpeed",
+        "description":"(unit:GetSpellData(iSlot).maxSpeed)",
+        "scope":"source.lua"
+    },
+    "minSpeed":{
+        "body":"minSpeed",
+        "prefix":"minSpeed",
+        "description":"(unit:GetSpellData(iSlot).minSpeed)",
+        "scope":"source.lua"
+    },
+    "GetItemData":{
+        "body":"GetItemData(${1:index})",
+        "prefix":"GetItemData",
+        "description":"(hero:GetItemData(index))--func for units only",
+        "scope":"source.lua"
+    },
+    "itemID":{
+        "body":"itemID",
+        "prefix":"itemID",
+        "description":"(hero:GetItemData(index).itemID)",
+        "scope":"source.lua"
+    },
+    "stacks":{
+        "body":"stacks",
+        "prefix":"stacks",
+        "description":"(hero:GetItemData(index).stacks)",
+        "scope":"source.lua"
+    },
+    "itemID":{
+        "body":"itemID",
+        "prefix":"itemID",
+        "description":"(hero:GetItemData(index).itemID)",
+        "scope":"source.lua"
+    },
+    "GetBuff":{
+        "body":"GetBuff(${1:index})",
+        "prefix":"GetBuff",
+        "description":"(unit:GetBuff(index))--func for units only",
+        "scope":"source.lua"
+    },
+    "type":{
+        "body":"type",
+        "prefix":"type",
+        "description":"(unit:GetBuff(index).type) -- [0->31?]",
+        "scope":"source.lua"
+    },
+    "name":{
+        "body":"name",
+        "prefix":"name",
+        "description":"(unit:GetBuff(index).name) --string",
+        "scope":"source.lua"
+    },
+    "startTime":{
+        "body":"startTime",
+        "prefix":"startTime",
+        "description":"(unit:GetBuff(index).startTime) -- Game.Timer()",
+        "scope":"source.lua"
+    },
+    "expireTime":{
+        "body":"expireTime",
+        "prefix":"expireTime",
+        "description":"(unit:GetBuff(index).expireTime) -- Game.Timer()",
+        "scope":"source.lua"
+    },
+    "duration":{
+        "body":"type",
+        "prefix":"type",
+        "description":"(unit:GetBuff(index).duration) -- Game.Timer()-startTime",
+        "scope":"source.lua"
+    },
+    "stacks":{
+        "body":"stacks",
+        "prefix":"stacks",
+        "description":"(unit:GetBuff(index).stacks)",
+        "scope":"source.lua"
+    },
+    "count":{
+        "body":"count",
+        "prefix":"count",
+        "description":"(unit:GetBuff(index).count) --number > 0 if valid",
+        "scope":"source.lua"
+    },
+    "sourcenID":{
+        "body":"sourcenID",
+        "prefix":"sourcenID",
+        "description":"(unit:GetBuff(index).sourcenID)--buffSource.networkID",
+        "scope":"source.lua"
+    },
+    "sourceName":{
+        "body":"sourceName",
+        "prefix":"sourceName",
+        "description":"(unit:GetBuff(index).sourceName)",
+        "scope":"source.lua"
+    },
+    "GetPrediction":{
+        "body":"GetPrediction(${1:speed}, ${2:delay})",
+        "prefix":"GetPrediction",
+        "description":"(target:GetPrediction(speed,delay))--fct return Vector(.x,.y.z)",
+        "scope":"source.lua"
+    },
+    "GetCollision":{
+        "body":"GetCollision(${1:width}, ${2:speed}, ${3:delay})",
+        "prefix":"GetCollision",
+        "description":"(target:GetCollision(width,speed,delay))--fct return nb Collision Count",
+        "scope":"source.lua"
+    },
+    "IsValidTarget":{
+        "body":"IsValidTarget",
+        "prefix":"IsValidTarget(${1:range}, ${1:teamcheck}, ${1:source}, ${1:pos})",
+        "description":"(target:IsValidTarget(range,teamcheck,source or pos)--return boolean",
+        "scope":"source.lua"
+    },
+    "Draw.Circle()":{
+        "body":"Draw.Circle(${1:pos}, ${2:radius}, ${3:width}, Draw.Color($4))",
+        "prefix":"Draw.Circle",
+        "description":"(Draw.Circle(pos, radius, width, color))",
+        "scope":"source.lua"
+    },
+    "Draw.Line()":{
+        "body":"Draw.Line(${1:pos1}, ${2:pos2}, ${3:width}, Draw.Color($4))",
+        "prefix":"Draw.Line",
+        "description":"(Draw.Line(pos1, pos2, width, color))",
+        "scope":"source.lua"
+    },
+    "Draw.Rect()":{
+        "body":"Draw.Rect(${1:x}, ${2:y}, ${3:width}, Draw.Color($4))",
+        "prefix":"Draw.Rect",
+        "description":"(Draw.Rect(x, y, width, color))",
+        "scope":"source.lua"
+    },
+    "Draw.Text()":{
+        "body":"Draw.Text(${1:text}, ${2:size}, ${3:pos2D}, Draw.Color($4))",
+        "prefix":"Draw.Text",
+        "description":"(Draw.Text(text, size, pos2D, color))",
+        "scope":"source.lua"
+    },
+    "Draw.CircleMinimap()":{
+        "body":"Draw.CircleMinimap(${1:pos}, ${2:radius}, ${3:width}, Draw.Color($4))",
+        "prefix":"Draw.CircleMinimap",
+        "description":"(Draw.CircleMinimap(pos, radius, width, color))",
+        "scope":"source.lua"
+    },
+    "Draw.Color()":{
+        "body":"Draw.Color(${1:255}, ${2:255}, ${3:255}, ${4:255})",
+        "prefix":"Draw.Color",
+        "description":"(Draw.Color(alphaColor, redColor, greenColor, blueColor))--Returns Color, default is white",
+        "scope":"source.lua"
+    },
+    "Draw.Font()":{
+        "body":"Draw.Font(${1:path}, ${2:fontName})",
+        "prefix":"Draw.Font",
+        "description":"(Draw.Font(path, fontName))--Creates a drawable Font",
+        "scope":"source.lua"
+    },
+    "Draw.FontRect()":{
+        "body":"Draw.FontRect(${1:text}, ${2:fontSize}, ${3:Font})",
+        "prefix":"Draw.FontRect",
+        "description":"(Draw.FontRect(text, fontSize, Font))--Gets a Font Rectangle,Return {width, height}",
+        "scope":"source.lua"
+    },
+    "Control.LeftClick()":{
+        "body":"Control.LeftClick(${1:XYtable/x}, ${2:y})",
+        "prefix":"Control.LeftClick",
+        "description":"(Control.LeftClick(XYtable/x,y)--Executes a left mouse click",
+        "scope":"source.lua"
+    },
+    "Control.RightClick()":{
+        "body":"Control.RightClick(${1:XYtable/x}, ${2:y})",
+        "prefix":"Control.RightClick",
+        "description":"(Control.RightClick(XYtable/x,y)--Executes a right mouse click",
+        "scope":"source.lua"
+    },
+    "Control.CastSpell()":{
+        "body":"Control.CastSpell(${1:HK_Q}, ${2:obj/pos/vec})",
+        "prefix":"Control.CastSpell",
+        "description":"(Control.CastSpell(char|byte, [nil/obj/pos/vec])--Executes a keystroke and moves mouse",
+        "scope":"source.lua"
+    },
+    "Control.Move()":{
+        "body":"Control.Move(${1:pos/vec})",
+        "prefix":"Control.Move",
+        "description":"(Control.Move(nil/pos/vec))--Sends a move command",
+        "scope":"source.lua"
+    },
+    "Control.Attack()":{
+        "body":"Control.Attack(${1:GameObject})",
+        "prefix":"Control.Attack",
+        "description":"(Control.Attack(GameObject))--Sends an attack command",
+        "scope":"source.lua"
+    },
+    "Control.IsKeyDown()":{
+        "body":"Control.IsKeyDown()",
+        "prefix":"Control.IsKeyDown",
+        "description":"(Control.IsKeyDown())--Check for a key being held down, return bool",
+        "scope":"source.lua"
+    },
+    "Control.SetCursorPos()":{
+        "body":"Control.SetCursorPos(${1:pos/obj/vec})",
+        "prefix":"Control.SetCursorPos",
+        "description":"(Control.SetCursorPos(pos/obj/vec))--Sets the cursor position, return bool",
+        "scope":"source.lua"
+    },
+    "Control.KeyDown()":{
+        "body":"Control.KeyDown(${1:HK_Q})",
+        "prefix":"Control.KeyDown",
+        "description":"(Control.KeyDown(char/byte))--Holds down a keystroke, return bool",
+        "scope":"source.lua"
+    },
+    "Control.KeyUp()":{
+        "body":"Control.KeyUp(${1:HK_Q})",
+        "prefix":"Control.KeyUp",
+        "description":"(Control.KeyUp(char/byte))--Holds up a keystroke, return bool",
+        "scope":"source.lua"
+    },
+    "Control.mouse_event()":{
+        "body":"Control.mouse_event(${1:number})",
+        "prefix":"Control.mouse_event",
+        "description":"(Control.mouse_event(number))--Sends a mouse click, return bool",
+        "scope":"source.lua"
+    },
+    "Game.MyHero()":{
+        "body":"Game.MyHero()",
+        "prefix":"Game.MyHero",
+        "description":"(Game.MyHero())--Returns myHero",
+        "scope":"source.lua"
+    },
+    "Game.Resolution()":{
+        "body":"Game.Resolution()",
+        "prefix":"Game.Resolution",
+        "description":"(Game.Resolution())--Returns Resolution as Vector",
+        "scope":"source.lua"
+    },
+    "Game.FPS()":{
+        "body":"Game.FPS()",
+        "prefix":"Game.FPS",
+        "description":"(Game.FPS())--Returns the total FPS",
+        "scope":"source.lua"
+    },
+    "Game.IsOnTop()":{
+        "body":"Game.IsOnTop()",
+        "prefix":"Game.IsOnTop",
+        "description":"(Game.IsOnTop())--Return true/false if Game is on top",
+        "scope":"source.lua"
+    },
+    "Game.IsChatOpen()":{
+        "body":"Game.IsChatOpen()",
+        "prefix":"Game.IsChatOpen",
+        "description":"(Game.IsChatOpen())--Return true/false if chat is open",
+        "scope":"source.lua"
+    },
+    "Game.Timer()":{
+        "body":"Game.Timer()",
+        "prefix":"Game.Timer",
+        "description":"(Game.Timer())--Return the Game Timer",
+        "scope":"source.lua"
+    },
+    "Game.mapID()":{
+        "body":"Game.mapID()",
+        "prefix":"Game.mapID",
+        "description":"(Game.mapID())--The current map ID",
+        "scope":"source.lua"
+    },
+    "Game.HeroCount()":{
+        "body":"Game.HeroCount()",
+        "prefix":"Game.HeroCount",
+        "description":"(Game.HeroCount())--Return the total Hero Count",
+        "scope":"source.lua"
+    },
+    "Game.Hero()":{
+        "body":"Game.Hero(${1:index})",
+        "prefix":"Game.Hero",
+        "description":"(Game.Hero(index))--Return the Hero at index",
+        "scope":"source.lua"
+    },
+    "Game.ObjectCount()":{
+        "body":"Game.ObjectCount()",
+        "prefix":"Game.ObjectCount",
+        "description":"(Game.ObjectCount())--Return the total Object Count",
+        "scope":"source.lua"
+    },
+    "Game.Object()":{
+        "body":"Game.Object(${1:index})",
+        "prefix":"Game.Object",
+        "description":"(Game.Object(index))--Return the Object at index",
+        "scope":"source.lua"
+    },
+    "Game.CampCount()":{
+        "body":"Game.CampCount()",
+        "prefix":"Game.CampCount",
+        "description":"(Game.CampCount())--Return the total Camp Count",
+        "scope":"source.lua"
+    },
+    "Game.Camp()":{
+        "body":"Game.Camp(${1:index})",
+        "prefix":"Game.Camp",
+        "description":"(Game.Camp(index))--Return the Camp at index",
+        "scope":"source.lua"
+    },
+    "Game.TurretCount()":{
+        "body":"Game.TurretCount()",
+        "prefix":"Game.TurretCount",
+        "description":"(Game.TurretCount())--Return the total Turret Count",
+        "scope":"source.lua"
+    },
+    "Game.Turret()":{
+        "body":"Game.Turret(${1:index})",
+        "prefix":"Game.Turret",
+        "description":"(Game.Turret(index))--Return the Turret at index",
+        "scope":"source.lua"
+    },
+    "Game.MissileCount()":{
+        "body":"Game.MissileCount()",
+        "prefix":"Game.MissileCount",
+        "description":"(Game.MissileCount())--Return the total Missile Count",
+        "scope":"source.lua"
+    },
+    "Game.Missile()":{
+        "body":"Game.Missile(${1:index})",
+        "prefix":"Game.Missile",
+        "description":"(Game.Missile(index))--Return the Missile at index",
+        "scope":"source.lua"
+    },
+    "Game.ParticleCount()":{
+        "body":"Game.ParticleCount()",
+        "prefix":"Game.ParticleCount",
+        "description":"(Game.ParticleCount())--Return the total Particle Count",
+        "scope":"source.lua"
+    },
+    "Game.Particle()":{
+        "body":"Game.Particle(${1:index})",
+        "prefix":"Game.Particle",
+        "description":"(Game.Particle(index))--Return the Particle at index",
+        "scope":"source.lua"
+    },
+    "Game.MinionCount()":{
+        "body":"Game.MinionCount()",
+        "prefix":"Game.MinionCount",
+        "description":"(Game.MinionCount())--Return the total Minion Count",
+        "scope":"source.lua"
+    },
+    "Game.Minion()":{
+        "body":"Game.Minion(${1:index})",
+        "prefix":"Game.Minion",
+        "description":"(Game.Minion(index))--Return the Minion at index",
+        "scope":"source.lua"
+    },
+    "Game.WardCount()":{
+        "body":"Game.WardCount()",
+        "prefix":"Game.WardCount",
+        "description":"(Game.WardCount())--Return the total wards Count",
+        "scope":"source.lua"
+    },
+    "Game.Ward()":{
+        "body":"Game.Ward(${1:index})",
+        "prefix":"Game.Ward",
+        "description":"(Game.Ward(index))--Return the Ward at index",
+        "scope":"source.lua"
+    },
+    "Game.GetObjectByNetID()":{
+        "body":"Game.GetObjectByNetID(${1:networkID})",
+        "prefix":"Game.GetObjectByNetID",
+        "description":"(Game.GetObjectByNetID(networkID))--returns the object with the networkID",
+        "scope":"source.lua"
+    },
+    "Game.Latency()":{
+        "body":"Game.Latency()",
+        "prefix":"Game.Latency",
+        "description":"(Game.Latency())--Returns the game latency (ms,ping)",
+        "scope":"source.lua"
+    },
+    "Game.CanUseSpell()":{
+        "body":"Game.CanUseSpell(${1:spell_index})",
+        "prefix":"Game.CanUseSpell",
+        "description":"(Game.CanUseSpell(spell_index))--Returns the state of a specific spell",
+        "scope":"source.lua"
+    },
+    "Game.mousePos()":{
+        "body":"Game.mousePos()",
+        "prefix":"Game.mousePos",
+        "description":"(Game.mousePos())--alias to the global mouse pos,Return Vector3",
+        "scope":"source.lua"
+    },
+    "Game.cursorPos()":{
+        "body":"Game.cursorPos()",
+        "prefix":"Game.cursorPos",
+        "description":"(Game.cursorPos())--alias to the global cursor pos,Return Vector2",
+        "scope":"source.lua"
+    },
+    "Callback.Add":{
+        "body":"Callback.Add(\"${1:Load}\", function($2)\n\t$3\nend)",
+        "prefix":"Callback.Add",
+        "description":"(Callback API, Adds a new Callback; Callback.Add(iType, function) --return:callbackID)",
+        "scope":"source.lua"
+    },
+    "Callback.Del":{
+        "body":"Callback.Del(\"iType\", callbackID)",
+        "prefix":"Callback.Del",
+        "description":"(Callback API, Deletes a callback, Callback.Del(iType, callbackID))",
+        "scope":"source.lua"
+    },
+    "Load":{
+        "body":"Callback.Add(\"Load\", function()\n\t$1\nend)",
+        "prefix":"OnLoad",
+        "description":"(Callback API, iType, cb.function())",
+        "scope":"source.lua"
+    },
+    "UnLoad":{
+        "body":"Callback.Add(\"UnLoad\", function()\n\t$1\nend)",
+        "prefix":"UnLoad",
+        "description":"(Callback API, iType, cb.function())",
+        "scope":"source.lua"
+    },
+    "GameEnd":{
+        "body":"Callback.Add(\"GameEnd\", function()\n\t$1\nend)",
+        "prefix":"OnGameEnd",
+        "description":"(Callback API, iType, cb.function())",
+        "scope":"source.lua"
+    },
+    "Tick":{
+        "body":"Callback.Add(\"Tick\", function()\n\t$1\nend)",
+        "prefix":"OnTick",
+        "description":"(Callback API, iType, cb.function())",
+        "scope":"source.lua"
+    },
+    "Draw()":{
+        "body":"Callback.Add(\"Draw\", function()\n\t$1\nend)",
+        "prefix":"OnDraw",
+        "description":"(Callback API, iType, cb.function())",
+        "scope":"source.lua"
+    },
+    "WndMsg":{
+        "body":"Callback.Add(\"WndMsg\", function()\n\t$1\nend)",
+        "prefix":"OnWndMsg",
+        "description":"(Callback API, iType, cb.function(msg, wParam))",
+        "scope":"source.lua"
+    },
+    "ProcessRecall":{
+        "body":"Callback.Add(\"ProcessRecall\", function(hero, recalProc)\n\t$1\nend)",
+        "prefix":"OnProcessRecall",
+        "description":"(Callback API, iType, cb.function(hero, recalProc))",
+        "scope":"source.lua"
+    },
+    "SCRIPT_PATH":{
+        "body":"SCRIPT_PATH",
+        "prefix":"SCRIPT_PATH",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "COMMON_PATH":{
+        "body":"COMMON_PATH",
+        "prefix":"COMMON_PATH",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },   
+    "SOUNDS_PATH":{
+        "body":"SOUNDS_PATH",
+        "prefix":"SOUNDS_PATH",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },    
+    "FONTS_PATH":{
+        "body":"FONTS_PATH",
+        "prefix":"FONTS_PATH",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "READY":{
+        "body":"READY",
+        "prefix":"READY",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "NOTAVAILABLE":{
+        "body":"NOTAVAILABLE",
+        "prefix":"NOTAVAILABLE",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "NOTLEARNED":{
+        "body":"NOTLEARNED",
+        "prefix":"NOTLEARNED",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "NOMANA":{
+        "body":"NOMANA",
+        "prefix":"NOMANA",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "NOMANAONCOOLDOWN":{
+        "body":"NOMANAONCOOLDOWN",
+        "prefix":"NOMANAONCOOLDOWN",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "WM_MOUSEHWHEEL":{
+        "body":"WM_MOUSEHWHEEL",
+        "prefix":"WM_MOUSEHWHEEL",
+        "description":"(Global Constant), OnWndMsg(param1, wParam)",
+        "scope":"source.lua"
+    },
+    "WM_MBUTTONUP":{
+        "body":"WM_MBUTTONUP",
+        "prefix":"WM_MBUTTONUP",
+        "description":"(Global Constant), OnWndMsg(param1, wParam)",
+        "scope":"source.lua"
+    },
+    "WM_MBUTTONDOWN":{
+        "body":"WM_MBUTTONDOWN",
+        "prefix":"WM_MBUTTONDOWN",
+        "description":"(Global Constant), OnWndMsg(param1, wParam)",
+        "scope":"source.lua"
+    },
+    "WM_RBUTTONUP":{
+        "body":"WM_RBUTTONUP",
+        "prefix":"WM_RBUTTONUP",
+        "description":"(Global Constant), OnWndMsg(param1, wParam)",
+        "scope":"source.lua"
+    },
+    "WM_RBUTTONDOWN":{
+        "body":"WM_RBUTTONDOWN",
+        "prefix":"WM_RBUTTONDOWN",
+        "description":"(Global Constant), OnWndMsg(param1, wParam)",
+        "scope":"source.lua"
+    },
+    "WM_LBUTTONUP":{
+        "body":"WM_LBUTTONUP",
+        "prefix":"WM_LBUTTONUP",
+        "description":"(Global Constant), OnWndMsg(param1, wParam)",
+        "scope":"source.lua"
+    },
+    "WM_LBUTTONDOWN":{
+        "body":"WM_LBUTTONDOWN",
+        "prefix":"WM_LBUTTONDOWN",
+        "description":"(Global Constant), OnWndMsg(param1, wParam)",
+        "scope":"source.lua"
+    },
+    "KEY_UP":{
+        "body":"KEY_UP",
+        "prefix":"KEY_UP",
+        "description":"(Global Constant), OnWndMsg(param1, wParam)",
+        "scope":"source.lua"
+    },
+    "KEY_DOWN":{
+        "body":"KEY_DOWN",
+        "prefix":"KEY_DOWN",
+        "description":"(Global Constant), OnWndMsg(param1, wParam)",
+        "scope":"source.lua"
+    },
+    "CRYSTAL_SCAR":{
+        "prefix":"CRYSTAL_SCAR",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "TWISTED_TREELINE":{
+        "body":"TWISTED_TREELINE",
+        "prefix":"TWISTED_TREELINE",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },   
+    "SUMMONERS_RIFT":{
+        "body":"SUMMONERS_RIFT",
+        "prefix":"SUMMONERS_RIFT",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },  
+    "HOWLING_ABYSS":{
+        "body":"HOWLING_ABYSS",
+        "prefix":"HOWLING_ABYSS",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    }, 
+    "STATE_UNKNOWN":{
+        "body":"STATE_UNKNOWN",
+        "prefix":"STATE_UNKNOWN",
+        "description":"(Global Constant), useFor unit.attackData.stage",
+        "scope":"source.lua"
+    },
+    "STATE_ATTACK":{
+        "body":"STATE_ATTACK",
+        "prefix":"STATE_ATTACK",
+        "description":"(Global Constant), useFor unit.attackData.stage",
+        "scope":"source.lua"
+    },
+    "STATE_WINDUP":{
+        "body":"STATE_WINDUP",
+        "prefix":"STATE_WINDUP",
+        "description":"(Global Constant), useFor unit.attackData.stage",
+        "scope":"source.lua"
+    },
+    "STATE_WINDDOWN":{
+        "body":"STATE_WINDDOWN",
+        "prefix":"STATE_WINDDOWN",
+        "description":"(Global Constant), useFor unit.attackData.stage",
+        "scope":"source.lua"
+    },  
+    "_Q":{
+        "body":"_Q",
+        "prefix":"_Q",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "_W":{
+        "body":"_W",
+        "prefix":"_W",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "_E":{
+        "body":"_E",
+        "prefix":"_E",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "_R":{
+        "body":"_R",
+        "prefix":"_R",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "ITEM_1":{
+        "body":"ITEM_1",
+        "prefix":"ITEM_1",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+     "ITEM_2":{
+        "body":"ITEM_2",
+        "prefix":"ITEM_2",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "ITEM_3":{
+        "body":"ITEM_3",
+        "prefix":"ITEM_3",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "ITEM_4":{
+        "body":"ITEM_4",
+        "prefix":"ITEM_4",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "ITEM_5":{
+        "body":"ITEM_5",
+        "prefix":"ITEM_5",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "ITEM_6":{
+        "body":"ITEM_6",
+        "prefix":"ITEM_6",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "ITEM_7":{
+        "body":"ITEM_7",
+        "prefix":"ITEM_7",
+        "description":"(Global Constant, trinket)",
+        "scope":"source.lua"
+    },
+    "SUMMONER_1":{
+        "body":"SUMMONER_1",
+        "prefix":"SUMMONER_1",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "SUMMONER_2":{
+        "body":"SUMMONER_2",
+        "prefix":"SUMMONER_2",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_Q":{
+        "body":"HK_Q",
+        "prefix":"HK_Q",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_W":{
+        "body":"HK_W",
+        "prefix":"HK_W",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_E":{
+        "body":"HK_E",
+        "prefix":"HK_E",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_R":{
+        "body":"HK_R",
+        "prefix":"HK_R",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_ITEM_1":{
+        "body":"HK_ITEM_1",
+        "prefix":"HK_ITEM_1",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_ITEM_2":{
+        "body":"HK_ITEM_2",
+        "prefix":"HK_ITEM_2",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_ITEM_3":{
+        "body":"HK_ITEM_3",
+        "prefix":"HK_ITEM_3",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_ITEM_4":{
+        "body":"HK_ITEM_4",
+        "prefix":"HK_ITEM_4",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_ITEM_5":{
+        "body":"HK_ITEM_5",
+        "prefix":"HK_ITEM_5",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_ITEM_6":{
+        "body":"HK_ITEM_6",
+        "prefix":"HK_ITEM_6",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_ITEM_7":{
+        "body":"HK_ITEM_7",
+        "prefix":"HK_ITEM_7",
+        "description":"(Global Constant, trinket)",
+        "scope":"source.lua"
+        
+    },
+    "HK_SUMMONER_1":{
+        "body":"HK_SUMMONER_1",
+        "prefix":"HK_SUMMONER_1",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_SUMMONER_2":{
+        "body":"HK_SUMMONER_2",
+        "prefix":"HK_SUMMONER_2",
+        "description":"(Global Constant)",
+        "scope":"source.lua"
+    },
+    "HK_TCO":{
+        "body":"HK_TCO",
+        "prefix":"HK_TCO",
+        "description":"(Global Constant, Target Champions Only)",
+        "scope":"source.lua"
+    },
+    "HK_LUS":{
+        "body":"HK_LUS",
+        "prefix":"HK_LUS",
+        "description":"(Global Constant, Level Up Spell Hotkey)",
+        "scope":"source.lua"
+    },
+    "HK_MENU":{
+        "body":"HK_MENU",
+        "prefix":"HK_MENU",
+        "description":"(Global Constant, Hotkey for the LUA Menu)",
+        "scope":"source.lua"
+    },
+    "MOUSEEVENTF_LEFTDOWN":{
+        "body":"MOUSEEVENTF_LEFTDOWN",
+        "prefix":"MOUSEEVENTF_LEFTDOWN",
+        "description":"(Global Constant), mouse_event(MOUSEEVENTF_LEFTDOWN)",
+        "scope":"source.lua"
+    },
+    "MOUSEEVENTF_LEFTUP":{
+        "body":"MOUSEEVENTF_LEFTUP",
+        "prefix":"MOUSEEVENTF_LEFTUP",
+        "description":"(Global Constant), mouse_event(MOUSEEVENTF_LEFTUP)",
+        "scope":"source.lua"
+    },
+    "MOUSEEVENTF_RIGHTDOWN":{
+        "body":"MOUSEEVENTF_RIGHTDOWN",
+        "prefix":"MOUSEEVENTF_RIGHTDOWN",
+        "description":"(Global Constant), mouse_event(MOUSEEVENTF_RIGHTDOWN)",
+        "scope":"source.lua"
+    },
+    "MOUSEEVENTF_RIGHTUP":{
+        "body":"MOUSEEVENTF_RIGHTUP",
+        "prefix":"MOUSEEVENTF_RIGHTUP",
+        "description":"(Global Constant), mouse_event(MOUSEEVENTF_RIGHTUP)",
+        "scope":"source.lua"
+    },
+    "Obj_AI_SpawnPoint":{
+        "body":"Obj_AI_SpawnPoint",
+        "prefix":"Obj_AI_SpawnPoint",
+        "description":"(Global Constant, obj_SpawnPoint)",
+        "scope":"source.lua"
+    },
+    "Obj_AI_Camp":{
+        "body":"Obj_AI_Camp",
+        "prefix":"Obj_AI_Camp",
+        "description":"(Global Constant, NeutralMinionCamp)",
+        "scope":"source.lua"
+    },
+    "Obj_AI_Barracks":{
+        "body":"Obj_AI_Barracks",
+        "prefix":"Obj_AI_Barracks",
+        "description":"(Global Constant, obj_BarracksDampener)",
+        "scope":"source.lua"
+    },
+    "Obj_AI_Hero":{
+        "body":"Obj_AI_Hero",
+        "prefix":"Obj_AI_Hero",
+        "description":"(Global Constant, AIHeroClient)",
+        "scope":"source.lua"
+    },
+    "Obj_AI_Hero":{
+        "body":"Obj_AI_Hero",
+        "prefix":"Obj_AI_Hero",
+        "description":"(Global Constant, AIHeroClient)",
+        "scope":"source.lua"
+    },
+    "Obj_AI_Hero":{
+        "body":"Obj_AI_Hero",
+        "prefix":"Obj_AI_Hero",
+        "description":"(Global Constant, AIHeroClient)",
+        "scope":"source.lua"
+    },
+    "Obj_AI_Minion":{
+        "body":"Obj_AI_Minion",
+        "prefix":"Obj_AI_Minion",
+        "description":"(Global Constant, obj_AI_Minion)",
+        "scope":"source.lua"
+    },
+    "Obj_AI_Turret":{
+        "body":"Obj_AI_Turret",
+        "prefix":"Obj_AI_Turret",
+        "description":"(Global Constant, obj_AI_Turret)",
+        "scope":"source.lua"
+    },
+    "Obj_AI_LineMissle":{
+        "body":"Obj_AI_LineMissle",
+        "prefix":"Obj_AI_LineMissle",
+        "description":"(Global Constant, MissileClient)",
+        "scope":"source.lua"
+    },
+    "Obj_AI_Shop":{
+        "body":"Obj_AI_Shop",
+        "prefix":"Obj_AI_Shop",
+        "description":"(Global Constant, obj_Shop)",
+        "scope":"source.lua"
+    },
+    "cursorPos":{
+        "body":"cursorPos",
+        "prefix":"cursorPos",
+        "description":"(Global Constant, Vector2D(x, y))--alias Game.cursorPos",
+        "scope":"source.lua"
+    },
+    "mousePos":{
+        "body":"mousePos",
+        "prefix":"mousePos",
+        "description":"(Global Constant, Vector3D(x, y, z))--alias Game.mousePos",
+        "scope":"source.lua"
+    },
+    "myHero":{
+        "body":"myHero",
+        "prefix":"myHero",
+        "description":"(Global Constant, GameObject)",
+        "scope":"source.lua"
+    },
+    "GetTickCount()":{
+        "body":"GetTickCount()",
+        "prefix":"GetTickCount",
+        "description":"(Global Function, TickCount ofc (ms))",
+        "scope":"source.lua"
+    },
+    "GetImageInfoFromFile()":{
+        "body":"GetImageInfoFromFile(${1:file_path})",
+        "prefix":"GetImageInfoFromFile",
+        "description":"(Global Function, file_path)",
+        "scope":"source.lua"
+    },
+    "PrintChat()":{
+        "body":"PrintChat(\"${1:string}\")",
+        "prefix":"PrintChat",
+        "description":"(Global Function, PrintChat(string)",
+        "scope":"source.lua"
+    },
+    "print()":{
+        "body":"print(${1:Vector/string/number/table})",
+        "prefix":"print",
+        "description":"(Global Function, print(vec/string/num/table))",
+        "scope":"source.lua"
+    },
+    "DumpDocumentation":{
+        "body":"DumpDocumentation(${1:\"API.lua\"})",
+        "prefix":"DumpDocumentation",
+        "description":"(Global Function, writes this text to a file)",
+        "scope":"source.lua"
+    },
+
+
+
+
+}
