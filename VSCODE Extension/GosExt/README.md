@@ -14,7 +14,7 @@ Initial release of 06/13/2017
 
 ## Come play with Gaming on Steroids
 
-###Gaming on Steroids](http://http://gamingonsteroids.com/)
+###[Gaming on Steroids](http://http://gamingonsteroids.com/)
 **For more information**
 
 
