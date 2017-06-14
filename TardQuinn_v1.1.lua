@@ -443,6 +443,7 @@ function TardQuinn:Tard_KillSteal()
                 break
                 return
             end
+          end
         end   
   end
 end
