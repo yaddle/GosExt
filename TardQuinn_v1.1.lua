@@ -274,7 +274,7 @@ function TardQuinn:Tard_Menu()
   self.Tard_TardMenu.Farm:MenuElement({id = "FarmW", name = "Use W", value = true})
   self.Tard_TardMenu.Farm:MenuElement({id = "FarmE", name = "Use E", value = true})
   self.Tard_TardMenu.Farm:MenuElement({id = "FarmMana", name = "Min. Mana", value = 40, min = 0, max = 100})
-   	]]
+   	
 
     --[[Misc]]
    self.Tard_TardMenu:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})
