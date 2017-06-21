@@ -243,11 +243,10 @@ require("Eternal Prediction")
 	}
 
 	if _G.Prediction_Loaded then self.Tard_EternalPred = true; print("Tosh Pred loaded ;)"); self.Tard_QPred = Prediction:SetSpell(self.Tard_QuinnSpells[0], TYPE_LINE, true) 
-  else 
+   	 if myHero.team == 100 then self.Tard_RecallPosition = Vector(396,182.132507324219,462); else self.Tard_RecallPosition = Vector(14340, 171.977722167969, 14390); end
+	
 	self:Tard_Menu() 
-  if myHero.team == 100 then self.Tard_RecallPosition = Vector(396,182.132507324219,462); else self.Tard_RecallPosition = Vector(14340, 171.977722167969, 14390); end;
-
-  	Callback.Add("Tick", function() self:Tard_Tick() end)
+   	Callback.Add("Tick", function() self:Tard_Tick() end)
   	Callback.Add("Draw", function() self:Tard_Draw() end)
   end
 end 
