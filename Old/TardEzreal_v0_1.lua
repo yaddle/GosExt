@@ -52,15 +52,23 @@ end
 
 function Need:Tard_GetMode()
 		if self.Tard_Orb == 0 then
-			return EOW:CurrentMode()
+			if EOW:CurrentMode() == 1 then
+				return "Combo"
+			elseif EOW:CurrentMode() == 2 then
+			 	return "Harass"
+			elseif EOW:CurrentMode() == 3 then
+				return "Lasthit"
+			elseif EOW:CurrentMode() == 4 then
+				return "Clear"
+			end
 		elseif self.Tard_Orb == 1 then		
 			if self.Tard_SDK.Modes[self.Tard_SDKCombo] then				
 				return "Combo"
-			elseif self.Tard_SDK.Modes[self.Tard_SDKHarass]  then
+			elseif self.Tard_SDK.Modes[self.Tard_SDKHarass] then
 				return "Harass"	
-			elseif self.Tard_SDK.Modes[self.Tard_SDKLaneClear]  or self.Tard_SDK.Modes[self.Tard_SDKJungle] then
+			elseif self.Tard_SDK.Modes[self.Tard_SDKLaneClear] or self.Tard_SDK.Modes[self.Tard_SDKJungle] then
 				return "Clear"
-			elseif self.Tard_SDK.Modes[self.Tard_SDKLastHit]  then
+			elseif self.Tard_SDK.Modes[self.Tard_SDKLastHit] then
 				return "Lasthit"
 			elseif self.Tard_SDK.Modes[self.Tard_SDKFlee] then
 				return "Flee"
@@ -85,9 +93,15 @@ end
 function Need:Tard_CastSpell(spell, pos, delay)
 	local Tard_Delay = delay*1000 or 250
 	local Tard_SpellHitPosition = pos
-	local Tard_Mouse = mousePos
+	local Tard_Mouse = mousePos	
 	if Tard_SpellHitPosition:To2D().onScreen then
 		Control.SetCursorPos(Tard_SpellHitPosition)
+		Control.KeyDown(spell)
+		Control.KeyUp(spell)
+		Control.Control.SetCursorPos(Tard_Mouse)
+	else 
+		local Tard_SpellHitPositionMM = Tard_SpellHitPosition:ToMM()
+		Control.SetCursorPos(Tard_SpellHitPositionMM.x, Tard_SpellHitPositionMM.y)
 		Control.KeyDown(spell)
 		Control.KeyUp(spell)
 		Control.Control.SetCursorPos(Tard_Mouse)
@@ -224,7 +238,7 @@ end
 class "TardEzreal"
 
 function TardEzreal:__init()
-	require("Eternal Prediction")
+--	require("Eternal Prediction")
 
 	self.Tard_EzrealSpells = { 
 		[0] = {range = 1175, delay = 0.25, speed = 2000, width = 60, spellType = TYPE_LINE, hitBox = true},	
@@ -234,7 +248,7 @@ function TardEzreal:__init()
 	}
 
   if _G.Prediction_Loaded then self.Tard_EternalPred = true; print("Tosh Pred loaded ;)");
-     = {
+    self.Tard_SpellstoPred = {
       [0] = {Prediction:SetSpell(self.Tard_EzrealSpells[0], self.Tard_EzrealSpells[0].spellType, self.Tard_EzrealSpells[0].hitBox)},
       [1] = {Prediction:SetSpell(self.Tard_EzrealSpells[1], self.Tard_EzrealSpells[1].spellType, self.Tard_EzrealSpells[1].hitBox)},
       [3] = {Prediction:SetSpell(self.Tard_EzrealSpells[3], self.Tard_EzrealSpells[3].spellType, self.Tard_EzrealSpells[3].hitBox)}
@@ -246,17 +260,16 @@ function TardEzreal:__init()
       [1] = {Collision:SetSpell(self.Tard_EzrealSpells[1].range, self.Tard_EzrealSpells[1].speed, self.Tard_EzrealSpells[1].width, self.Tard_EzrealSpells[1].hitBox)},
       [3] = {Collision:SetSpell(self.Tard_EzrealSpells[3].range, self.Tard_EzrealSpells[3].speed, self.Tard_EzrealSpells[3].width, self.Tard_EzrealSpells[3].hitBox)}   
     }
-  end 
-
+  end  
   for i = 0, 3 do
     if i == 0 then self.Tard_EzrealSpells[i].dmg = function(unit) local Tard_level=myHero:GetSpellData(0).level return Need:CalcPhysicalDamage(myHero, unit, ({35, 55, 75, 95, 115})[Tard_level] + 1.1 * myHero.totalDamage + 0.4 * myHero.ap) end
     elseif i == 1 then self.Tard_EzrealSpells[i].dmg = function(unit) local Tard_level=myHero:GetSpellData(1).level return Need:CalcMagicalDamage(myHero, unit, ({70, 115, 160, 205, 250})[Tard_level] + 0.8 * myHero.ap) end
     elseif i == 3 then
       self.Tard_EzrealSpells[i].dmg = function(unit)
       local Tard_level = myHero:GetSpellData(i).level
-      local Tard_initialdmg = {350, 500, 650})[Tard_level] + 0.9 * myHero.ap + myHero.bonusDamage
+      local Tard_initialdmg = ({350, 500, 650})[Tard_level] + 0.9 * myHero.ap + myHero.bonusDamage
       local Tard_Collision
-      if self.Tard_EternalPred = true then
+      if self.Tard_EternalPred == true then
         local pred = self.Tard_SpellstoPred[i]:GetPrediction(unit, myHero.pos)
         Tard_Collision = pred:mCollision() + pred:hCollision()
       else 
@@ -266,7 +279,8 @@ function TardEzreal:__init()
       local Tard_finaldmg = Tard_initialdmg * ((10 - Tard_Collision) / 10)
       return Need:CalcMagicalDamage(myHero, unit, Tard_finaldmg)
     end
-  end 
+	end
+end
 
   --[[]
   self.Tard_EzrealDmg = {
@@ -288,37 +302,37 @@ function TardEzreal:Tard_Menu()
   self.Tard_TardMenu:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
   self.Tard_TardMenu.Combo:MenuElement({id = "ComboQ", name = "Use Q", value = true})
   self.Tard_TardMenu.Combo:MenuElement({id = "ComboW", name = "Use W", value = true})
-  self.Tard_TardMenu.Combo:MenuElement({id = "ComboE", name = "Use E", value = true})
-  self.Tard_TardMenu.Harass:MenuElement({id = "ComboWmana", name = "Min. Mana to W", value = 25, min = 0, max = 100})  
+  self.Tard_TardMenu.Combo:MenuElement({id = "ComboQmana", name = "Min. Mana to Q", value = 0, min = 0, max = 100, tooltip = "It's %"}) 
+  self.Tard_TardMenu.Combo:MenuElement({id = "ComboWmana", name = "Min. Mana to W", value = 25, min = 0, max = 100, tooltip = "It's %"})  
 
     --[[Harass]]
   self.Tard_TardMenu:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
   self.Tard_TardMenu.Harass:MenuElement({id = "HarassQ", name = "Use Q", value = true})
   self.Tard_TardMenu.Harass:MenuElement({id = "HarassW", name = "Use W", value = true})
-  self.Tard_TardMenu.Harass:MenuElement({id = "HarassQMana", name = "Min. Mana to Q", value = 40, min = 0, max = 100})
-  self.Tard_TardMenu.Harass:MenuElement({id = "HarassWMana", name = "Min. Mana to W", value = 70, min = 0, max = 100})
+  self.Tard_TardMenu.Harass:MenuElement({id = "HarassQMana", name = "Min. Mana to Q", value = 40, min = 0, max = 100, tooltip = "It's %"})
+  self.Tard_TardMenu.Harass:MenuElement({id = "HarassWMana", name = "Min. Mana to W", value = 70, min = 0, max = 100, tooltip = "It's %"})
     
     --[[Farm]]
   self.Tard_TardMenu:MenuElement({type = MENU, id = "Farm", name = "Farm Settings"})
   self.Tard_TardMenu.Farm:MenuElement({id = "FarmQ", name = "Use Q", value = true})  
-  self.Tard_TardMenu.Farm:MenuElement({id = "FarmMana", name = "Min. Mana", value = 60, min = 0, max = 100})
+  self.Tard_TardMenu.Farm:MenuElement({id = "FarmMana", name = "Min. Mana", value = 60, min = 0, max = 100, tooltip = "It's %"})
 
     --[[LastHit]]
-  self.Menu:MenuElement({type = MENU, id = "LastHit", name = "LastHit"})
-  self.Menu.Lasthit:MenuElement({id = "LastHitQ", name = "Use Q", value = true})
-  self.Menu.Lasthit:MenuElement({id = "LastHitMana", name = "Min Mana To Lasthit", value = 40, min = 0, max = 100})
+  self.Tard_TardMenu:MenuElement({type = MENU, id = "LastHit", name = "LastHit"})
+  self.Tard_TardMenu.LastHit:MenuElement({id = "LastHitQ", name = "Use Q", value = true})
+  self.Tard_TardMenu.LastHit:MenuElement({id = "LastHitMana", name = "Min Mana To Lasthit", value = 40, min = 0, max = 100, tooltip = "It's %"})
 
     --[[JungleClear]]
-  self.Menu:MenuElement({type = MENU, id = "JungleClear", name = "JungleClear"})
-  self.Menu.Jungleclear:MenuElement({id = "JungleQ", name = "Use Q", value = true})
-  self.Menu.Jungleclear:MenuElement({id = "JungleMana", name = "Min Mana To JungleClear", value = 40, min = 1, max = 100, step = 1})  
+  self.Tard_TardMenu:MenuElement({type = MENU, id = "JungleClear", name = "JungleClear"})
+  self.Tard_TardMenu.JungleClear:MenuElement({id = "JungleQ", name = "Use Q", value = true})
+  self.Tard_TardMenu.JungleClear:MenuElement({id = "JungleMana", name = "Min Mana To JungleClear", value = 40, min = 0, max = 100, step = 1, tooltip = "It's %"})  
   
    --[[KS]]
   self.Tard_TardMenu:MenuElement({type = MENU, id = "KS", name = "KillSteal Settings"})
   self.Tard_TardMenu.KS:MenuElement({id = "Q_KS", name = "Use Q to try to KillSteal", value = true})
   self.Tard_TardMenu.KS:MenuElement({id = "E_KS", name = "Use E to try to KillSteal", value = true})
   self.Tard_TardMenu.KS:MenuElement({id = "R_KS", name = "Use R to try to KillSteal", value = true})
-  self.Tard_TardMenu.KS:MenuElement({id = "R_Ksrange", name = "R Max Range", value = 10000, min = 300, max = 20000, step = 100})
+  self.Tard_TardMenu.KS:MenuElement({id = "R_Ksrange", name = "R Max Range", value = 10000, min = 300, max = 20000, step = 100, tooltip = "It's %"})
 
    --[[Misc]]
   self.Tard_TardMenu:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})  
@@ -327,7 +341,7 @@ function TardEzreal:Tard_Menu()
     --[[Pred]]
   if self.Tard_EternalPred then
     self.Tard_TardMenu:MenuElement({type = MENU, id = "Pred", name = "Prediction Settings"})
-    self.Tard_TardMenu.Pred:MenuElement({id = "PredHitChance", name = "HitChance (default 25)", value = 25, min = 0, max = 100,  tooltip = "higher value better pred but slower.  ||don't change it if don't know what is it||"})
+    self.Tard_TardMenu.Pred:MenuElement({id = "PredHitChance", name = "HitChance (default 25)", value = 25, min = 0, max = 100,  tooltip = "higher value better pred but slower(%)||don't change it if don't know what is it||"})
   end
 
     --[[Draw]]
@@ -344,52 +358,55 @@ end
 
 function TardEzreal:Tard_Tick()
 	if myHero.dead then return end	
-  if (self.Tard_TardMenu.Combo.ComboW:Value() and Game.CanUseSpell(3) == 0 and myHero.mana >= 140) or (Game.CanUseSpell(3) == 1 or not self.Tard_TardMenu.Combo.ComboW:Value()) then
+ -- if (self.Tard_TardMenu.Combo.ComboW:Value() and Game.CanUseSpell(3) == 0 and myHero.mana >= 140) or (Game.CanUseSpell(3) == 1 or not self.Tard_TardMenu.Combo.ComboW:Value()) then
 	  local Tard_Mode = Need:Tard_GetMode()	
-	  if Tard_Mode == "Combo" or Tard_Mode == 1 then
+	  if Tard_Mode == "Combo" then
 		   self:Tard_Combo()   
-	  elseif Tard_Mode == "Harass" or Tard_Mode == 2 then
+       
+	  elseif Tard_Mode == "Harass" then
 		   self:Tard_Harass()
-    elseif Tard_Mode == "Lasthit" or Tard_Mode == 3 then
+    elseif Tard_Mode == "Lasthit" then
        self:Tard_LastHit() 
-    elseif Tard_Mode == "Farm" or Tard_Mode == 4 then 
+    elseif Tard_Mode == "Farm" then 
        self:Tard_LastHit()
        self:Tard_Farm()
        self:Tard_JungleClear() 
 	  end
-  end 	
+ -- end 	
 end
 
+--local Tard_AAstate
 local Tard_CurrentTarget = math.huge
 function TardEzreal:Tard_Combo()
-	local Tard_target = Need:TardTarget(1200)
-	if Tard_target == nil or ((local Tard_AAstate = myHero.attackData.state) == 1)  then return end
-	local Tard_AArange = myHero.range
 
+	local Tard_target = Need:Tard_GetTarget(1200)
+	--Tard_AAstate = myHero.attackData.state
+	if Tard_target == nil or myHero.attackData.state == 1  then return end	
 	--CAST Q SPELL
-	if self.Tard_TardMenu.Combo.ComboQ:Value() and Game.CanUseSpell(_Q) == 0 and Need:Tard_IsValidTarget(self.Tard_EzrealSpells[0].range) then
-		self:Tard_CastQ
+	if self.Tard_TardMenu.Combo.ComboQ:Value() and Need:Tard_PercentMP() >= self.Tard_TardMenu.Combo.ComboQmana:Value() and Game.CanUseSpell(_Q) == 0 and Need:Tard_IsValidTarget(Tard_target, self.Tard_EzrealSpells[0].range) then
+		print("test")
+    self:Tard_CastQ(Tard_target)
     Tard_CurrentTarget = Tard_target
 	--CAST W SPELL
-	elseif self.Tard_TardMenu.Combo.ComboW:Value() and Need:Tard_PercentMP() >= self.Tard_TardMenu.Combo.ComboWmana:Value() and Game.CanUseSpell(_W) == 0 and Need:Tard_IsValidTarget(self.Tard_EzrealSpells[1].range) then
-		self:Tard_CastW
-    Tard_CurrentTarget = Tard_target
+	elseif self.Tard_TardMenu.Combo.ComboW:Value() and Need:Tard_PercentMP() >= self.Tard_TardMenu.Combo.ComboWmana:Value() and Game.CanUseSpell(_W) == 0 and Need:Tard_IsValidTarget(Tard_target, self.Tard_EzrealSpells[1].range) then
+		self:Tard_CastW(Tard_target)
+    	Tard_CurrentTarget = Tard_target
 	end
 end
 
 function TardEzreal:Tard_Harass()
-	local Tard_target = Need:TardTarget(1200)
-	if Tard_target == nil or ((local Tard_AAstate = myHero.attackData.state) == 1)  then return end
-	local Tard_AArange = myHero.range
-
+	local Tard_target = Need:Tard_GetTarget(1200)
+	if Tard_target == nil or myHero.attackData.state == 1  then return end
+	
 	--CAST Q SPELL
 	if self.Tard_TardMenu.Harass.HarassQ:Value() and Need:Tard_PercentMP() >= self.Tard_TardMenu.Harass.HarassQMana:Value() and Game.CanUseSpell(_Q) == 0 and Need:Tard_IsValidTarget(self.Tard_EzrealSpells[0].range) then
-		self:Tard_CastQ
-    Tard_CurrentTarget = Tard_target
+		self:Tard_CastQ(Tard_target)
+    	Tard_CurrentTarget = Tard_target
+    end
 	--CAST W SPELL
 	if self.Tard_TardMenu.Harass.HarassW:Value() and Need:TardPercentMP() >= self.Tard_TardMenu.Harass.HarassWMana:Value() and Game.CanUseSpell(_W) == 0 and Need:Tard_IsValidTarget(self.Tard_EzrealSpells[1].range) then
-		self:Tard_CastW
-    Tard_CurrentTarget = Tard_target
+		self:Tard_CastW(Tard_target)
+    	Tard_CurrentTarget = Tard_target
 	end
 end
 
@@ -398,7 +415,7 @@ function TardEzreal:Tard_Farm()
 	for i = 1, Game.MinionCount() do
 		local Tard_Minion = Game.Minion(i)
 		if Need:Tard_IsValidTarget(Tard_Minion, self.Tard_EzrealSpells[0].range) then
-			self:Tard_CastQ
+			self:Tard_CastQ(Tard_Minion)
 			break
 		end
 	end
@@ -408,22 +425,23 @@ function TardEzreal:Tard_JungleClear()
 	if not self.Tard_TardMenu.Jungleclear.JungleQ:Value() or Need:Tard_PercentMP() < self.Tard_TardMenu.Jungleclear.JungleMana:Value() or myHero.attackData.state == 1 or Game.CanUseSpell(0) ~= 0 then return end
 	for i = 1, Game.MinionCount(i) do
 		local Tard_JungleMinion = Game.Minion(i)
-		if Tard_JungleMinion.team = 300 and Need:Tard_IsValidTarget(Tard_JungleMinion, self.Tard_EzrealSpells[0].range) then
-			self:CastQ()
+		if Tard_JungleMinion.team == 300 and Need:Tard_IsValidTarget(Tard_JungleMinion, self.Tard_EzrealSpells[0].range) then
+			self:Tard_CastQ(Tard_JungleMinion)
 			break
 		end
 	end	
 end
 
 function TardEzreal:Tard_LastHit()
-	local Tard_AA.state = myHero.attackData.state
-	if not menu or Need:Tard_PercentMP() < menumana or Tard_AA.state == 1 or Game.CanUseSpell(0) ~= 0 then return end
-	local Tard_AA.target = myHero.attackData.target	
+	local Tard_AAstate = myHero.attackData.state
+	if not menu or Need:Tard_PercentMP() < menumana or Tard_AAstate == 1 or Game.CanUseSpell(0) ~= 0 then return end
+	local Tard_AAtarget = myHero.attackData.target
+	local Tard_AArange = myHero.range 	
 	for i = 1, Game.MinionCount() do
 		local Tard_Minion = Game.Minion(i)
-		if Tard_AA.target ~= Tard_Minion.handle and Need:Tard_IsValidTarget(Tard_Minion, self.Tard_EzrealSpells[0].range) and self.Tard_EzrealSpells[0].dmg(Tard_Minion) >= Tard_Minion.health then
-			if Tard_AA.state == 1 or Need:Tard_GetDistanceSqr(Tard_Minion) > myHero.range*myHero.range then
-				self:CastQ()
+		if Tard_AAtarget ~= Tard_Minion.handle and Need:Tard_IsValidTarget(Tard_Minion, self.Tard_EzrealSpells[0].range) and self.Tard_EzrealSpells[0].dmg(Tard_Minion) >= Tard_Minion.health then
+			if Tard_AAstate == 3 or Need:Tard_GetDistanceSqr(Tard_Minion) > Tard_AArange*Tard_AArange then
+				self:Tard_CastQ(Tard_Minion)
 				break
 			end
 		end		
@@ -442,7 +460,7 @@ function TardEzreal:Tard_KillSteal()
       if self.Tard_TardMenu.KS.W_KS:Value() and Game.CanUseSpell(1) == 0 and Need:GetDistanceSqr(Tard_Hero) <= self.Tard_EzrealSpells[1].range*self.Tard_EzrealSpells[1].range then 
             Tard_W_DMG = self.Tard_EzrealSpells[2].dmg(Tard_hero) 
       end
-      if self.Tard_TardMenu.KS.R_KS:Value() and Game.CanUseSpell(3) == 0 and Need:GetDistanceSqr(Tard_Hero) <= self.Menu.Killsteal.KSRC:Value())*self.Menu.Killsteal.KSRC:Value() then 
+      if self.Tard_TardMenu.KS.R_KS:Value() and Game.CanUseSpell(3) == 0 and Need:GetDistanceSqr(Tard_Hero) <= self.Menu.Killsteal.KSRC:Value()*self.Menu.Killsteal.KSRC:Value() then 
             Tard_R_DMG = self.Tard_EzrealSpells[3].dmg(Tard_hero) 
       end
 			if Tard_W_DMG and Tard_W_DMG > Tard_Hero.health + Tard_Hero.shieldAD then
@@ -455,17 +473,21 @@ function TardEzreal:Tard_KillSteal()
 				self:Tard_CastQ(Tard_Hero)
 				self:Tard_CastW(Tard_Hero)
         Tard_CurrentTarget = Tard_Hero
-			elseif Tard_R_DMG and Tard_R_DMG > Tard_Hero.health + Tard_Hero.shieldAD and Need:GetDistanceSqr(Tard_Hero) > local Tard_AA.range = myHero.range*Tard_AA.range then
-				self:Tard_CastR(Tard_Hero)
-        Tard_CurrentTarget = Tard_Hero
+			elseif Tard_R_DMG and Tard_R_DMG > Tard_Hero.health + Tard_Hero.shieldAD then
+				local Tard_AArange = myHero.range
+				if Need:GetDistanceSqr(Tard_Hero) > Tard_AArange*Tard_AArange then
+					self:Tard_CastR(Tard_Hero)
+       				Tard_CurrentTarget = Tard_Hero
+       			end
 			end
 		end
 	end
 end
 
 function TardEzreal:Tard_CastQ(unit)
-	if self.Tard_EternalPred == true then  
-	  local Tard_QPred = self.Tard_SpellstoPred[0]:GetPrediction(unit, myHero.pos)
+  if self.Tard_EternalPred == true then 
+  print(unit)
+	local Tard_QPred = self.Tard_SpellstoPred[0]:GetPrediction(unit, myHero.pos)
     if Tard_QPred and (Tard_QPred.hitChance >= self.Tard_TardMenu.Pred.PredHitChance:Value()/100) and Tard_QPred:mCollision() == 0 and Tard_QPred:hCollision() == 0 then
       Need:Tard_CastSpell(HK_Q,Tard_QPred.castPos)            
     end 
@@ -475,12 +497,13 @@ function TardEzreal:Tard_CastQ(unit)
     if Tard_QCollision == 0 and Need:Tard_GetDistanceSqr(myHero.pos,Tard_QPred) < (self.Tard_EzrealSpells[0].range*self.Tard_EzrealSpells[0].range) then
       Need:Tard_CastSpell(HK_Q, Tard_QPred)
     end
+  end
 end
 
 function TardEzreal:Tard_CastW(unit)
   if self.Tard_EternalPred == true then
     local Tard_WPred = self.Tard_SpellstoPred[1]:GetPrediction(unit, myHero.pos)
-    if Tard_WPred and (Tard_WPred.hitChance >= self.Tard_TardMenu.Pred.PredHitChance:Value()/100) 
+    if Tard_WPred and (Tard_WPred.hitChance >= self.Tard_TardMenu.Pred.PredHitChance:Value()/100) then
       Need:Tard_CastSpell(HK_W,Tard_QPred.castPos)  
     end
   else
@@ -488,6 +511,7 @@ function TardEzreal:Tard_CastW(unit)
     if Need:Tard_GetDistanceSqr(myHero.pos,Tard_QPred) < (self.Tard_EzrealSpells[1].range*self.Tard_EzrealSpells[1].range) then
       Need:Tard_CastSpell(HK_W, Tard_WPred)
     end
+  end 
 end
 
 function TardEzreal:Tard_CastR(unit)
@@ -501,46 +525,54 @@ function TardEzreal:Tard_CastR(unit)
     if Need:Tard_GetDistanceSqr(myHero.pos,Tard_RPred) < (self.Tard_EzrealSpells[3].range*self.Tard_EzrealSpells[3].range) then
       Need:Tard_CastSpell(HK_Q, Tard_RPred)
     end
+  end
 end
 
 function TardEzreal:Tard_Draw()
-    if myHero.dead or self.Tard_TardMenu.Draw.DrawReady:Value() then return end
+    if myHero.dead or self.Tard_TardMenu.Draw.DisableDraw:Value() then return end
     local Tard_EzrealPos = myHero.pos
     local Tard_DrawMenu = self.Tard_TardMenu.Draw
 
     if self.Tard_TardMenu.Draw.DrawReady:Value() then
       local Tard_Spell = Game.CanUseSpell     
         if Tard_Spell(_Q) == 0 and Tard_DrawMenu.DrawQ:Value() then
-            Draw.Circle(Tard_EzrealPos, self.Tard_QuinnSpells[0].range, 1, Draw.Color(255, 96, 203, 67))
+            Draw.Circle(Tard_EzrealPos, self.Tard_EzrealSpells[0].range, 1, Draw.Color(255, 96, 203, 67))
         end
         if Tard_Spell(_W) == 0 and Tard_DrawMenu.DrawW:Value() then
-            Draw.Circle(Tard_EzrealPos, self.Tard_QuinnSpells[1].range, 1, Draw.Color(255, 255, 255, 255))
+            Draw.Circle(Tard_EzrealPos, self.Tard_EzrealSpells[1].range, 1, Draw.Color(255, 255, 255, 255))
         end
         if Tard_Spell(_E) == 0 and Tard_DrawMenu.DrawE:Value() then
-            Draw.Circle(Tard_EzrealPos, self.Tard_QuinnSpells[2].range, 1, Draw.Color(255, 255, 255, 255))
+            Draw.Circle(Tard_EzrealPos, self.Tard_EzrealSpells[2].range, 1, Draw.Color(255, 255, 255, 255))
         end
        
     else
         if Tard_DrawMenu.DrawQ:Value() then
-            Draw.Circle(Tard_QuinnPos, self.Tard_QuinnSpells[0].range, 1, Draw.Color(255, 96, 203, 67))
+            Draw.Circle(Tard_EzrealPos, self.Tard_EzrealSpells[0].range, 1, Draw.Color(255, 96, 203, 67))
         end
         if Tard_DrawMenu.DrawW:Value() then
-            Draw.Circle(Tard_QuinnPos, self.Tard_QuinnSpells[1].range, 1, Draw.Color(255, 255, 255, 255))
+            Draw.Circle(Tard_EzrealPos, self.Tard_EzrealSpells[1].range, 1, Draw.Color(255, 255, 255, 255))
         end
         if Tard_DrawMenu.DrawE:Value() then
-            Draw.Circle(Tard_QuinnPos, self.Tard_QuinnSpells[2].range, 1, Draw.Color(255, 255, 255, 255))
+            Draw.Circle(Tard_EzrealPos, self.Tard_EzrealSpells[2].range, 1, Draw.Color(255, 255, 255, 255))
         end
        
     end
 
     if Tard_DrawMenu.DrawTarget:Value() then
         local Tard_drawTarget = Tard_CurrentTarget
-        if Tard_drawTarget then
-            Draw.Circle(Tard_drawTarget.pos,80,3,Draw.Color(255, 255, 0, 0))
+        if Tard_CurrentTarget ~= nil then
+            Draw.Circle(Tard_CurrentTarget,80,3,Draw.Color(255, 255, 0, 0))
         end
     end
 end
 
+--------------------------------------------------------------------------------------------------------------------------------------
+Callback.Add("Load", function() 
+	if _G["TardEzreal"] and myHero.charName == "Ezreal" then		
+		_G["TardEzreal"]()
+		_G.Need = Need()			 
+	end
+end)
 
 
 	

@@ -92,9 +92,11 @@ end
 function Need:Tard_GetTarget(range)
 	local Tard_target 
 	if self.Tard_Orb == 0 then
-		Tard_target = EOW:GetTarget(range)
-	elseif self.Tard_Orb == 1 then			
-		Tard_target = self.Tard_SDKSelector:GetTarget(range)
+		Tard_target = EOW:GetTarget(range, easykill_acd)
+	elseif self.Tard_Orb == 1 then
+        if self.myHero.totalDamage >= self.myHero.ap then Tard_target = self.Tard_SDKSelector:GetTarget(range, _G.SDK.DAMAGE_TYPE_PHYSICAL)			
+        else Tard_target = self.Tard_SDKSelector:GetTarget(range, _G.SDK.DAMAGE_TYPE_MAGICAL)			
+        end
 	else
 		Tard_target = GOS:GetTarget(range)
 	end
@@ -102,34 +104,32 @@ function Need:Tard_GetTarget(range)
 end
 
 local castSpell = {state = 0, tick = GetTickCount(), casting = GetTickCount() - 1000, mouse = mousePos}
-function Need:Tard_CastSpell(spell,pos,range,delay)
-local range = range or math.huge
-local delay = delay or 250
-local ticker = GetTickCount()
-
-	if castSpell.state == 0 and ticker - castSpell.casting > delay + Game.Latency()  then
-		castSpell.state = 1
-		castSpell.mouse = mousePos
-		castSpell.tick = ticker
-	end
-	if castSpell.state == 1 then
-		if ticker - castSpell.tick < Game.Latency() then
-			Control.SetCursorPos(pos)
-			Control.KeyDown(spell)
-			Control.KeyUp(spell)
-			castSpell.casting = ticker + delay
-			DelayAction(function()
-				if castSpell.state == 1 then
-					Control.SetCursorPos(castSpell.mouse)
-					castSpell.state = 0
-				end
-			end,Game.Latency()/1000)
+function Need:Tard_CastSpell(spell, pos, delay)
+	if pos == nil then return end
+		local ticker = GetTickCount()
+		if castSpell.state == 0 and ticker - castSpell.casting > delay + Game.Latency() and pos:ToScreen().onScreen then
+			castSpell.state = 1
+			castSpell.mouse = mousePos
+			castSpell.tick = ticker
 		end
-		if ticker - castSpell.casting > Game.Latency() then
-			Control.SetCursorPos(castSpell.mouse)
-			castSpell.state = 0
-		end
-	end
+		if castSpell.state == 1 then
+			if ticker - castSpell.tick < Game.Latency() then
+				Control.SetCursorPos(pos)
+				Control.KeyDown(spell)
+				Control.KeyUp(spell)
+				castSpell.casting = ticker + delay
+				DelayAction(function()
+					if castSpell.state == 1 then
+						Control.SetCursorPos(castSpell.mouse)
+						castSpell.state = 0
+					end
+				end, Game.Latency()/1000)
+			end
+			if ticker - castSpell.casting > Game.Latency() then
+				Control.SetCursorPos(castSpell.mouse)
+				castSpell.state = 0
+			end
+		end	
 end
 
 function Need:Tard_HP_PRED(unit, time)
@@ -151,6 +151,14 @@ function Need:Tard_GetEnemynearMouse()
     end
 end
 
+function Need:Tard_GetEnemybyHandle(handle)
+	for i = 1, Game.HeroCount() do
+		local Tard_h = Game.Hero(i)
+		if Tard_h.handle == handle then
+			return Tard_h
+		end
+	end
+end 
 -------------------------------------------------------------------------------------------------------------------------------------------
 --local dmglib
 
@@ -292,6 +300,7 @@ class "TardEzreal"
 
 function TardEzreal:__init()
     require("Eternal Prediction")
+    self.myHero = myHero
 	self.Tard_EzrealSpells = { 
 		[0] = {range = 1175, delay = 0.25, speed = 2000, width = 60, spellType = TYPE_LINE, hitBox = true},	
 		[1] = {range = 1050, delay = 0.54, speed = 1600, width = 80, spellType = TYPE_LINE, hitBox = false},
@@ -406,28 +415,31 @@ end
 function TardEzreal:Tard_Tick()
 	if myHero.dead then return end	
  -- if (self.Tard_TardMenu.Combo.ComboW:Value() and Game.CanUseSpell(3) == 0 and myHero.mana >= 140) or (Game.CanUseSpell(3) == 1 or not self.Tard_TardMenu.Combo.ComboW:Value()) then
-	  local Tard_Mode = Need:Tard_GetMode()	
-	  if Tard_Mode == "Combo" then
-		   self:Tard_Combo()   
-	  elseif Tard_Mode == "Harass" then
-		   self:Tard_Harass()
+	local Tard_Mode = Need:Tard_GetMode()	
+	if Tard_Mode == "Combo" then
+	    self:Tard_Combo()   
+	elseif Tard_Mode == "Harass" then
+	    self:Tard_Harass()
     elseif Tard_Mode == "Lasthit" then
-       self:Tard_LastHit() 
+        self:Tard_LastHit() 
     elseif Tard_Mode == "Clear" then 
-       self:Tard_LastHit()
-       self:Tard_Farm()
-       self:Tard_JungleClear() 
-	  end
- -- end 	
-
+        self:Tard_LastHit()
+        self:Tard_Farm()
+        self:Tard_JungleClear() 
+	end       
+ -- end 
 self:Tard_KillSteal()
-
 end
 
 local Tard_CurrentTarget
 function TardEzreal:Tard_Combo()
-	local Tard_target = Need:Tard_GetTarget(1200)
-	if Tard_target == nil or myHero.attackData.state == 2  then return end	
+    local Tard_target = Need:Tard_GetTarget(1175)
+    local Tard_AAtarget = Need:Tard_GetEnemybyHandle(myHero.attackData.target)
+	if Tard_target == nil or myHero.attackData.state == 2  then return end
+    if Need:Tard_IsValidTarget(Tard_AAtarget, 1175) and Tard_AAtarget.handle ~= Tard_target.handle then
+        Tard_target = Tard_AAtarget
+    end
+   
 	--CAST Q SPELL
 	if self.Tard_TardMenu.Combo.ComboQ:Value() and Need:Tard_PercentMP() >= self.Tard_TardMenu.Combo.ComboQmana:Value() and Game.CanUseSpell(_Q) == 0 and Need:Tard_IsValidTarget(Tard_target, self.Tard_EzrealSpells[0].range) then
         self:Tard_CastQ(Tard_target)
@@ -440,7 +452,7 @@ function TardEzreal:Tard_Combo()
 end
 
 function TardEzreal:Tard_Harass()
-	local Tard_target = Need:Tard_GetTarget(1200)
+	local Tard_target = Need:Tard_GetTarget(1175)
 	if Tard_target == nil or myHero.attackData.state == 2  then return end
 	--CAST Q SPELL
 	if self.Tard_TardMenu.Harass.HarassQ:Value() and Need:Tard_PercentMP() >= self.Tard_TardMenu.Harass.HarassQMana:Value() and Game.CanUseSpell(_Q) == 0 and Need:Tard_IsValidTarget(Tard_target, self.Tard_EzrealSpells[0].range) then
@@ -488,8 +500,9 @@ function TardEzreal:Tard_LastHit()
 	for i = 1, Game.MinionCount() do
 		local Tard_Minion = Game.Minion(i)
 		if Tard_AAtarget ~= Tard_Minion.handle and Need:Tard_IsValidTarget(Tard_Minion, self.Tard_EzrealSpells[0].range) and self.Tard_EzrealSpells[0].dmg(Tard_Minion) >= Tard_Minion.health then
-      if (Tard_AAstate == 3 and Need:Tard_HP_PRED(Tard_Minion, 1) > 0) or Need:Tard_GetDistanceSqr(Tard_Minion.pos) > Tard_AArange*Tard_AArange  then
-				self:Tard_CastQ(Tard_Minion)
+      if (Tard_AAstate == 3 and Need:Tard_HP_PRED(Tard_Minion, myHero.attackData.endTime - Game.Timer()) > 0) or Need:Tard_GetDistanceSqr(Tard_Minion.pos) > Tard_AArange*Tard_AArange  then
+				--test si minion va mourir avant le reset aa et tard_hp_pred (temps = myHero.attackData.endTime-Game.Timer() ou attackData.animationTime)
+        self:Tard_CastQ(Tard_Minion)
 				break
 			end
 		end		
@@ -546,7 +559,7 @@ function TardEzreal:Tard_CastQ(unit)
   if self.Tard_EternalPred == true then 
     local Tard_QPred = self.Tard_SpellstoPred[0]:GetPrediction(unit, myHero.pos)
       if Tard_QPred and (Tard_QPred.hitChance >= self.Tard_TardMenu.Pred.PredHitChance:Value()/100) and Tard_QPred:mCollision() == 0 and Tard_QPred:hCollision() == 0 and Need:Tard_GetDistanceSqr(Tard_QPred.castPos) <= 1380625 then
-        Need:Tard_CastSpell(HK_Q,Tard_QPred.castPos)            
+        Need:Tard_CastSpell(HK_Q,Tard_QPred.castPos, 250)            
       end 
   else
     local Tard_QPred = unit:GetPrediction(self.Tard_EzrealSpells[0].speed, self.Tard_EzrealSpells[0].delay + Game.Latency()/1000)
@@ -566,7 +579,7 @@ function TardEzreal:Tard_CastW(unit)
   if self.Tard_EternalPred == true then
     local Tard_WPred = self.Tard_SpellstoPred[1]:GetPrediction(unit, myHero.pos)
     if Tard_WPred and Tard_WPred.hitChance >= self.Tard_TardMenu.Pred.PredHitChance:Value()/100 and Need:Tard_GetDistanceSqr(Tard_WPred.castPos) < 1050625 then
-      Need:Tard_CastSpell(HK_W,Tard_WPred.castPos)  
+      Need:Tard_CastSpell(HK_W,Tard_WPred.castPos,540)  
     end
   else
     local Tard_WPred = unit:GetPrediction(self.Tard_EzrealSpells[1].speed, self.Tard_EzrealSpells[1].delay + Game.Latency()/1000)
@@ -587,7 +600,7 @@ function TardEzreal:Tard_CastR(unit)
       if Tard_RPred and (Tard_RPred.hitChance >= self.Tard_TardMenu.Pred.PredHitChance:Value()/100) then
             Tard_RPred.castPos = Vector(Tard_RPred.castPos)
             Tard_RPred.castPos = myHero.pos + Vector(Tard_RPred.castPos - myHero.pos):Normalized() * math.random(500,800)
-            Need:Tard_CastSpell(HK_R,Tard_RPred.castPos)
+            Need:Tard_CastSpell(HK_R,Tard_RPred.castPos, 1760)
       end 
     else
       local Tard_RPred = unit:GetPrediction(self.Tard_EzrealSpells[3].speed, self.Tard_EzrealSpells[3].delay + Game.Latency()/1000)    
@@ -635,8 +648,9 @@ function TardEzreal:Tard_Draw()
     end
     if Tard_DrawMenu.DrawTarget:Value() then
         local Tard_drawTarget = Tard_CurrentTarget
-        if Tard_CurrentTarget ~= nil then
-            Draw.Circle(Tard_CurrentTarget,80,3,Draw.Color(255, 255, 0, 0))
+        if Tard_drawTarget == nil or Tard_drawTarget.dead then return 
+        else
+            Draw.Circle(Tard_drawTarget,80,3,Draw.Color(255, 255, 0, 0))
         end
     end
 end
