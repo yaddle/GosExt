@@ -18,47 +18,47 @@ local Tard_EzrealSpells = {
 	[3] = {range = 20000, delay = 1.76, speed = 2000, width = 160, spellType = TYPE_LINE, hitBox = false}
 }
 local DamageReductionTable = {
-  		["Braum"] = {buff = "BraumShieldRaise", amount = function(target) return 1 - ({0.3, 0.325, 0.35, 0.375, 0.4})[target:GetSpellData(_E).level] end},
-  		["Urgot"] = {buff = "urgotswapdef", amount = function(target) return 1 - ({0.3, 0.4, 0.5})[target:GetSpellData(_R).level] end},
-  		["Alistar"] = {buff = "Ferocious Howl", amount = function(target) return ({0.5, 0.4, 0.3})[target:GetSpellData(_R).level] end},
-  		["Amumu"] = {buff = "Tantrum", amount = function(target) return ({2, 4, 6, 8, 10})[target:GetSpellData(_E).level] end, damageType = 1},
-  		["Galio"] = {buff = "GalioIdolOfDurand", amount = function(target) return 0.5 end},
-  		["Garen"] = {buff = "GarenW", amount = function(target) return 0.7 end},
-  		["Gragas"] = {buff = "GragasWSelf", amount = function(target) return ({0.1, 0.12, 0.14, 0.16, 0.18})[target:GetSpellData(_W).level] end},
-  		["Annie"] = {buff = "MoltenShield", amount = function(target) return 1 - ({0.16,0.22,0.28,0.34,0.4})[target:GetSpellData(_E).level] end},
-  		["Malzahar"] = {buff = "malzaharpassiveshield", amount = function(target) return 0.1 end}
-	}
+    ["Braum"] = {buff = "BraumShieldRaise", amount = function(target) return 1 - ({0.3, 0.325, 0.35, 0.375, 0.4})[target:GetSpellData(_E).level] end},
+  	["Urgot"] = {buff = "urgotswapdef", amount = function(target) return 1 - ({0.3, 0.4, 0.5})[target:GetSpellData(_R).level] end},
+  	["Alistar"] = {buff = "Ferocious Howl", amount = function(target) return ({0.5, 0.4, 0.3})[target:GetSpellData(_R).level] end},
+  	["Amumu"] = {buff = "Tantrum", amount = function(target) return ({2, 4, 6, 8, 10})[target:GetSpellData(_E).level] end, damageType = 1},
+  	["Galio"] = {buff = "GalioIdolOfDurand", amount = function(target) return 0.5 end},
+  	["Garen"] = {buff = "GarenW", amount = function(target) return 0.7 end},
+  	["Gragas"] = {buff = "GragasWSelf", amount = function(target) return ({0.1, 0.12, 0.14, 0.16, 0.18})[target:GetSpellData(_W).level] end},
+  	["Annie"] = {buff = "MoltenShield", amount = function(target) return 1 - ({0.16,0.22,0.28,0.34,0.4})[target:GetSpellData(_E).level] end},
+  	["Malzahar"] = {buff = "malzaharpassiveshield", amount = function(target) return 0.1 end}
+}
 if _G.Prediction_Loaded then Tard_EternalPred = true; print("Tosh Pred loaded ;)");
-        Tard_SpellstoPred = {
-        [0] = Prediction:SetSpell(Tard_EzrealSpells[0], Tard_EzrealSpells[0].spellType, Tard_EzrealSpells[0].hitBox),
-        [1] = Prediction:SetSpell(Tard_EzrealSpells[1], Tard_EzrealSpells[1].spellType, Tard_EzrealSpells[1].hitBox),
-        [3] = Prediction:SetSpell(Tard_EzrealSpells[3], Tard_EzrealSpells[3].spellType, Tard_EzrealSpells[3].hitBox)
-        }
+    Tard_SpellstoPred = {
+    [0] = Prediction:SetSpell(Tard_EzrealSpells[0], Tard_EzrealSpells[0].spellType, Tard_EzrealSpells[0].hitBox),
+    [1] = Prediction:SetSpell(Tard_EzrealSpells[1], Tard_EzrealSpells[1].spellType, Tard_EzrealSpells[1].hitBox),
+    [3] = Prediction:SetSpell(Tard_EzrealSpells[3], Tard_EzrealSpells[3].spellType, Tard_EzrealSpells[3].hitBox)
+    }
 else 
-        require("Collision")
-        print("collision loaded")
-        local Tard_SpellstoCollision = {
+    require("Collision")
+    print("collision loaded")
+    local Tard_SpellstoCollision = {
         [0] = Collision:SetSpell(Tard_EzrealSpells[0].range, Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[0].width, Tard_EzrealSpells[0].hitBox),
         [3] = Collision:SetSpell(Tard_EzrealSpells[3].range, Tard_EzrealSpells[3].speed, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[3].width, Tard_EzrealSpells[3].hitBox)   
-        }
+    }
 end  
 if _G.EOWLoaded then 
-        Tard_Orb = 0; print("New Eternal Orb is good but Tosh is still toxic ^^")  
+    Tard_Orb = 0; print("New Eternal Orb is good but Tosh is still toxic ^^")  
 elseif _G.SDK and _G.SDK.Orbwalker then 
-        Tard_Orb = 1; print("IC is a good Orb")		
-        Tard_SDK = _G.SDK.Orbwalker		
-        Tard_SDKCombo = _G.SDK.ORBWALKER_MODE_COMBO      	
-        Tard_SDKHarass = _G.SDK.ORBWALKER_MODE_HARASS
-        Tard_SDKJungleClear = _G.SDK.ORBWALKER_MODE_JUNGLECLEAR
-        Tard_SDKLaneClear = _G.SDK.ORBWALKER_MODE_LANECLEAR
-        Tard_SDKLastHit = _G.SDK.ORBWALKER_MODE_LASTHIT
-        Tard_SDKFlee = _G.SDK.ORBWALKER_MODE_FLEE
-        Tard_SDKSelector = _G.SDK.TargetSelector
-        Tard_SDKHealthPrediction = _G.SDK.HealthPrediction
-        Tard_SDKDamagePhysical = _G.SDK.DAMAGE_TYPE_PHYSICAL
-        Tard_SDKDamageMagical = _G.SDK.DAMAGE_TYPE_MAGICAL
+    Tard_Orb = 1; print("IC is a good Orb")		
+    Tard_SDK = _G.SDK.Orbwalker		
+    Tard_SDKCombo = _G.SDK.ORBWALKER_MODE_COMBO      	
+    Tard_SDKHarass = _G.SDK.ORBWALKER_MODE_HARASS
+    Tard_SDKJungleClear = _G.SDK.ORBWALKER_MODE_JUNGLECLEAR
+    Tard_SDKLaneClear = _G.SDK.ORBWALKER_MODE_LANECLEAR
+    Tard_SDKLastHit = _G.SDK.ORBWALKER_MODE_LASTHIT
+    Tard_SDKFlee = _G.SDK.ORBWALKER_MODE_FLEE
+    Tard_SDKSelector = _G.SDK.TargetSelector
+    Tard_SDKHealthPrediction = _G.SDK.HealthPrediction
+    Tard_SDKDamagePhysical = _G.SDK.DAMAGE_TYPE_PHYSICAL
+    Tard_SDKDamageMagical = _G.SDK.DAMAGE_TYPE_MAGICAL
 else 
-        print("Noddy rocks") 
+    print("Noddy rocks") 
 end	
 for i = 0, 3 do
     if i == 0 then Tard_EzrealSpells[i].dmg = function(unit) local Tard_level=Tard_myHero:GetSpellData(0).level return Need:CalcPhysicalDamage(Tard_myHero, unit, ({35, 55, 75, 95, 115})[Tard_level] + 1.1 * Tard_myHero.totalDamage + 0.4 * Tard_myHero.ap) end
@@ -117,31 +117,31 @@ function Need:Tard_HasBuff(unit, buffname)
 end		
 
 function Need:Tard_GetMode()
-		if Tard_Orb == 0 then         
-			if EOW.CurrentMode == 1 then
-				return "Combo"
-			elseif EOW.CurrentMode == 2 then
-			 	return "Harass"
-			elseif EOW.CurrentMode == 3 then
-				return "Lasthit"
-			elseif EOW.CurrentMode == 4 then
-				return "Clear"
-			end
-		elseif Tard_Orb == 1 then		
-			if Tard_SDK.Modes[Tard_SDKCombo] then				
-				return "Combo"
-			elseif Tard_SDK.Modes[Tard_SDKHarass] then
-				return "Harass"	
-			elseif Tard_SDK.Modes[Tard_SDKLaneClear] or Tard_SDK.Modes[Tard_SDKJungle] then
-				return "Clear"
-			elseif Tard_SDK.Modes[Tard_SDKLastHit] then
-				return "Lasthit"
-			elseif Tard_SDK.Modes[Tard_SDKFlee] then
-				return "Flee"
-			end
-		else 
-			return GOS.GetMode()
+	if Tard_Orb == 0 then         
+		if EOW.CurrentMode == 1 then
+	        return "Combo"
+		elseif EOW.CurrentMode == 2 then
+			return "Harass"
+		elseif EOW.CurrentMode == 3 then
+			return "Lasthit"
+		elseif EOW.CurrentMode == 4 then
+			return "Clear"
 		end
+	elseif Tard_Orb == 1 then		
+		if Tard_SDK.Modes[Tard_SDKCombo] then				
+			return "Combo"
+		elseif Tard_SDK.Modes[Tard_SDKHarass] then
+			return "Harass"	
+		elseif Tard_SDK.Modes[Tard_SDKLaneClear] or Tard_SDK.Modes[Tard_SDKJungle] then
+			return "Clear"
+		elseif Tard_SDK.Modes[Tard_SDKLastHit] then
+			return "Lasthit"
+		elseif Tard_SDK.Modes[Tard_SDKFlee] then
+			return "Flee"
+		end
+	else 
+		return GOS.GetMode()
+	end
 end
 
 function Need:Tard_GetTarget(range)
@@ -189,13 +189,13 @@ function Need:Tard_CastSpell(spell, pos, delay)
 end
 
 function Need:Tard_HP_PRED(unit, time)
-  if Tard_Orb == 0 then
-    return EOW:GetHealthPrediction(unit,time)
-  elseif Tard_Orb == 1 then
-    return Tard_SDKHealthPrediction:GetPrediction(unit, time)
-  else
-    return GOS:HP_Pred(unit,time)
-  end
+    if Tard_Orb == 0 then
+        return EOW:GetHealthPrediction(unit,time)
+    elseif Tard_Orb == 1 then
+        return Tard_SDKHealthPrediction:GetPrediction(unit, time)
+    else
+        return GOS:HP_Pred(unit,time)
+    end
 end
 
 function Need:Tard_GetEnemynearMouse()
@@ -245,135 +245,135 @@ end
 --local dmglib
 
 function Need:GetItemSlot(unit, id)
-  for i = ITEM_1, ITEM_7 do
-    if unit:GetItemData(i).itemID == id then
-      return i
+    for i = ITEM_1, ITEM_7 do
+        if unit:GetItemData(i).itemID == id then
+            return i
+        end
     end
-  end
-  return 0
+    return 0
 end
 
 function Need:CalcPhysicalDamage(source, target, amount)
-  local ArmorPenPercent = source.armorPenPercent
-  local ArmorPenFlat = (0.4 + target.levelData.lvl / 30) * source.armorPen
-  local BonusArmorPen = source.bonusArmorPenPercent
+    local ArmorPenPercent = source.armorPenPercent
+    local ArmorPenFlat = (0.4 + target.levelData.lvl / 30) * source.armorPen
+    local BonusArmorPen = source.bonusArmorPenPercent
 
-  if source.type == Obj_AI_Minion then
-    ArmorPenPercent = 1
-    ArmorPenFlat = 0
-    BonusArmorPen = 1
-  elseif source.type == Obj_AI_Turret then
-    ArmorPenFlat = 0
-    BonusArmorPen = 1
-    if source.charName:find("3") or source.charName:find("4") then
-      ArmorPenPercent = 0.25
-    else
-      ArmorPenPercent = 0.7
+    if source.type == Obj_AI_Minion then
+        ArmorPenPercent = 1
+        ArmorPenFlat = 0
+        BonusArmorPen = 1
+    elseif source.type == Obj_AI_Turret then
+        ArmorPenFlat = 0
+        BonusArmorPen = 1
+        if source.charName:find("3") or source.charName:find("4") then
+        ArmorPenPercent = 0.25
+        else
+        ArmorPenPercent = 0.7
+        end
     end
-  end
 
-  if source.type == Obj_AI_Turret then
-    if target.type == Obj_AI_Minion then
-      amount = amount * 1.25
-      string.ends = function(String,End) return End == "" or string.sub(String,-string.len(End)) == End end
-      if string.ends(target.charName, "MinionSiege") then
-        amount = amount * 0.7
-      end
-      return amount
+    if source.type == Obj_AI_Turret then
+        if target.type == Obj_AI_Minion then
+        amount = amount * 1.25
+        string.ends = function(String,End) return End == "" or string.sub(String,-string.len(End)) == End end
+        if string.ends(target.charName, "MinionSiege") then
+            amount = amount * 0.7
+        end
+        return amount
+        end
     end
-  end
 
-  local armor = target.armor
-  local bonusArmor = target.bonusArmor
-  local value = 100 / (100 + (armor * ArmorPenPercent) - (bonusArmor * (1 - BonusArmorPen)) - ArmorPenFlat)
+    local armor = target.armor
+    local bonusArmor = target.bonusArmor
+    local value = 100 / (100 + (armor * ArmorPenPercent) - (bonusArmor * (1 - BonusArmorPen)) - ArmorPenFlat)
 
-  if armor < 0 then
-    value = 2 - 100 / (100 - armor)
-  elseif (armor * ArmorPenPercent) - (bonusArmor * (1 - BonusArmorPen)) - ArmorPenFlat < 0 then
-    value = 1
-  end
-  return math.max(0, math.floor(Need:DamageReductionMod(source, target,Need:PassivePercentMod(source, target, value) * amount, 1)))
+    if armor < 0 then
+        value = 2 - 100 / (100 - armor)
+    elseif (armor * ArmorPenPercent) - (bonusArmor * (1 - BonusArmorPen)) - ArmorPenFlat < 0 then
+        value = 1
+    end
+    return math.max(0, math.floor(Need:DamageReductionMod(source, target,Need:PassivePercentMod(source, target, value) * amount, 1)))
 end
 
 function Need:CalcMagicalDamage(source, target, amount)
-  local mr = target.magicResist
-  local value = 100 / (100 + (mr * source.magicPenPercent) - source.magicPen)
+    local mr = target.magicResist
+    local value = 100 / (100 + (mr * source.magicPenPercent) - source.magicPen)
 
-  if mr < 0 then
-    value = 2 - 100 / (100 - mr)
-  elseif (mr * source.magicPenPercent) - source.magicPen < 0 then
-    value = 1
-  end
-  return math.max(0, math.floor(DamageReductionMod(source, target, PassivePercentMod(source, target, value) * amount, 2)))
+    if mr < 0 then
+        value = 2 - 100 / (100 - mr)
+    elseif (mr * source.magicPenPercent) - source.magicPen < 0 then
+        value = 1
+    end
+    return math.max(0, math.floor(DamageReductionMod(source, target, PassivePercentMod(source, target, value) * amount, 2)))
 end
 
 function Need:DamageReductionMod(source,target,amount,DamageType)
-  if source.type == Obj_AI_Hero then
-    if Need:Tard_HasBuff(source, "Exhaust") > 0 then
-      amount = amount * 0.6
-    end
-  end
-
-  if target.type == Obj_AI_Hero then
-
-    for i = 0, target.buffCount do
-      if target:GetBuff(i).count > 0 then
-        local buff = target:GetBuff(i)
-        if buff.name == "w" then
-          amount = amount * (1 - (0.06 * buff.count))
+    if source.type == Obj_AI_Hero then
+        if Need:Tard_HasBuff(source, "Exhaust") > 0 then
+        amount = amount * 0.6
         end
-    
-        if DamageReductionTable[target.charName] then
-          if buff.name == DamageReductionTable[target.charName].buff and (not DamageReductionTable[target.charName].damagetype or DamageReductionTable[target.charName].damagetype == DamageType) then
-            amount = amount * DamageReductionTable[target.charName].amount(target)
-          end
-        end
-
-        if target.charName == "Maokai" and source.type ~= Obj_AI_Turret then
-          if buff.name == "MaokaiDrainDefense" then
-            amount = amount * 0.8
-          end
-        end
-
-        if target.charName == "MasterYi" then
-          if buff.name == "Meditate" then
-            amount = amount - amount * ({0.5, 0.55, 0.6, 0.65, 0.7})[target:GetSpellData(_W).level] / (source.type == Obj_AI_Turret and 2 or 1)
-          end
-        end
-      end
     end
 
-    if Need:GetItemSlot(target, 1054) > 0 then
-      amount = amount - 8
+    if target.type == Obj_AI_Hero then
+
+        for i = 0, target.buffCount do
+        if target:GetBuff(i).count > 0 then
+            local buff = target:GetBuff(i)
+            if buff.name == "w" then
+            amount = amount * (1 - (0.06 * buff.count))
+            end
+        
+            if DamageReductionTable[target.charName] then
+            if buff.name == DamageReductionTable[target.charName].buff and (not DamageReductionTable[target.charName].damagetype or DamageReductionTable[target.charName].damagetype == DamageType) then
+                amount = amount * DamageReductionTable[target.charName].amount(target)
+            end
+            end
+
+            if target.charName == "Maokai" and source.type ~= Obj_AI_Turret then
+            if buff.name == "MaokaiDrainDefense" then
+                amount = amount * 0.8
+            end
+            end
+
+            if target.charName == "MasterYi" then
+            if buff.name == "Meditate" then
+                amount = amount - amount * ({0.5, 0.55, 0.6, 0.65, 0.7})[target:GetSpellData(_W).level] / (source.type == Obj_AI_Turret and 2 or 1)
+            end
+            end
+        end
+        end
+
+        if Need:GetItemSlot(target, 1054) > 0 then
+        amount = amount - 8
+        end
+
+        if target.charName == "Kassadin" and DamageType == 2 then
+        amount = amount * 0.85
+        end
     end
 
-    if target.charName == "Kassadin" and DamageType == 2 then
-      amount = amount * 0.85
-    end
-  end
-
-  return amount
+    return amount
 end
 
 function Need:PassivePercentMod(source, target, amount, damageType)
-  local SiegeMinionList = {"Red_Minion_MechCannon", "Blue_Minion_MechCannon"}
-  local NormalMinionList = {"Red_Minion_Wizard", "Blue_Minion_Wizard", "Red_Minion_Basic", "Blue_Minion_Basic"}
+    local SiegeMinionList = {"Red_Minion_MechCannon", "Blue_Minion_MechCannon"}
+    local NormalMinionList = {"Red_Minion_Wizard", "Blue_Minion_Wizard", "Red_Minion_Basic", "Blue_Minion_Basic"}
 
-  if source.type == Obj_AI_Turret then
-    if table.contains(SiegeMinionList, target.charName) then
-      amount = amount * 0.7
-    elseif table.contains(NormalMinionList, target.charName) then
-      amount = amount * 1.14285714285714
+    if source.type == Obj_AI_Turret then
+        if table.contains(SiegeMinionList, target.charName) then
+        amount = amount * 0.7
+        elseif table.contains(NormalMinionList, target.charName) then
+        amount = amount * 1.14285714285714
+        end
     end
-  end
-  if source.type == Obj_AI_Hero then 
-    if target.type == Obj_AI_Hero then
-      if (Need:GetItemSlot(source, 3036) > 0 or Need:GetItemSlot(source, 3034) > 0) and source.maxHealth < target.maxHealth and damageType == 1 then
-        amount = amount * (1 + math.min(target.maxHealth - source.maxHealth, 500) / 50 * (Need:GetItemSlot(source, 3036) > 0 and 0.015 or 0.01))
-      end
+    if source.type == Obj_AI_Hero then 
+        if target.type == Obj_AI_Hero then
+        if (Need:GetItemSlot(source, 3036) > 0 or Need:GetItemSlot(source, 3034) > 0) and source.maxHealth < target.maxHealth and damageType == 1 then
+            amount = amount * (1 + math.min(target.maxHealth - source.maxHealth, 500) / 50 * (Need:GetItemSlot(source, 3036) > 0 and 0.015 or 0.01))
+        end
+        end
     end
-  end
-  return amount
+    return amount
 end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -622,23 +622,23 @@ function TardEzreal:Tard_KillSteal()
 end
 
 function TardEzreal:Tard_CastQ(unit)
-  if Tard_EternalPred == true then 
-    local Tard_QPred = Tard_SpellstoPred[0]:GetPrediction(unit, Tard_myHero.pos)
-      if Tard_QPred and (Tard_QPred.hitChance >= Tard_TardMenu.Pred.PredHitChance:Value()/100) and Tard_QPred:mCollision() == 0 and Tard_QPred:hCollision() == 0 and Need:Tard_GetDistanceSqr(Tard_QPred.castPos) <= 1380625 then
-        Need:Tard_CastSpell(HK_Q,Tard_QPred.castPos, 250)            
-      end 
-  else
-    local Tard_QPred = unit:GetPrediction(Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].delay + Game.Latency()/1000)
-    local Tard_QCollision, Tard_QblockUnit = Tard_SpellstoCollision[0]:__GetCollision(Tard_myHero, unit, 5)
-    if (Tard_QCollision == false or (unit.type == Obj_AI_Minion and #Tard_QblockUnit == 1)) and Need:Tard_GetDistanceSqr(Tard_QPred) < (Tard_EzrealSpells[0].range*Tard_EzrealSpells[0].range) then-- 1380625 then
-      --Need:Tard_CastSpell(HK_Q, Tard_QPred, Tard_EzrealSpells[0].delay)   
-        GOS.BlockMovement = true
-      --GOS.BlockAttack = true
-        Control.CastSpell(HK_Q, Tard_QPred)
-        GOS.BlockMovement = false
-      --GOS.BlockAttack = false
+    if Tard_EternalPred == true then 
+        local Tard_QPred = Tard_SpellstoPred[0]:GetPrediction(unit, Tard_myHero.pos)
+        if Tard_QPred and (Tard_QPred.hitChance >= Tard_TardMenu.Pred.PredHitChance:Value()/100) and Tard_QPred:mCollision() == 0 and Tard_QPred:hCollision() == 0 and Need:Tard_GetDistanceSqr(Tard_QPred.castPos) <= 1380625 then
+            Need:Tard_CastSpell(HK_Q,Tard_QPred.castPos, 250)            
+        end 
+    else
+        local Tard_QPred = unit:GetPrediction(Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].delay + Game.Latency()/1000)
+        local Tard_QCollision, Tard_QblockUnit = Tard_SpellstoCollision[0]:__GetCollision(Tard_myHero, unit, 5)
+        if (Tard_QCollision == false or (unit.type == Obj_AI_Minion and #Tard_QblockUnit == 1)) and Need:Tard_GetDistanceSqr(Tard_QPred) < (Tard_EzrealSpells[0].range*Tard_EzrealSpells[0].range) then-- 1380625 then
+        --Need:Tard_CastSpell(HK_Q, Tard_QPred, Tard_EzrealSpells[0].delay)   
+            GOS.BlockMovement = true
+        --GOS.BlockAttack = true
+            Control.CastSpell(HK_Q, Tard_QPred)
+            GOS.BlockMovement = false
+        --GOS.BlockAttack = false
+        end
     end
-  end
 end
 
 function TardEzreal:Tard_CastW(unit)
@@ -691,27 +691,15 @@ function TardEzreal:Tard_Draw()
     local Tard_DrawMenu = Tard_TardMenu.Draw
     local Tard_DrawCircle = Draw.Circle
     local Tard_DrawColor = Draw.Color
-    if Tard_DrawMenu.DrawReady:Value() then
-      local Tard_Spell = Game.CanUseSpell     
-        if Tard_Spell(_Q) == 0 and Tard_DrawMenu.DrawQ:Value() then
+    local Tard_Spell = Game.CanUseSpell
+    if Tard_DrawMenu.DrawQ:Value() and (Tard_Spell(_Q) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
             Draw.Circle(Tard_EzrealPos, Tard_EzrealSpells[0].range, 1, Tard_DrawColor(255, 96, 203, 67))
-        end
-        if Tard_Spell(_W) == 0 and Tard_DrawMenu.DrawW:Value() then
+    end
+    if Tard_DrawMenu.DrawW:Value() and (Tard_Spell(_W) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
             Draw.Circle(Tard_EzrealPos, Tard_EzrealSpells[1].range, 1, Tard_DrawColor(255, 255, 255, 255))
-        end
-        if Tard_Spell(_E) == 0 and Tard_DrawMenu.DrawE:Value() then
-            Draw.Circle(Tard_EzrealPos, Tard_EzrealSpells[2].range, 1, Tard_DrawColor(255, 255, 255, 255))
-        end
-    else
-        if Tard_DrawMenu.DrawQ:Value() then
-            Draw.Circle(Tard_EzrealPos, Tard_EzrealSpells[0].range, 1, Tard_DrawColor(255, 96, 203, 67))
-        end
-        if Tard_DrawMenu.DrawW:Value() then
-            Draw.Circle(Tard_EzrealPos, Tard_EzrealSpells[1].range, 1, Tard_DrawColor(255, 255, 255, 255))
-        end
-        if Tard_DrawMenu.DrawE:Value() then
-            Draw.Circle(Tard_EzrealPos, Tard_EzrealSpells[2].range, 1, Tard_DrawColor(255, 255, 255, 255))
-        end
+    end
+    if Tard_DrawMenu.DrawE:Value() and (Tard_Spell(_E) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
+           Draw.Circle(Tard_EzrealPos, Tard_EzrealSpells[2].range, 1, Tard_DrawColor(255, 255, 255, 255))
     end
     --[[if Tard_DrawMenu.DrawTarget:Value() then
         local Tard_drawTarget = Tard_CurrentTarget
