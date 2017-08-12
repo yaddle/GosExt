@@ -1,7 +1,91 @@
---Datas----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local Tard_Orb; local Tard_version; local Tard_SDK; local Tard_SDKCombo; local Tard_SDKHarass; local Tard_SDKJungleClear; local Tard_SDKLaneClear; local Tard_SDKLastHit; local Tard_SDKFlee; local Tard_SDKSelector; local Tard_SDKHealthPrediction; local Tard_SDKDamagePhysical; local Tard_SDKDamageMagical; local Tard_CurrentTarget; local Tard_SpellstoPred;local Tard_Mode;local Tard_TardMenu;local Tard_EternalPred;local Tard_myHero;local Tard_SelectedTarget;local Tard_Item;local Tard_ItemHotKey;local DamageReductionTable;local Tard_SpellstoCollision;
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 class "Need"
+require 'Eternal Prediction'
+
+--Datas
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local Tard_Orb; local Tard_SDK; local Tard_SDKCombo; local Tard_SDKHarass; local Tard_SDKJungleClear; local Tard_SDKLaneClear; local Tard_SDKLastHit; local Tard_SDKFlee; local Tard_SDKSelector; local Tard_SDKHealthPrediction; local Tard_SDKDamagePhysical; local Tard_SDKDamageMagical; local Tard_CurrentTarget; local Tard_SpellstoPred;local Tard_Mode;
+local Tard_TardMenu = MenuElement({type = MENU, id = "TardEzrealMenu", name = "TardEzreal", leftIcon="https://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c3/EzrealSquare.png"})
+local Tard_EternalPred = false
+local Tard_myHero = myHero
+local Tard_SelectedTarget = nil
+local Tard_Item = {Cutlass = 3144, Botrk = 3153}
+local Tard_ItemHotKey = {[ITEM_1] = HK_ITEM_1, [ITEM_2] = HK_ITEM_2, [ITEM_3] = HK_ITEM_3,[ITEM_4] = HK_ITEM_4, [ITEM_5] = HK_ITEM_5, [ITEM_6] = HK_ITEM_6, [ITEM_7] = HK_ITEM_7}
+local Tard_EzrealSpells = { 
+	[0] = {range = 1175, delay = 0.25, speed = 2000, width = 60, spellType = TYPE_LINE, hitBox = true},	
+	[1] = {range = 1050, delay = 0.54, speed = 1600, width = 80, spellType = TYPE_LINE, hitBox = false},
+	[2] = {range = 450},
+	[3] = {range = 20000, delay = 1.76, speed = 2000, width = 160, spellType = TYPE_LINE, hitBox = false}
+}
+local DamageReductionTable = {
+    ["Braum"] = {buff = "BraumShieldRaise", amount = function(target) return 1 - ({0.3, 0.325, 0.35, 0.375, 0.4})[target:GetSpellData(_E).level] end},
+  	["Urgot"] = {buff = "urgotswapdef", amount = function(target) return 1 - ({0.3, 0.4, 0.5})[target:GetSpellData(_R).level] end},
+  	["Alistar"] = {buff = "Ferocious Howl", amount = function(target) return ({0.5, 0.4, 0.3})[target:GetSpellData(_R).level] end},
+  	["Amumu"] = {buff = "Tantrum", amount = function(target) return ({2, 4, 6, 8, 10})[target:GetSpellData(_E).level] end, damageType = 1},
+  	["Galio"] = {buff = "GalioIdolOfDurand", amount = function(target) return 0.5 end},
+  	["Garen"] = {buff = "GarenW", amount = function(target) return 0.7 end},
+  	["Gragas"] = {buff = "GragasWSelf", amount = function(target) return ({0.1, 0.12, 0.14, 0.16, 0.18})[target:GetSpellData(_W).level] end},
+  	["Annie"] = {buff = "MoltenShield", amount = function(target) return 1 - ({0.16,0.22,0.28,0.34,0.4})[target:GetSpellData(_E).level] end},
+  	["Malzahar"] = {buff = "malzaharpassiveshield", amount = function(target) return 0.1 end}
+}
+if _G.Prediction_Loaded then Tard_EternalPred = true; print("Tosh Pred loaded ;)");
+    Tard_SpellstoPred = {
+    [0] = Prediction:SetSpell(Tard_EzrealSpells[0], Tard_EzrealSpells[0].spellType, Tard_EzrealSpells[0].hitBox),
+    [1] = Prediction:SetSpell(Tard_EzrealSpells[1], Tard_EzrealSpells[1].spellType, Tard_EzrealSpells[1].hitBox),
+    [3] = Prediction:SetSpell(Tard_EzrealSpells[3], Tard_EzrealSpells[3].spellType, Tard_EzrealSpells[3].hitBox)
+    }
+else 
+    require("Collision")
+    print("collision loaded")
+    local Tard_SpellstoCollision = {
+        [0] = Collision:SetSpell(Tard_EzrealSpells[0].range, Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[0].width, Tard_EzrealSpells[0].hitBox),
+        [3] = Collision:SetSpell(Tard_EzrealSpells[3].range, Tard_EzrealSpells[3].speed, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[3].width, Tard_EzrealSpells[3].hitBox)   
+    }
+end  
+if _G.EOWLoaded then 
+    Tard_Orb = 0; print("New Eternal Orb is good but Tosh is still toxic ^^")  
+elseif _G.SDK and _G.SDK.Orbwalker then 
+    Tard_Orb = 1; print("IC is a good Orb")		
+    Tard_SDK = _G.SDK.Orbwalker		
+    Tard_SDKCombo = _G.SDK.ORBWALKER_MODE_COMBO      	
+    Tard_SDKHarass = _G.SDK.ORBWALKER_MODE_HARASS
+    Tard_SDKJungleClear = _G.SDK.ORBWALKER_MODE_JUNGLECLEAR
+    Tard_SDKLaneClear = _G.SDK.ORBWALKER_MODE_LANECLEAR
+    Tard_SDKLastHit = _G.SDK.ORBWALKER_MODE_LASTHIT
+    Tard_SDKFlee = _G.SDK.ORBWALKER_MODE_FLEE
+    Tard_SDKSelector = _G.SDK.TargetSelector
+    Tard_SDKHealthPrediction = _G.SDK.HealthPrediction
+    Tard_SDKDamagePhysical = _G.SDK.DAMAGE_TYPE_PHYSICAL
+    Tard_SDKDamageMagical = _G.SDK.DAMAGE_TYPE_MAGICAL
+else 
+    print("Noddy rocks") 
+end	
+for i = 0, 3 do
+    if i == 0 then Tard_EzrealSpells[i].dmg = function(unit) local Tard_level=Tard_myHero:GetSpellData(0).level return Need:CalcPhysicalDamage(Tard_myHero, unit, ({35, 55, 75, 95, 115})[Tard_level] + 1.1 * Tard_myHero.totalDamage + 0.4 * Tard_myHero.ap) end
+    elseif i == 1 then Tard_EzrealSpells[i].dmg = function(unit) local Tard_level=Tard_myHero:GetSpellData(1).level return Need:CalcMagicalDamage(Tard_myHero, unit, ({70, 115, 160, 205, 250})[Tard_level] + 0.8 * Tard_myHero.ap) end
+    elseif i == 3 then
+        Tard_EzrealSpells[i].dmg = function(unit)
+        local Tard_level = Tard_myHero:GetSpellData(i).level
+        local Tard_initialdmg = ({350, 500, 650})[Tard_level] + 0.9 * Tard_myHero.ap + Tard_myHero.bonusDamage
+        local Tard_Collision
+        if Tard_EternalPred == true then
+            local pred = Tard_SpellstoPred[i]:GetPrediction(unit, Tard_myHero.pos)
+            Tard_Collision = pred:mCollision() + pred:hCollision()
+        else
+            local Tard_RblockUnit 
+            Tard_Collision, Tard_RblockUnit = Tard_SpellstoCollision[i]:__GetCollision(Tard_myHero, unit, 5)
+            Tard_Collision = #Tard_RblockUnit
+        end
+        local Tard_nerf = math.min(Tard_Collision,7)
+        local Tard_finaldmg = Tard_initialdmg * ((10 - Tard_nerf) / 10)
+        return Need:CalcMagicalDamage(Tard_myHero, unit, Tard_finaldmg)
+        end
+    end
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
 function Need:Tard_GetDistanceSqr(Pos1, Pos2)
 	local Pos2 = Pos2 or Tard_myHero.pos
 	local Tard_dx = Pos1.x - Pos2.x
@@ -76,7 +160,6 @@ end
 
 local castSpell = {state = 0, tick = GetTickCount(), casting = GetTickCount() - 1000, mouse = mousePos}
 function Need:Tard_CastSpell(spell, pos, delay)
-
     local delay = delay or 250
 	if pos == nil then return end
 		local ticker = GetTickCount()
@@ -119,11 +202,23 @@ function Need:Tard_GetEnemynearMouse()
     for i = 1, Game.HeroCount() do
         local Tard_H = Game.Hero(i)
         if Need:Tard_IsValidTarget(Tard_H) and Need:Tard_GetDistanceSqr(_G.mousePos, Tard_H.pos) <= 100 * 100 then
+            print("ok")
             return Tard_H        
         end
         break
     end
 end
+
+function Need:Tard_GetEnemybyHandle(handle)
+	for i = 1, Game.HeroCount() do
+		local Tard_h = Game.Hero(i)
+		if Tard_h.handle == handle then
+			return Tard_h
+		end
+	end
+end 
+
+
 
 function Need:Tard_OnWndMsg(msg, wParam)
     if msg == WM_LBUTTONDOWN then
@@ -284,91 +379,14 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------
 class "TardEzreal"
-function TardEzreal:__init() 
-    Tard_version = 1.0
-    Tard_TardMenu = MenuElement({type = MENU, id = "TardEzrealMenu", name = "TardEzreal", leftIcon="https://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c3/EzrealSquare.png"})
-    Tard_EternalPred = false
-    Tard_myHero = myHero
-    Tard_SelectedTarget = nil
-    Tard_Item = {Cutlass = 3144, Botrk = 3153}
-    Tard_ItemHotKey = {[ITEM_1] = HK_ITEM_1, [ITEM_2] = HK_ITEM_2, [ITEM_3] = HK_ITEM_3,[ITEM_4] = HK_ITEM_4, [ITEM_5] = HK_ITEM_5, [ITEM_6] = HK_ITEM_6, [ITEM_7] = HK_ITEM_7}
-    Tard_EzrealSpells = { 
-        [0] = {range = 1150, delay = 0.25, speed = 2000, width = 60, spellType = TYPE_LINE, hitBox = true},	
-        [1] = {range = 1050, delay = 0.54, speed = 1600, width = 80, spellType = TYPE_LINE, hitBox = false},
-        [2] = {range = 450},
-        [3] = {range = 20000, delay = 1.76, speed = 2000, width = 160, spellType = TYPE_LINE, hitBox = false}
-    }
-    DamageReductionTable = {
-        ["Braum"] = {buff = "BraumShieldRaise", amount = function(target) return 1 - ({0.3, 0.325, 0.35, 0.375, 0.4})[target:GetSpellData(_E).level] end},
-        ["Urgot"] = {buff = "urgotswapdef", amount = function(target) return 1 - ({0.3, 0.4, 0.5})[target:GetSpellData(_R).level] end},
-        ["Alistar"] = {buff = "Ferocious Howl", amount = function(target) return ({0.5, 0.4, 0.3})[target:GetSpellData(_R).level] end},
-        ["Amumu"] = {buff = "Tantrum", amount = function(target) return ({2, 4, 6, 8, 10})[target:GetSpellData(_E).level] end, damageType = 1},
-        ["Galio"] = {buff = "GalioIdolOfDurand", amount = function(target) return 0.5 end},
-        ["Garen"] = {buff = "GarenW", amount = function(target) return 0.7 end},
-        ["Gragas"] = {buff = "GragasWSelf", amount = function(target) return ({0.1, 0.12, 0.14, 0.16, 0.18})[target:GetSpellData(_W).level] end},
-        ["Annie"] = {buff = "MoltenShield", amount = function(target) return 1 - ({0.16,0.22,0.28,0.34,0.4})[target:GetSpellData(_E).level] end},
-        ["Malzahar"] = {buff = "malzaharpassiveshield", amount = function(target) return 0.1 end}
-    }
 
-    if _G.Prediction_Loaded then Tard_EternalPred = true; print("Tosh Pred loaded ;)");
-        Tard_SpellstoPred = {
-        [0] = Prediction:SetSpell(Tard_EzrealSpells[0], Tard_EzrealSpells[0].spellType, Tard_EzrealSpells[0].hitBox),
-        [1] = Prediction:SetSpell(Tard_EzrealSpells[1], Tard_EzrealSpells[1].spellType, Tard_EzrealSpells[1].hitBox),
-        [3] = Prediction:SetSpell(Tard_EzrealSpells[3], Tard_EzrealSpells[3].spellType, Tard_EzrealSpells[3].hitBox)
-        }
-    else 
-        require("Collision")
-        print("collision loaded")
-        Tard_SpellstoCollision = {
-            [0] = Collision:SetSpell(Tard_EzrealSpells[0].range, Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[0].width, Tard_EzrealSpells[0].hitBox),
-            [3] = Collision:SetSpell(Tard_EzrealSpells[3].range, Tard_EzrealSpells[3].speed, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[3].width, Tard_EzrealSpells[3].hitBox)   
-        }
-    end  
-    if _G.EOWLoaded then 
-        Tard_Orb = 0; print("New Eternal Orb is good but Tosh is still toxic ^^")  
-    elseif _G.SDK and _G.SDK.Orbwalker then 
-        Tard_Orb = 1; print("IC is a good Orb")		
-        Tard_SDK = _G.SDK.Orbwalker		
-        Tard_SDKCombo = _G.SDK.ORBWALKER_MODE_COMBO      	
-        Tard_SDKHarass = _G.SDK.ORBWALKER_MODE_HARASS
-        Tard_SDKJungleClear = _G.SDK.ORBWALKER_MODE_JUNGLECLEAR
-        Tard_SDKLaneClear = _G.SDK.ORBWALKER_MODE_LANECLEAR
-        Tard_SDKLastHit = _G.SDK.ORBWALKER_MODE_LASTHIT
-        Tard_SDKFlee = _G.SDK.ORBWALKER_MODE_FLEE
-        Tard_SDKSelector = _G.SDK.TargetSelector
-        Tard_SDKHealthPrediction = _G.SDK.HealthPrediction
-        Tard_SDKDamagePhysical = _G.SDK.DAMAGE_TYPE_PHYSICAL
-        Tard_SDKDamageMagical = _G.SDK.DAMAGE_TYPE_MAGICAL
-    else 
-        print("Noddy rocks") 
-    end	
-    for i = 0, 3 do
-        if i == 0 then Tard_EzrealSpells[i].dmg = function(unit) local Tard_level=Tard_myHero:GetSpellData(0).level return Need:CalcPhysicalDamage(Tard_myHero, unit, ({35, 55, 75, 95, 115})[Tard_level] + 1.1 * Tard_myHero.totalDamage + 0.4 * Tard_myHero.ap) end
-        elseif i == 1 then Tard_EzrealSpells[i].dmg = function(unit) local Tard_level=Tard_myHero:GetSpellData(1).level return Need:CalcMagicalDamage(Tard_myHero, unit, ({70, 115, 160, 205, 250})[Tard_level] + 0.8 * Tard_myHero.ap) end
-        elseif i == 3 then
-            Tard_EzrealSpells[i].dmg = function(unit)
-            local Tard_level = Tard_myHero:GetSpellData(i).level
-            local Tard_initialdmg = ({350, 500, 650})[Tard_level] + 0.9 * Tard_myHero.ap + Tard_myHero.bonusDamage
-            local Tard_Collision
-            if Tard_EternalPred == true then
-                local pred = Tard_SpellstoPred[i]:GetPrediction(unit, Tard_myHero.pos)
-                Tard_Collision = pred:mCollision() + pred:hCollision()
-            else
-                local Tard_RblockUnit 
-                Tard_Collision, Tard_RblockUnit = Tard_SpellstoCollision[i]:__GetCollision(Tard_myHero, unit, 5)
-                Tard_Collision = #Tard_RblockUnit
-            end
-            local Tard_nerf = math.min(Tard_Collision,7)
-            local Tard_finaldmg = Tard_initialdmg * ((10 - Tard_nerf) / 10)
-            return Need:CalcMagicalDamage(Tard_myHero, unit, Tard_finaldmg)
-            end
-        end
-    end       
-    print("Hello ", myHero.name, ", TardEzreal v", Tard_version, " is ready to feed")      
+function TardEzreal:__init()      
+    self.Tard_version = 1.0    
+    print("Hello ", myHero.name, ", TardEzreal v", self.Tard_version, " is ready to feed")      
     self:Tard_Menu()     
-    Callback.Add("Tick", function() self:Tard_Tick() end)
+	Callback.Add("Tick", function() self:Tard_Tick() end)
     Callback.Add("Draw", function() self:Tard_Draw() end)
-    Callback.Add('WndMsg', function(msg, wParam) Need:Tard_OnWndMsg(msg, wParam) end)   
+    Callback.Add('WndMsg', function(msg, wParam) Need:Tard_OnWndMsg(msg, wParam) end)
 end
 
 function TardEzreal:Tard_Menu()
@@ -459,10 +477,9 @@ function TardEzreal:Tard_Tick()
 end
 
 function TardEzreal:Tard_Combo()
-
     local Tard_target
-    if Tard_SelectedTarget == nil or not Need:Tard_IsValidTarget(Tard_SelectedTarget, 1100) then
-        Tard_target = Need:Tard_GetTarget(1100)        
+    if Tard_SelectedTarget == nil or not Need:Tard_IsValidTarget(Tard_SelectedTarget, 1175) then
+        Tard_target = Need:Tard_GetTarget(1175)        
     else
         Tard_target = Tard_SelectedTarget
     end
@@ -480,11 +497,13 @@ function TardEzreal:Tard_Combo()
     if Tard_TardMenu.Combo.Item.Botrk:Value() then
         local botrk = Need:GetItemSlot(Tard_myHero, Tard_Item.Botrk)
         if botrk >= 1 and Tard_myHero:GetSpellData(botrk).currentCd == 0 and Need:Tard_GetDistanceSqr(Tard_target.pos) <= 550*550 + (25*25) and Need:Tard_PercentMP(Tard_myHero) <= Tard_TardMenu.Combo.Item.MyHP:Value() and Need:Tard_PercentMP(Tard_target) <= Tard_TardMenu.Combo.Item.EnemyHP:Value() then
+            print("ok")
             Need:Tard_CastSpell(Tard_ItemHotKey[botrk], Tard_target.pos, 50)      
         end   
     elseif Tard_TardMenu.Combo.Item.Cutlass:Value() then
         local cutlass = Need:GetItemSlot(Tard_myHero, Tard_Item.Cutlass)
         if cutlass >= 1 and Tard_myHero:GetSpellData(cutlass).currentCd == 0 and Need:Tard_GetDistanceSqr(Tard_target.pos) <= 550*550 + (25*25) and Need:Tard_PercentMP(Tard_myHero) <= Tard_TardMenu.Combo.Item.MyHP:Value() and Need:Tard_PercentMP(Tard_target) <= Tard_TardMenu.Combo.Item.EnemyHP:Value() then
+            print("ok")
             Need:Tard_CastSpell(Tard_ItemHotKey[cutlass], Tard_target.pos, 50)      
         end    
     end
@@ -492,8 +511,8 @@ end
 
 function TardEzreal:Tard_Harass()
 	local Tard_target
-    if Tard_SelectedTarget == nil or not Need:Tard_IsValidTarget(Tard_SelectedTarget, 1100) then
-        Tard_target = Need:Tard_GetTarget(1100)        
+    if Tard_SelectedTarget == nil or not Need:Tard_IsValidTarget(Tard_SelectedTarget, 1175) then
+        Tard_target = Need:Tard_GetTarget(1175)        
     else
         Tard_target = Tard_SelectedTarget
     end
@@ -604,7 +623,6 @@ end
 
 function TardEzreal:Tard_CastQ(unit)
     if Tard_EternalPred == true then 
-    
         local Tard_QPred = Tard_SpellstoPred[0]:GetPrediction(unit, Tard_myHero.pos)
         if Tard_QPred and (Tard_QPred.hitChance >= Tard_TardMenu.Pred.PredHitChance:Value()/100) and Tard_QPred:mCollision() == 0 and Tard_QPred:hCollision() == 0 and Need:Tard_GetDistanceSqr(Tard_QPred.castPos) <= 1380625 then
             Need:Tard_CastSpell(HK_Q,Tard_QPred.castPos, 250)            
@@ -653,7 +671,7 @@ function TardEzreal:Tard_CastR(unit)
     else
       local Tard_RPred = unit:GetPrediction(Tard_EzrealSpells[3].speed, Tard_EzrealSpells[3].delay + Game.Latency()/1000)    
       if Need:Tard_GetDistanceSqr(Tard_myHero.pos,Tard_RPred) < (Tard_EzrealSpells[3].range*Tard_EzrealSpells[3].range) then
-        Need:Tard_CastSpell(HK_R, Tard_RPred, 1760)
+        Need:Tard_CastSpell(HK_R, Tard_RPred, Tard_EzrealSpells[3].delay)
       end
     end
 end
@@ -699,14 +717,8 @@ end
 
 --------------------------------------------------------------------------------------------------------------------------------------
 Callback.Add("Load", function() 
-	if _G["TardEzreal"] and myHero.charName == "Ezreal" then
-        require 'Eternal Prediction'
-        if not _G.Prediction_Loaded then 
-            print("Warning : Eternal Prediction is missing and required, install it, Ezreal script closing...")
-            return
-        else	            	
-		    _G["TardEzreal"]() 
-        end       		       
+	if _G["TardEzreal"] and myHero.charName == "Ezreal" then		
+		_G["TardEzreal"]()       		       
 	end
 end)
 
