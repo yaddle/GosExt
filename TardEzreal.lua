@@ -286,7 +286,7 @@ end
 class "TardEzreal"
 function TardEzreal:__init() 
     Tard_version = 1.0
-    Tard_TardMenu = MenuElement({type = MENU, id = "TardEzrealMenu", name = "TardEzreal", leftIcon="https://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c3/EzrealSquare.png"})
+    Tard_TardMenu = MenuElement({type = MENU, id = "TardEzrealMenu", name = "TardEzreal"})
     Tard_EternalPred = false
     Tard_myHero = myHero
     Tard_SelectedTarget = nil
@@ -379,8 +379,8 @@ function TardEzreal:Tard_Menu()
     Tard_TardMenu.Combo:MenuElement({id = "ComboQmana", name = "Min. Mana to Q", value = 0, min = 0, max = 100, tooltip = "It's %"}) 
     Tard_TardMenu.Combo:MenuElement({id = "ComboWmana", name = "Min. Mana to W", value = 75, min = 0, max = 100, tooltip = "It's %"})  
     Tard_TardMenu.Combo:MenuElement({type = MENU, id = "Item", name = "Item"})
-    Tard_TardMenu.Combo.Item:MenuElement({id = "Botrk", name = "Blade of the Ruined King", value = true, leftIcon = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/2/2f/Blade_of_the_Ruined_King_item.png"})
-    Tard_TardMenu.Combo.Item:MenuElement({id = "Cutlass", name = "Bilgewater Cutlass", value = true, leftIcon = "https://vignette1.wikia.nocookie.net/leagueoflegends/images/4/44/Bilgewater_Cutlass_item.png"})
+    Tard_TardMenu.Combo.Item:MenuElement({id = "Botrk", name = "Blade of the Ruined King", value = true})
+    Tard_TardMenu.Combo.Item:MenuElement({id = "Cutlass", name = "Bilgewater Cutlass", value = true})
     Tard_TardMenu.Combo.Item:MenuElement({id = "MyHP", name = "Max HP to use items", value = 60, min = 0, max = 100, tooltip = "It's %"})
     Tard_TardMenu.Combo.Item:MenuElement({id = "EnemyHP", name = "Max enemy HP to use items", value = 60, min = 0, max = 100, tooltip = "It's %"})
 
