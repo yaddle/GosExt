@@ -1,5 +1,10 @@
 --Datas----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local Tard_Orb; local Tard_version; local Tard_SDK; local Tard_SDKCombo; local Tard_SDKHarass; local Tard_SDKJungleClear; local Tard_SDKLaneClear; local Tard_SDKLastHit; local Tard_SDKFlee; local Tard_SDKSelector; local Tard_SDKHealthPrediction; local Tard_SDKDamagePhysical; local Tard_SDKDamageMagical; local Tard_CurrentTarget; local Tard_SpellstoPred;local Tard_Mode;local Tard_TardMenu;local Tard_EternalPred;local Tard_myHero;local Tard_SelectedTarget;local Tard_Item;local Tard_ItemHotKey;local DamageReductionTable;local Tard_SpellstoCollision;
+local Tard_Orb; local Tard_version; local Tard_SDK; local Tard_SDKCombo; local Tard_SDKHarass; local Tard_SDKJungleClear; local Tard_SDKLaneClear; local Tard_SDKLastHit; local Tard_SDKFlee; local Tard_SDKSelector; local Tard_SDKHealthPrediction; local Tard_SDKDamagePhysical; local Tard_SDKDamageMagical; local Tard_CurrentTarget; local Tard_SpellstoPred;local Tard_Mode;local Tard_TardMenu;local Tard_EternalPred;local Tard_myHero;local Tard_SelectedTarget;local Tard_Item;local Tard_ItemHotKey;local DamageReductionTable;local Tard_SpellstoCollision; 
+Tard_Icon = {
+    ["Ezreal"] = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c3/EzrealSquare.png",
+    ["Botrk"] = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/2/2f/Blade_of_the_Ruined_King_item.png",
+    ["Cutlass"] = "https://vignette1.wikia.nocookie.net/leagueoflegends/images/4/44/Bilgewater_Cutlass_item.png"
+}
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class "Need"
 function Need:Tard_GetDistanceSqr(Pos1, Pos2)
@@ -285,8 +290,8 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------------
 class "TardEzreal"
 function TardEzreal:__init() 
-    Tard_version = 1.0
-    Tard_TardMenu = MenuElement({type = MENU, id = "TardEzrealMenu", name = "TardEzreal"})
+    Tard_version = 1.1
+    Tard_TardMenu = MenuElement({type = MENU, id = "TardEzrealMenu", name = "TardEzreal", leftIcon=Tard_Icon.Ezreal})
     Tard_EternalPred = false
     Tard_myHero = myHero
     Tard_SelectedTarget = nil
@@ -379,8 +384,8 @@ function TardEzreal:Tard_Menu()
     Tard_TardMenu.Combo:MenuElement({id = "ComboQmana", name = "Min. Mana to Q", value = 0, min = 0, max = 100, tooltip = "It's %"}) 
     Tard_TardMenu.Combo:MenuElement({id = "ComboWmana", name = "Min. Mana to W", value = 75, min = 0, max = 100, tooltip = "It's %"})  
     Tard_TardMenu.Combo:MenuElement({type = MENU, id = "Item", name = "Item"})
-    Tard_TardMenu.Combo.Item:MenuElement({id = "Botrk", name = "Blade of the Ruined King", value = true})
-    Tard_TardMenu.Combo.Item:MenuElement({id = "Cutlass", name = "Bilgewater Cutlass", value = true})
+    Tard_TardMenu.Combo.Item:MenuElement({id = "Botrk", name = "Blade of the Ruined King", value = true, leftIcon = Tard_Icon.Botrk})
+    Tard_TardMenu.Combo.Item:MenuElement({id = "Cutlass", name = "Bilgewater Cutlass", value = true, leftIcon = Tard_Icon.Cutlass})
     Tard_TardMenu.Combo.Item:MenuElement({id = "MyHP", name = "Max HP to use items", value = 60, min = 0, max = 100, tooltip = "It's %"})
     Tard_TardMenu.Combo.Item:MenuElement({id = "EnemyHP", name = "Max enemy HP to use items", value = 60, min = 0, max = 100, tooltip = "It's %"})
 
@@ -457,8 +462,8 @@ function TardEzreal:Tard_Tick()
 end
 
 function TardEzreal:Tard_Combo()
-
     local Tard_target
+    if Tard_SelectedTarget ~= nil and (Tard_SelectedTarget.dead or Need:Tard_GetDistanceSqr(Tard_SelectedTarget.pos) > 2500*2500) then Tard_SelectedTarget = nil end
     if Tard_SelectedTarget == nil or not Need:Tard_IsValidTarget(Tard_SelectedTarget, 1200) then
         Tard_target = Need:Tard_GetTarget(1200)        
     else
@@ -490,6 +495,7 @@ end
 
 function TardEzreal:Tard_Harass()
 	local Tard_target
+    if Tard_SelectedTarget ~= nil and (Tard_SelectedTarget.dead or Need:Tard_GetDistanceSqr(Tard_SelectedTarget.pos) > 2500*2500) then Tard_SelectedTarget = nil end
     if Tard_SelectedTarget == nil or not Need:Tard_IsValidTarget(Tard_SelectedTarget, 1200) then
         Tard_target = Need:Tard_GetTarget(1200)        
     else
@@ -698,7 +704,7 @@ Callback.Add("Load", function()
 	if _G["TardEzreal"] and myHero.charName == "Ezreal" then
         require 'Eternal Prediction'
         if not _G.Prediction_Loaded then 
-            print("Warning : Eternal Prediction is missing and required, install it, Ezreal script closing...")
+            print("Warning : Eternal Prediction is missing and required, you need to install it, Ezreal script closing...")
             return
         else	            	
 		    _G["TardEzreal"]() 
