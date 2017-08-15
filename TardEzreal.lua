@@ -1,6 +1,7 @@
 --Datas----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local Tard_Orb; local Tard_version; local Tard_SDK; local Tard_SDKCombo; local Tard_SDKHarass; local Tard_SDKJungleClear; local Tard_SDKLaneClear; local Tard_SDKLastHit; local Tard_SDKFlee; local Tard_SDKSelector; local Tard_SDKHealthPrediction; local Tard_SDKDamagePhysical; local Tard_SDKDamageMagical; local Tard_CurrentTarget; local Tard_SpellstoPred;local Tard_Mode;local Tard_TardMenu;local Tard_EternalPred;local Tard_myHero;local Tard_SelectedTarget;local Tard_Item;local Tard_ItemHotKey;local DamageReductionTable;local Tard_SpellstoCollision; 
-Tard_Icon = {
+local Tard_Orb; local Tard_SDK; local Tard_SDKCombo; local Tard_SDKHarass; local Tard_SDKJungleClear; local Tard_SDKLaneClear; local Tard_SDKLastHit; local Tard_SDKFlee; local Tard_SDKSelector; local Tard_SDKHealthPrediction; local Tard_SDKDamagePhysical; local Tard_SDKDamageMagical; local Tard_CurrentTarget; local Tard_SpellstoPred;local Tard_Mode;local Tard_TardMenu;local Tard_EternalPred;local Tard_myHero;local Tard_SelectedTarget;local Tard_Item;local Tard_ItemHotKey;local DamageReductionTable;local Tard_SpellstoCollision; 
+local Tard_version = 1.1
+local Tard_Icon = {
     ["Ezreal"] = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c3/EzrealSquare.png",
     ["Botrk"] = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/2/2f/Blade_of_the_Ruined_King_item.png",
     ["Cutlass"] = "https://vignette1.wikia.nocookie.net/leagueoflegends/images/4/44/Bilgewater_Cutlass_item.png"
@@ -68,7 +69,9 @@ end
 function Need:Tard_GetTarget(range)
 	local Tard_target 
 	if Tard_Orb == 0 then
-		Tard_target = EOW:GetTarget(range, easykill_acd)
+        if Tard_myHero.totalDamage >= Tard_myHero.ap then Tard_target = EOW:GetTarget(range, ad_dec)
+        else Tard_target = EOW:GetTarget(range, ap_dec)
+        end
 	elseif Tard_Orb == 1 then
         if Tard_myHero.totalDamage >= Tard_myHero.ap then Tard_target = Tard_SDKSelector:GetTarget(range, Tard_SDKDamagePhysical)			
         else Tard_target = Tard_SDKSelector:GetTarget(range, Tard_SDKDamageMagical)			
@@ -289,8 +292,7 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------
 class "TardEzreal"
-function TardEzreal:__init() 
-    Tard_version = 1.1
+function TardEzreal:__init()     
     Tard_TardMenu = MenuElement({type = MENU, id = "TardEzrealMenu", name = "TardEzreal", leftIcon=Tard_Icon.Ezreal})
     Tard_EternalPred = false
     Tard_myHero = myHero
@@ -544,11 +546,11 @@ function TardEzreal:Tard_LastHit()
 	local Tard_AAstate = Tard_myHero.attackData.state
 	if not Tard_TardMenu.LastHit.LastHitQ:Value() or Need:Tard_PercentMP(Tard_myHero) < Tard_TardMenu.LastHit.LastHitMana:Value() or Tard_AAstate == 2 or Game.CanUseSpell(_Q) ~= 0 then return end
 	local Tard_AAtarget = Tard_myHero.attackData.target
-	local Tard_AArange = Tard_myHero.range 
+	local Tard_AArange = Tard_myHero.range + Tard_myHero.boundingRadius
 	for i = 1, Game.MinionCount() do
 		local Tard_Minion = Game.Minion(i)
 		if Tard_AAtarget ~= Tard_Minion.handle and Need:Tard_IsValidTarget(Tard_Minion, Tard_EzrealSpells[0].range) and Tard_EzrealSpells[0].dmg(Tard_Minion) >= Tard_Minion.health then
-            if (Tard_AAstate == 3 and Need:Tard_HP_PRED(Tard_Minion, Tard_myHero.attackData.endTime - Game.Timer()) > 0) or (Need:Tard_GetDistanceSqr(Tard_Minion.pos) > Tard_AArange*Tard_AArange and Tard_AAstate ~= 2)  then
+            if (Tard_AAstate == 3 and Need:Tard_HP_PRED(Tard_Minion, Tard_myHero.attackData.endTime - Game.Timer()) > 0) or (Need:Tard_GetDistanceSqr(Tard_Minion.pos) > (Tard_AArange+Tard_Minion.boundingRadius)*(Tard_AArange+Tard_Minion.boundingRadius) and Tard_AAstate ~= 2)  then
 				--test si minion va mourir avant le reset aa et tard_hp_pred (temps = Tard_myHero.attackData.endTime-Game.Timer() ou attackData.animationTime)
                 self:Tard_CastQ(Tard_Minion)
 				break
@@ -595,8 +597,8 @@ function TardEzreal:Tard_KillSteal()
 			if Tard_R_DMG and Tard_R_DMG > Tard_Hero.health + Tard_Hero.shieldAP then
                     print("KS R")
                     print(Tard_R_DMG)
-                    local Tard_AArange = Tard_myHero.range                    
-                    if Tard_Hero.pos:DistanceTo(Tard_myHero.pos) - (Tard_Hero.boundingRadius - 30) > (Tard_AArange + Tard_myHero.boundingRadius + 35) then
+                    local Tard_AArange = Tard_myHero.range + Tard_myHero.boundingRadius + Tard_Hero.boundingRadius    
+                    if Need:Tard_GetDistanceSqr(Tard_Hero.pos) > Tard_AArange * Tard_AArange and Need:Tard_HP_PRED(Tard_Hero, 1,5) then
                         self:Tard_CastR(Tard_Hero)
                         Tard_CurrentTarget = Tard_Hero
                     end
