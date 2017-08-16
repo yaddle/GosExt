@@ -1,0 +1,1 @@
+If Menu of my scripts doesn't appear when you are in game, just download MenuElement.zip and extract it here : %AppData% \Roaming\GamingOnSteroids\LOLEXT\Sprites\
