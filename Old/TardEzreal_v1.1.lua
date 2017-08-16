@@ -1,6 +1,6 @@
 --Datas----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local Tard_Orb; local Tard_SDK; local Tard_SDKCombo; local Tard_SDKHarass; local Tard_SDKJungleClear; local Tard_SDKLaneClear; local Tard_SDKLastHit; local Tard_SDKFlee; local Tard_SDKSelector; local Tard_SDKHealthPrediction; local Tard_SDKDamagePhysical; local Tard_SDKDamageMagical; local Tard_CurrentTarget; local Tard_SpellstoPred;local Tard_Mode;local Tard_TardMenu;local Tard_EternalPred;local Tard_myHero;local Tard_SelectedTarget;local Tard_Item;local Tard_ItemHotKey;local DamageReductionTable;local Tard_SpellstoCollision; 
-local Tard_version = 1.1
+local Tard_version = 1.2
 local Tard_Icon = {
     ["Ezreal"] = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c3/EzrealSquare.png",
     ["Botrk"] = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/2/2f/Blade_of_the_Ruined_King_item.png",
@@ -679,13 +679,13 @@ function TardEzreal:Tard_Draw()
     local Tard_DrawColor = Draw.Color
     local Tard_Spell = Game.CanUseSpell
     if Tard_DrawMenu.DrawQ:Value() and (Tard_Spell(_Q) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
-            Draw.Circle(Tard_EzrealPos, 1200, 1, Tard_DrawColor(255, 96, 203, 67))
+            Tard_DrawCircle(Tard_EzrealPos, 1200, 1, Tard_DrawColor(255, 96, 203, 67))
     end
     if Tard_DrawMenu.DrawW:Value() and (Tard_Spell(_W) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
-            Draw.Circle(Tard_EzrealPos, 1050, 1, Tard_DrawColor(255, 255, 255, 255))
+            Tard_DrawCircle(Tard_EzrealPos, 1050, 1, Tard_DrawColor(255, 255, 255, 255))
     end
     if Tard_DrawMenu.DrawE:Value() and (Tard_Spell(_E) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
-           Draw.Circle(Tard_EzrealPos, 475, 1, Tard_DrawColor(255, 255, 255, 255))
+           Tard_DrawCircle(Tard_EzrealPos, 475, 1, Tard_DrawColor(255, 255, 255, 255))
     end
     --[[if Tard_DrawMenu.DrawTarget:Value() then
         local Tard_drawTarget = Tard_CurrentTarget
