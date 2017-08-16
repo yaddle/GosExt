@@ -473,23 +473,23 @@ function TardEzreal:Tard_Combo()
     end
     if Tard_target == nil or Tard_myHero.attackData.state == 2  then return end  
 	--CAST Q SPELL
-	if Tard_TardMenu.Combo.ComboQ:Value() and Need:Tard_PercentHP(Tard_myHero) >= Tard_TardMenu.Combo.ComboQmana:Value() and Game.CanUseSpell(_Q) == 0 and Need:Tard_IsValidTarget(Tard_target, 1200) then
+	if Tard_TardMenu.Combo.ComboQ:Value() and Need:Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.Combo.ComboQmana:Value() and Game.CanUseSpell(_Q) == 0 and Need:Tard_IsValidTarget(Tard_target, 1200) then
         self:Tard_CastQ(Tard_target)
         Tard_CurrentTarget = Tard_target
 	--CAST W SPELL
-	elseif Tard_TardMenu.Combo.ComboW:Value() and Need:Tard_PercentHP(Tard_myHero) >= Tard_TardMenu.Combo.ComboWmana:Value() and Game.CanUseSpell(_W) == 0 and Need:Tard_IsValidTarget(Tard_target, 1050) then
+	elseif Tard_TardMenu.Combo.ComboW:Value() and Need:Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.Combo.ComboWmana:Value() and Game.CanUseSpell(_W) == 0 and Need:Tard_IsValidTarget(Tard_target, 1050) then
 		self:Tard_CastW(Tard_target)
         Tard_CurrentTarget = Tard_target
 	end
  
     if Tard_TardMenu.Combo.Item.Botrk:Value() then
         local botrk = Need:GetItemSlot(Tard_myHero, Tard_Item.Botrk)
-        if botrk >= 1 and Tard_myHero:GetSpellData(botrk).currentCd == 0 and Need:Tard_GetDistanceSqr(Tard_target.pos) <= 550*550 + (25*25) and Need:Tard_PercentMP(Tard_myHero) <= Tard_TardMenu.Combo.Item.MyHP:Value() and Need:Tard_PercentMP(Tard_target) <= Tard_TardMenu.Combo.Item.EnemyHP:Value() then
+        if botrk >= 1 and Tard_myHero:GetSpellData(botrk).currentCd == 0 and Need:Tard_GetDistanceSqr(Tard_target.pos) <= 550*550 + (25*25) and Need:Tard_PercentHP(Tard_myHero) <= Tard_TardMenu.Combo.Item.MyHP:Value() and Need:Tard_PercentHP(Tard_target) <= Tard_TardMenu.Combo.Item.EnemyHP:Value() then
             Need:Tard_CastSpell(Tard_ItemHotKey[botrk], Tard_target.pos, 50)      
         end   
     elseif Tard_TardMenu.Combo.Item.Cutlass:Value() then
         local cutlass = Need:GetItemSlot(Tard_myHero, Tard_Item.Cutlass)
-        if cutlass >= 1 and Tard_myHero:GetSpellData(cutlass).currentCd == 0 and Need:Tard_GetDistanceSqr(Tard_target.pos) <= 550*550 + (25*25) and Need:Tard_PercentMP(Tard_myHero) <= Tard_TardMenu.Combo.Item.MyHP:Value() and Need:Tard_PercentMP(Tard_target) <= Tard_TardMenu.Combo.Item.EnemyHP:Value() then
+        if cutlass >= 1 and Tard_myHero:GetSpellData(cutlass).currentCd == 0 and Need:Tard_GetDistanceSqr(Tard_target.pos) <= 550*550 + (25*25) and Need:Tard_PercentHP(Tard_myHero) <= Tard_TardMenu.Combo.Item.MyHP:Value() and Need:Tard_PercentHP(Tard_target) <= Tard_TardMenu.Combo.Item.EnemyHP:Value() then
             Need:Tard_CastSpell(Tard_ItemHotKey[cutlass], Tard_target.pos, 50)      
         end    
     end
