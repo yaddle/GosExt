@@ -473,11 +473,11 @@ function TardEzreal:Tard_Combo()
     end
     if Tard_target == nil or Tard_myHero.attackData.state == 2  then return end  
 	--CAST Q SPELL
-	if Tard_TardMenu.Combo.ComboQ:Value() and Need:Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.Combo.ComboQmana:Value() and Game.CanUseSpell(_Q) == 0 and Need:Tard_IsValidTarget(Tard_target, 1200) then
+	if Tard_TardMenu.Combo.ComboQ:Value() and Need:Tard_PercentHP(Tard_myHero) >= Tard_TardMenu.Combo.ComboQmana:Value() and Game.CanUseSpell(_Q) == 0 and Need:Tard_IsValidTarget(Tard_target, 1200) then
         self:Tard_CastQ(Tard_target)
         Tard_CurrentTarget = Tard_target
 	--CAST W SPELL
-	elseif Tard_TardMenu.Combo.ComboW:Value() and Need:Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.Combo.ComboWmana:Value() and Game.CanUseSpell(_W) == 0 and Need:Tard_IsValidTarget(Tard_target, 1050) then
+	elseif Tard_TardMenu.Combo.ComboW:Value() and Need:Tard_PercentHP(Tard_myHero) >= Tard_TardMenu.Combo.ComboWmana:Value() and Game.CanUseSpell(_W) == 0 and Need:Tard_IsValidTarget(Tard_target, 1050) then
 		self:Tard_CastW(Tard_target)
         Tard_CurrentTarget = Tard_target
 	end
