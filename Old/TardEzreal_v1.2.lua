@@ -1,6 +1,6 @@
 --Datas----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local Tard_Orb; local Tard_SDK; local Tard_SDKCombo; local Tard_SDKHarass; local Tard_SDKJungleClear; local Tard_SDKLaneClear; local Tard_SDKLastHit; local Tard_SDKFlee; local Tard_SDKSelector; local Tard_SDKHealthPrediction; local Tard_SDKDamagePhysical; local Tard_SDKDamageMagical; local Tard_CurrentTarget; local Tard_SpellstoPred;local Tard_Mode;local Tard_TardMenu;local Tard_EternalPred;local Tard_myHero;local Tard_SelectedTarget;local Tard_Item;local Tard_ItemHotKey;local DamageReductionTable;local Tard_SpellstoCollision; 
-local Tard_version = 1.3
+local Tard_version = 1.21
 local Tard_Icon = {
     ["Ezreal"] = "http://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c3/EzrealSquare.png",
     ["Botrk"] = "http://vignette2.wikia.nocookie.net/leagueoflegends/images/2/2f/Blade_of_the_Ruined_King_item.png",
@@ -84,9 +84,9 @@ end
 
 local castSpell = {state = 0, tick = GetTickCount(), casting = GetTickCount() - 1000, mouse = mousePos}
 function Need:Tard_CastSpell(spell, pos, delay)
+
     local delay = delay or 250
 	if pos == nil then return end
-    if ExtLibEvade and ExtLibEvade.Evading then return end
 		local ticker = GetTickCount()
 		if castSpell.state == 0 and ticker - castSpell.casting > delay + Game.Latency() then -- and pos:ToScreen().onScreen then
 			castSpell.state = 1
@@ -136,6 +136,7 @@ end
 function Need:Tard_OnWndMsg(msg, wParam)
     if msg == WM_LBUTTONDOWN then
         if Tard_TardMenu.Misc.SelectedTarget:Value() then
+            --local Tard_hero = Need:Tard_GetEnemynearMouse()
             for i = 1, Game.HeroCount() do
                 local H = Game.Hero(i)
                 if self:Tard_GetDistanceSqr(H.pos, _G.mousePos) <= 100*100 then
@@ -149,6 +150,9 @@ function Need:Tard_OnWndMsg(msg, wParam)
             end
         end
     end
+    --if msg == KEY_DOWN and wParam == 0x54 then 
+    --    Need:Tard_CastR(self.Tard_SelectedTarget)
+    --end
 end
 -------------------------------------------------------------------------------------------------------------------------------------------
 --local dmglib
@@ -319,6 +323,13 @@ function TardEzreal:__init()
         [1] = Prediction:SetSpell(Tard_EzrealSpells[1], Tard_EzrealSpells[1].spellType, Tard_EzrealSpells[1].hitBox),
         [3] = Prediction:SetSpell(Tard_EzrealSpells[3], Tard_EzrealSpells[3].spellType, Tard_EzrealSpells[3].hitBox)
         }
+    --[[else 
+        require("Collision")
+        print("collision loaded")
+        Tard_SpellstoCollision = {
+            [0] = Collision:SetSpell(Tard_EzrealSpells[0].range, Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[0].width, Tard_EzrealSpells[0].hitBox),
+            [3] = Collision:SetSpell(Tard_EzrealSpells[3].range, Tard_EzrealSpells[3].speed, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[3].width, Tard_EzrealSpells[3].hitBox)   
+        }--]]
     end  
     if _G.EOWLoaded then 
         Tard_Orb = 0; print("New Eternal Orb is good but Tosh is still toxic ^^")  
@@ -349,6 +360,10 @@ function TardEzreal:__init()
             if Tard_EternalPred == true then
                 local pred = Tard_SpellstoPred[i]:GetPrediction(unit, Tard_myHero.pos)
                 Tard_Collision = pred:mCollision() + pred:hCollision()
+            --[[   else
+                local Tard_RblockUnit 
+                Tard_Collision, Tard_RblockUnit = Tard_SpellstoCollision[i]:__GetCollision(Tard_myHero, unit, 5)
+                Tard_Collision = #Tard_RblockUnit ]]
             end
             local Tard_nerf = math.min(Tard_Collision,7)
             local Tard_finaldmg = Tard_initialdmg * ((10 - Tard_nerf) / 10)
@@ -423,6 +438,7 @@ function TardEzreal:Tard_Menu()
     Tard_TardMenu.Draw:MenuElement({id = "DrawQ", name = "Draw Q Range", value = true})
     Tard_TardMenu.Draw:MenuElement({id = "DrawW", name = "Draw W Range", value = true})
     Tard_TardMenu.Draw:MenuElement({id = "DrawE", name = "Draw E Range", value = true})
+    --Tard_TardMenu.Draw:MenuElement({id = "DrawTarget", name = "Draw Target [?]", value = true, tooltip = "Draws current target"})
     Tard_TardMenu.Draw:MenuElement({id = "DrawSpellTarget", name = "Draw Spell Target Focus [?]", value = true, tooltip = "Draws spell target focus"})
     Tard_TardMenu.Draw:MenuElement({id = "DisableDraw", name = "Disable all Draws [?]", value = false})
 end
@@ -598,6 +614,17 @@ function TardEzreal:Tard_CastQ(unit)
                 Need:Tard_CastSpell(HK_Q, Tard_QPred.castPos, 250) 
             end           
         end 
+    --[[else
+        local Tard_QPred = unit:GetPrediction(Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].delay + Game.Latency()/1000)
+        local Tard_QCollision, Tard_QblockUnit = Tard_SpellstoCollision[0]:__GetCollision(Tard_myHero, unit, 5)
+        if (Tard_QCollision == false or (unit.type == Obj_AI_Minion and #Tard_QblockUnit == 1)) and Need:Tard_GetDistanceSqr(Tard_QPred) < (Tard_EzrealSpells[0].range*Tard_EzrealSpells[0].range) then-- 1440000 then
+        --Need:Tard_CastSpell(HK_Q, Tard_QPred, Tard_EzrealSpells[0].delay)   
+            GOS.BlockMovement = true
+        --GOS.BlockAttack = true
+            Control.CastSpell(HK_Q, Tard_QPred)
+            GOS.BlockMovement = false
+        --GOS.BlockAttack = false
+        end ]]
     end
 end
 
@@ -609,6 +636,16 @@ function TardEzreal:Tard_CastW(unit)
                 Need:Tard_CastSpell(HK_W,Tard_WPred.castPos,540) 
             end 
         end
+    --[[else
+        local Tard_WPred = unit:GetPrediction(Tard_EzrealSpells[1].speed, Tard_EzrealSpells[1].delay + Game.Latency()/1000)
+        if Need:Tard_GetDistanceSqr(Tard_WPred) < 1050625 then
+        --Need:Tard_CastSpell(HK_W, Tard_WPred, Tard_EzrealSpells[0].delay)
+        GOS.BlockMovement = true
+        --GOS.BlockAttack = true
+        Control.CastSpell(HK_W, Tard_WPred)
+        GOS.BlockAttack = false
+    --  GOS.BlockAttack = false
+        end]]
     end 
 end
 
@@ -622,6 +659,11 @@ function TardEzreal:Tard_CastR(unit)
                     Need:Tard_CastSpell(HK_R,Tard_RPred.castPos, 1760)
                 end
         end 
+        --[[else
+        local Tard_RPred = unit:GetPrediction(Tard_EzrealSpells[3].speed, Tard_EzrealSpells[3].delay + Game.Latency()/1000)    
+        if Need:Tard_GetDistanceSqr(Tard_myHero.pos,Tard_RPred) < (Tard_EzrealSpells[3].range*Tard_EzrealSpells[3].range) then
+            Need:Tard_CastSpell(HK_R, Tard_RPred, 1760)
+        end]]
     end
 end
 
@@ -650,6 +692,13 @@ function TardEzreal:Tard_Draw()
     if Tard_DrawMenu.DrawE:Value() and (Tard_Spell(_E) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
            Tard_DrawCircle(Tard_EzrealPos, 475, 1, Tard_DrawColor(255, 255, 255, 255))
     end
+    --[[if Tard_DrawMenu.DrawTarget:Value() then
+        local Tard_drawTarget = Tard_CurrentTarget
+        if Tard_drawTarget == nil or Tard_drawTarget.dead then return 
+        else
+            Tard_DrawCircle(Tard_drawTarget,70,3,Tard_DrawColor(255, 255, 255, 0))
+        end
+    end ]]
     if Tard_DrawMenu.DrawSpellTarget:Value() then
         if Tard_TardMenu.Misc.SelectedTarget:Value() and Need:Tard_IsValidTarget(Tard_SelectedTarget) then
             Tard_DrawCircle(Tard_SelectedTarget.pos, 80, 3, Tard_DrawColor(255, 0, 0 ,255))
