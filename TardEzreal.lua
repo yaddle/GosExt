@@ -1,10 +1,10 @@
 --Datas----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local Tard_Orb; local Tard_SDK; local Tard_SDKCombo; local Tard_SDKHarass; local Tard_SDKJungleClear; local Tard_SDKLaneClear; local Tard_SDKLastHit; local Tard_SDKFlee; local Tard_SDKSelector; local Tard_SDKHealthPrediction; local Tard_SDKDamagePhysical; local Tard_SDKDamageMagical; local Tard_CurrentTarget; local Tard_SpellstoPred;local Tard_Mode;local Tard_TardMenu;local Tard_EternalPred;local Tard_myHero;local Tard_SelectedTarget;local Tard_Item;local Tard_ItemHotKey;local DamageReductionTable;local Tard_SpellstoCollision; 
-local Tard_version = 1.2
+local Tard_version = 1.21
 local Tard_Icon = {
-    ["Ezreal"] = "https://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c3/EzrealSquare.png",
-    ["Botrk"] = "https://vignette2.wikia.nocookie.net/leagueoflegends/images/2/2f/Blade_of_the_Ruined_King_item.png",
-    ["Cutlass"] = "https://vignette1.wikia.nocookie.net/leagueoflegends/images/4/44/Bilgewater_Cutlass_item.png"
+    ["Ezreal"] = "http://vignette4.wikia.nocookie.net/leagueoflegends/images/c/c3/EzrealSquare.png",
+    ["Botrk"] = "http://vignette2.wikia.nocookie.net/leagueoflegends/images/2/2f/Blade_of_the_Ruined_King_item.png",
+    ["Cutlass"] = "http://vignette1.wikia.nocookie.net/leagueoflegends/images/4/44/Bilgewater_Cutlass_item.png"
 }
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class "Need"
@@ -301,9 +301,9 @@ function TardEzreal:__init()
     Tard_ItemHotKey = {[ITEM_1] = HK_ITEM_1, [ITEM_2] = HK_ITEM_2, [ITEM_3] = HK_ITEM_3,[ITEM_4] = HK_ITEM_4, [ITEM_5] = HK_ITEM_5, [ITEM_6] = HK_ITEM_6, [ITEM_7] = HK_ITEM_7}
     Tard_EzrealSpells = { 
         [0] = {range = 1200, delay = 0.25, speed = 2000, width = 60, spellType = TYPE_LINE, hitBox = true},	
-        [1] = {range = 1050, delay = 0.54, speed = 1600, width = 80, spellType = TYPE_LINE, hitBox = false},
+        [1] = {range = 1050, delay = 0.25, speed = 1600, width = 80, spellType = TYPE_LINE, hitBox = false},
         [2] = {range = 475},
-        [3] = {range = 20000, delay = 1.76, speed = 2000, width = 160, spellType = TYPE_LINE, hitBox = false}
+        [3] = {range = 20000, delay = 1, speed = 2000, width = 160, spellType = TYPE_LINE, hitBox = false}
     }
     DamageReductionTable = {
         ["Braum"] = {buff = "BraumShieldRaise", amount = function(target) return 1 - ({0.3, 0.325, 0.35, 0.375, 0.4})[target:GetSpellData(_E).level] end},
@@ -550,8 +550,7 @@ function TardEzreal:Tard_LastHit()
 	for i = 1, Game.MinionCount() do
 		local Tard_Minion = Game.Minion(i)
 		if Tard_AAtarget ~= Tard_Minion.handle and Need:Tard_IsValidTarget(Tard_Minion, Tard_EzrealSpells[0].range) and Tard_EzrealSpells[0].dmg(Tard_Minion) >= Tard_Minion.health then
-            if (Tard_AAstate == 3 and Need:Tard_HP_PRED(Tard_Minion, Tard_myHero.attackData.endTime - Game.Timer()) > 0) or (Need:Tard_GetDistanceSqr(Tard_Minion.pos) > (Tard_AArange+Tard_Minion.boundingRadius)*(Tard_AArange+Tard_Minion.boundingRadius) and Tard_AAstate ~= 2)  then
-				--test si minion va mourir avant le reset aa et tard_hp_pred (temps = Tard_myHero.attackData.endTime-Game.Timer() ou attackData.animationTime)
+            if (Tard_AAstate == 3 and Need:Tard_HP_PRED(Tard_Minion, Tard_myHero.attackData.endTime - Game.Timer()) < 1) or (Need:Tard_GetDistanceSqr(Tard_Minion.pos) > (Tard_AArange+Tard_Minion.boundingRadius)*(Tard_AArange+Tard_Minion.boundingRadius) and Tard_AAstate ~= 2)  then
                 self:Tard_CastQ(Tard_Minion)
 				break
 			end
@@ -611,7 +610,9 @@ function TardEzreal:Tard_CastQ(unit)
     if Tard_EternalPred == true then 
         local Tard_QPred = Tard_SpellstoPred[0]:GetPrediction(unit, Tard_myHero.pos)
         if Tard_QPred and (Tard_QPred.hitChance >= Tard_TardMenu.Pred.PredHitChance:Value()/100) and Tard_QPred:mCollision() == 0 and Tard_QPred:hCollision() == 0 and Need:Tard_GetDistanceSqr(Tard_QPred.castPos) <= 1440000 then
-            Need:Tard_CastSpell(HK_Q,Tard_QPred.castPos, 250)            
+            if Need:Tard_IsValidTarget(unit) then
+                Need:Tard_CastSpell(HK_Q, Tard_QPred.castPos, 250) 
+            end           
         end 
     --[[else
         local Tard_QPred = unit:GetPrediction(Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].delay + Game.Latency()/1000)
@@ -631,7 +632,9 @@ function TardEzreal:Tard_CastW(unit)
     if Tard_EternalPred == true then
         local Tard_WPred = Tard_SpellstoPred[1]:GetPrediction(unit, Tard_myHero.pos)
         if Tard_WPred and Tard_WPred.hitChance >= Tard_TardMenu.Pred.PredHitChance:Value()/100 and Need:Tard_GetDistanceSqr(Tard_WPred.castPos) < 1102500 then
-            Need:Tard_CastSpell(HK_W,Tard_WPred.castPos,540)  
+            if Need:Tard_IsValidTarget(unit) then
+                Need:Tard_CastSpell(HK_W,Tard_WPred.castPos,540) 
+            end 
         end
     --[[else
         local Tard_WPred = unit:GetPrediction(Tard_EzrealSpells[1].speed, Tard_EzrealSpells[1].delay + Game.Latency()/1000)
@@ -651,8 +654,10 @@ function TardEzreal:Tard_CastR(unit)
         local Tard_RPred = Tard_SpellstoPred[3]:GetPrediction(unit, Tard_myHero.pos)
         if Tard_RPred and (Tard_RPred.hitChance >= Tard_TardMenu.Pred.PredHitChance:Value()/100) then
                 Tard_RPred.castPos = Vector(Tard_RPred.castPos)
-                Tard_RPred.castPos = Tard_myHero.pos + Vector(Tard_RPred.castPos - Tard_myHero.pos):Normalized() * math.random(500,800)
-                Need:Tard_CastSpell(HK_R,Tard_RPred.castPos, 1760)
+                Tard_RPred.castPos = Tard_myHero.pos + Vector(Tard_RPred.castPos - Tard_myHero.pos):Normalized() * 500
+                if Need:Tard_IsValidTarget(unit) then
+                    Need:Tard_CastSpell(HK_R,Tard_RPred.castPos, 1760)
+                end
         end 
         --[[else
         local Tard_RPred = unit:GetPrediction(Tard_EzrealSpells[3].speed, Tard_EzrealSpells[3].delay + Game.Latency()/1000)    
