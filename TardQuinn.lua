@@ -88,7 +88,7 @@ function Need:Tard_GetMode()
 				return "Flee"
 			end
 	else 
-			return GOS.GetMode()
+			return GOS:GetMode()
 	end
 end
 
