@@ -7,7 +7,7 @@ local Tard_Icon = {
     ['Tiamat'] = "http://vignette2.wikia.nocookie.net/leagueoflegends/images/e/e3/Tiamat_item.png"
 } 
 local Tard_version = 0; local myH = myHero; local Tard_Orb;
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class "Need"
 function Need:__init()
     self.DamageReductionTable = {
