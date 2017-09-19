@@ -227,7 +227,7 @@ function Need:DamageReductionMod(source,target,amount,DamageType)
       end
     end
 
-    if Need:GetItemSlot(target, 1054) > 0 then
+    if self:GetItemSlot(target, 1054) > 0 then
       amount = amount - 8
     end
 
