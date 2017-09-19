@@ -193,7 +193,7 @@ end
 
 function Need:DamageReductionMod(source,target,amount,DamageType)
   if source.type == Obj_AI_Hero then
-    if Need:Tard_HasBuff(source, "Exhaust") > 0 then
+    if self:Tard_HasBuff(source, "Exhaust") > 0 then
       amount = amount * 0.6
     end
   end
