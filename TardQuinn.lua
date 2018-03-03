@@ -1,4 +1,4 @@
-local Tard_Icon = {["Quinn"] = "http://vignette3.wikia.nocookie.net/leagueoflegends/images/a/af/Behind_Enemy_Lines.png"}
+local Tard_Icon = {["Quinn"] = "https://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Behind_Enemy_Lines.png"}
 class "Need"
 function Need:__init()
 	self.Tard_version = 1.21
