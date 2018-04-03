@@ -6,9 +6,9 @@ if myHero.charName ~= "Ezreal" then return end
 
 --------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------</VARIABLES>---------------------------------------------------
-local Tard_SpellstoPred, Tard_EternalPred, HpredV, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardGSOOrbwalker, TardGSOGetTarget, TardGSOMode, TardGSOObjects, TardGSOState, _EnemyHeroes
+local TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardGSOOrbwalker, TardGSOGetTarget, TardGSOMode, TardGSOObjects, TardGSOState, _EnemyHeroes
 local Tard_myHero                   = _G.myHero
-local Tard_version                  = 2
+local Tard_version                  = 2.1
 local Tard_SelectedTarget           = nil
 local LocalCallbackAdd				= Callback.Add
 local Tard_DrawCircle				= Draw.Circle
@@ -24,8 +24,13 @@ local TardIsChatOpen                = Game.IsChatOpen
 local TardInsert                    = table.insert
 local TardMathHuge                  = math.huge
 local TardMathSqrt                  = math.sqrt
-local TardMin                       = math.min
-local TardVector                    = Vector           
+local TardMathMin                   = math.min
+local TardMathMax                   = math.max
+local TardMathFloor                 = math.floor
+local TardMathAtan2                 = math.atan2
+local TardMathPI                    = math.pi
+local TardVector                    = Vector
+local TardTickCount                 = GetTickCount               
 local _Q							= _Q
 local _W							= _W
 local _E							= _E
@@ -41,10 +46,10 @@ local Tard_Orb                      = 4
 local TEAM_ALLY 					= Tard_myHero.team
 local TEAM_JUNGLE 					= 300
 local TEAM_ENEMY 					= 300 - TEAM_ALLY
-local visionTick 					= GetTickCount()
+local visionTick 					= TardTickCount()
 local _OnVision, _OnWaypoint        = {}, {}
 local _movementHistory              = {}
-local castSpell                     = {state = 0, tick = GetTickCount(), casting = GetTickCount() - 1000, mouse = mousePos}
+local castSpell                     = {state = 0, tick = TardTickCount(), casting = TardTickCount() - 1000, mouse = mousePos}
 local Tard_ItemHotKey               = {[ITEM_1] = HK_ITEM_1, [ITEM_2] = HK_ITEM_2,	[ITEM_3] = HK_ITEM_3, [ITEM_4] = HK_ITEM_4,	[ITEM_5] = HK_ITEM_5, [ITEM_6] = HK_ITEM_6}
 local Tard_EzrealSpells             = { [0] = {range = 1200, delay = 0.25, speed = 2000, width = 80, spellType = TYPE_LINE, hitBox = true},
                                         [1] = {range = 1050, delay = 0.54, speed = 1600, width = 80, spellType = TYPE_LINE, hitBox = false},
@@ -223,7 +228,9 @@ local GetEnemyHeroes                = function()
                                         for i = 1, TardHeroCount() do
                                             local unit = TardHero(i)
                                             if unit.team == TEAM_ENEMY then
-                                                table.insert(_EnemyHeroes, unit)
+                                                _EnemyHeroes[i] = unit
+                                                print(_EnemyHeroes[i].name)
+                                                --TardInsert(_EnemyHeroes, unit)
                                             end
                                         end
                                         return _EnemyHeroes
@@ -296,17 +303,16 @@ local hCollision                    = function(unit, spell, sourcePos, castPos) 
 ---------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------<NODDY FONCTIONS, THX TO HIM :)>---------------------------------------------------
 local OnVision                      = function(unit)
-                                        if _OnVision[unit.networkID] == nil then _OnVision[unit.networkID] = {state = unit.visible , tick = GetTickCount(), pos = unit.pos} end
-                                        if _OnVision[unit.networkID].state == true and not unit.visible then _OnVision[unit.networkID].state = false _OnVision[unit.networkID].tick = GetTickCount() end
-                                        if _OnVision[unit.networkID].state == false and unit.visible then _OnVision[unit.networkID].state = true _OnVision[unit.networkID].tick = GetTickCount() end
+                                        if _OnVision[unit.networkID] == nil then _OnVision[unit.networkID] = {state = unit.visible , tick = TardTickCount(), pos = unit.pos} end
+                                        if _OnVision[unit.networkID].state == true and not unit.visible then _OnVision[unit.networkID].state = false _OnVision[unit.networkID].tick = TardTickCount() end
+                                        if _OnVision[unit.networkID].state == false and unit.visible then _OnVision[unit.networkID].state = true _OnVision[unit.networkID].tick = TardTickCount() end
                                         return _OnVision[unit.networkID]
                                     end
-LocalCallbackAdd                    ("Tick", function() OnVisionF() end)
 
-OnVisionF                           = function()
-                                        if GetTickCount() - visionTick > 100 then
-                                            for i,v in pairs(GetEnemyHeroes()) do
-                                                OnVision(v)
+local OnVisionF                           = function()
+                                        if TardTickCount() - visionTick > 100 then
+                                            for i=1, #GetEnemyHeroes() do
+                                                OnVision(GetEnemyHeroes()[i])
                                             end
                                         end
                                     end
@@ -314,12 +320,12 @@ OnVisionF                           = function()
 local OnWaypoint                    = function(unit)
                                         if _OnWaypoint[unit.networkID] == nil then _OnWaypoint[unit.networkID] = {pos = unit.posTo , speed = unit.ms, time = TardGameTimer()} end
                                         if _OnWaypoint[unit.networkID].pos ~= unit.posTo then 
-                                            -- print("OnWayPoint:"..unit.charName.." | "..math.floor(LocalGameTimer()))
+                                            -- print("OnWayPoint:"..unit.charName.." | "..TardMathFloor(LocalGameTimer()))
                                             _OnWaypoint[unit.networkID] = {startPos = unit.pos, pos = unit.posTo , speed = unit.ms, time = TardGameTimer()}
                                                 DelayAction(function()
                                                     local time = (TardGameTimer() - _OnWaypoint[unit.networkID].time)
                                                     local speed = TardMathSqrt(Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos))/(TardGameTimer() - _OnWaypoint[unit.networkID].time)
-                                                    if speed > 1250 and time > 0 and unit.posTo == _OnWaypoint[unit.networkID].pos and Tard_GetDistanceSqr(unit.pos,_OnWaypoint[unit.networkID].pos) > 200^2 then
+                                                    if speed > 1250 and time > 0 and unit.posTo == _OnWaypoint[unit.networkID].pos and Tard_GetDistanceSqr(unit.pos,_OnWaypoint[unit.networkID].pos) > 40000 then
                                                         _OnWaypoint[unit.networkID].speed = TardMathSqrt(Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos))/(TardGameTimer() - _OnWaypoint[unit.networkID].time)
                                                         print("OnDash: "..unit.charName)
                                                     end
@@ -334,7 +340,7 @@ local GetPred                       = function(unit, speed, delay)
                                         local unitSpeed = unit.ms
                                         if OnWaypoint(unit).speed > unitSpeed then unitSpeed = OnWaypoint(unit).speed end
                                         if OnVision(unit).state == false then
-                                            local unitPos = unit.pos + TardVector(unit.pos,unit.posTo):Normalized() * ((GetTickCount() - OnVision(unit).tick)*.001 * unitSpeed)
+                                            local unitPos = unit.pos + TardVector(unit.pos,unit.posTo):Normalized() * ((TardTickCount() - OnVision(unit).tick)*.001 * unitSpeed)
                                             local predPos = unitPos + TardVector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + (TardMathSqrt(Tard_GetDistanceSqr(Tard_myHero.pos,unitPos))/speed)))
                                             if Tard_GetDistanceSqr(unit.pos,predPos) > Tard_GetDistanceSqr(unit.pos,unit.posTo) then predPos = unit.posTo end
                                             return predPos
@@ -356,7 +362,7 @@ local Tard_CastSpell                = function(spell, pos, delay)
                                         if pos == nil then
                                             return
                                         end
-                                        local ticker = GetTickCount()
+                                        local ticker = TardTickCount()
                                         if castSpell.state == 0 and ticker - castSpell.casting > delay + TardLatency() then -- and pos:ToScreen().onScreen then
                                             castSpell.state = 1
                                             castSpell.mouse = mousePos
@@ -434,7 +440,7 @@ local CalcPhysicalDamage            = function(source, target, amount)
                                         elseif (armor * ArmorPenPercent) - (bonusArmor * (1 - BonusArmorPen)) - ArmorPenFlat < 0 then
                                             value = 1
                                         end
-                                        return math.max(0, math.floor(DamageReductionMod(source, target, PassivePercentMod(source, target, value) * amount, 1)))
+                                        return TardMathMax(0, TardMathFloor(DamageReductionMod(source, target, PassivePercentMod(source, target, value) * amount, 1)))
                                     end
 
 local CalcMagicalDamage             = function(source, target, amount)
@@ -446,8 +452,8 @@ local CalcMagicalDamage             = function(source, target, amount)
                                         elseif (mr * source.magicPenPercent) - source.magicPen < 0 then
                                             value = 1
                                         end
-                                        return math.max(
-                                            0, math.floor(DamageReductionMod(source, target, PassivePercentMod(source, target, value) * amount, 2)))
+                                        return TardMathMax(
+                                            0, TardMathFloor(DamageReductionMod(source, target, PassivePercentMod(source, target, value) * amount, 2)))
                                     end
 
 local DamageReductionMod            = function(source, target, amount, DamageType)
@@ -511,7 +517,7 @@ local PassivePercentMod             = function(source, target, amount, damageTyp
                                                         source.maxHealth < target.maxHealth and
                                                         damageType == 1
                                                 then
-                                                    amount =amount * (1 + TardMin(target.maxHealth - source.maxHealth, 500) / 50 *(GetItemSlot(source, 3036) > 0 and 0.015 or 0.01))
+                                                    amount =amount * (1 + TardMathMin(target.maxHealth - source.maxHealth, 500) / 50 *(GetItemSlot(source, 3036) > 0 and 0.015 or 0.01))
                                                 end
                                             end
                                         end
@@ -537,16 +543,18 @@ local GetTargetMS                   = function(target)
                                         return ms
                                     end  
 
-local GetPathNodes                  = function(unit)    
+local GetPathNodes                  = function(unit)
                                         local nodes = {}
+                                        local truc = {}
                                         TardInsert(nodes, unit.pos)
                                         if unit.pathing.hasMovePath then
-                                            for i = unit.pathing.pathIndex, unit.pathing.pathCount do
-                                                path = unit:GetPath(i)
+                                            local init = unit.pathing.pathIndex
+                                            for i = init, unit.pathing.pathCount do
+                                                local path = unit:GetPath(i)
                                                 TardInsert(nodes, path)
-                                            end
-                                        end		
-                                        return nodes
+	                                    	end
+	                                    end		
+	                                    return nodes
                                     end   
 
 local PredictUnitPosition           = function(unit, delay)
@@ -554,16 +562,16 @@ local PredictUnitPosition           = function(unit, delay)
                                         local timeRemaining = delay
                                         local pathNodes = GetPathNodes(unit)
                                         for i = 1, #pathNodes -1 do
-                                            local nodeDistance = Tard_GetDistanceSqr(pathNodes[i], pathNodes[i +1])
+                                            local nodeDistance = TardMathSqrt(Tard_GetDistanceSqr(pathNodes[i], pathNodes[i +1]))
                                             local targetMs = GetTargetMS(unit)
-                                            local nodeTraversalTime = nodeDistance / targetMs^2
+                                            local nodeTraversalTime = nodeDistance / targetMs
                                             if timeRemaining > nodeTraversalTime then
                                                 --This node of the path will be completed before the delay has finished. Move on to the next node if one remains
                                                 timeRemaining =  timeRemaining - nodeTraversalTime
                                                 predictedPosition = pathNodes[i + 1]
                                             else
                                                 local directionVector = (pathNodes[i+1] - pathNodes[i]):Normalized()
-                                                predictedPosition = pathNodes[i] + directionVector *  GetTargetMS(unit) * timeRemaining
+                                                predictedPosition = pathNodes[i] + directionVector *  targetMs * timeRemaining
                                                 break;
                                             end
                                         end
@@ -581,9 +589,10 @@ local UnitMovementBounds            = function(unit, delay, reactionTime)
                                     end
 
 local GetRecallingData              = function(unit)
-                                        for K, Buff in pairs(GetBuffs(unit)) do
-                                            if Buff.name == "recall" and Buff.duration > 0 then
-                                                return true, TardGameTimer() - Buff.startTime
+                                        for i = 0, unit.buffCount do
+                                            local buff = unit:GetBuff(i)
+                                            if buff and buff.name == "recall" and buff.duration > 0 then
+                                                return true, TardGameTimer() - buff.startTime
                                             end
                                         end
                                         return false
@@ -607,7 +616,7 @@ local PredictReactionTime           = function(unit, minimumReactionTime)
                                     end                                                
 
 local GetSpellInterceptTime         = function(startPos, endPos, delay, speed)
-                                        local interceptTime =TardLatency()/2000 + delay + TardMathSqrt(Tard_GetDistanceSqr(startPos, endPos)) / speed
+                                        local interceptTime = TardLatency()/2000 + delay + TardMathSqrt(Tard_GetDistanceSqr(startPos, endPos)) / speed
                                         return interceptTime
                                     end
 
@@ -615,35 +624,32 @@ local CanTarget                     = function(target)
                                         return target.team == TEAM_ENEMY and target.alive and target.visible and target.isTargetable
                                     end
 
+local Angle                         = function(A, B)
+                                        local deltaPos = A - B
+                                        local angle = TardMathAtan2(deltaPos.x, deltaPos.z) *  180 / TardMathPI	
+                                        if angle < 0 then angle = angle + 360 end
+                                        return angle
+                                    end  
 
-
-local IsMinionIntersection          = function(location, radius, delay, maxDistance)
-                                        if not maxDistance then maxDistance = 500 end
-                                        for i = 1, TardMinionCount() do
-                                            local minion = TardMinion(i)
-                                            if CanTarget(minion) and Tard_GetDistanceSqr(minion.pos, location) < maxDistance^2 then
-                                                local predictedPosition = PredictUnitPosition(minion, delay)
-                                                if Tard_GetDistanceSqr(location, predictedPosition) <= (radius + minion.boundingRadius)^2 then
-                                                    return true
-                                                end
+local UpdateMovementHistory         = function()
+                                        for i = 1, TardHeroCount() do
+                                            local unit = TardHero(i)
+                                            if not _movementHistory[unit.charName] then
+                                                _movementHistory[unit.charName] = {}
+                                                _movementHistory[unit.charName]["EndPos"] = unit.pathing.endPos
+                                                _movementHistory[unit.charName]["StartPos"] = unit.pathing.endPos
+                                                _movementHistory[unit.charName]["PreviousAngle"] = 0
+                                                _movementHistory[unit.charName]["ChangedAt"] = TardGameTimer()
+                                            end
+                                            
+                                            if _movementHistory[unit.charName]["EndPos"].x ~=unit.pathing.endPos.x or _movementHistory[unit.charName]["EndPos"].y ~=unit.pathing.endPos.y or _movementHistory[unit.charName]["EndPos"].z ~=unit.pathing.endPos.z then				
+                                                _movementHistory[unit.charName]["PreviousAngle"] = Angle(TardVector(_movementHistory[unit.charName]["StartPos"].x, _movementHistory[unit.charName]["StartPos"].y, _movementHistory[unit.charName]["StartPos"].z), TardVector(_movementHistory[unit.charName]["EndPos"].x, _movementHistory[unit.charName]["EndPos"].y, _movementHistory[unit.charName]["EndPos"].z))
+                                                _movementHistory[unit.charName]["EndPos"] = unit.pathing.endPos
+                                                _movementHistory[unit.charName]["StartPos"] = unit.pos
+                                                _movementHistory[unit.charName]["ChangedAt"] = TardGameTimer()
                                             end
                                         end
-                                        return false
-                                    end
-
-local CheckMinionCollision          = function(origin, endPos, delay, speed, radius, frequency)
-                                        if not frequency then frequency = radius end
-                                        local directionVector = (endPos - origin):Normalized()
-                                        local checkCount = Tard_GetDistanceSqr(origin, endPos) / frequency^2
-                                        for i = 1, checkCount do
-                                            local checkPosition = origin + directionVector * i * frequency
-                                            local checkDelay = delay + Tard_GetDistanceSqr(origin, checkPosition) / speed^2
-                                            if IsMinionIntersection(checkPosition, radius, checkDelay, radius * 3) then
-                                                return true
-                                            end
-                                        end
-                                        return false
-                                    end
+                                    end                                    
 
 local GetHitchance                  = function(source, target, range, delay, speed, radius, checkCollision)	
                                         local hitChance = 1	
@@ -678,14 +684,8 @@ local GetHitchance                  = function(source, target, range, delay, spe
                                             end
                                         end
                                         --Check for out of range
-                                        if Tard_GetDistanceSqr(myHero.pos, aimPosition) >= range*range then
+                                        if (Tard_GetDistanceSqr(myHero.pos, aimPosition)) > range*range then
                                             hitChance = -1
-                                        end
-                                        --Check minion block
-                                        if hitChance > 0 and checkCollision then	
-                                            if CheckMinionCollision(source, aimPosition, delay, speed, radius) then
-                                                hitChance = -1
-                                            end
                                         end
                                         return hitChance, aimPosition
                                     end
@@ -695,7 +695,7 @@ local GetHitchance                  = function(source, target, range, delay, spe
 -----------------------------------------------------<MENU>---------------------------------------------------
 local Tard_Menu                     = function()
                                         Tard_TardMenu:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
-                                            Tard_TardMenu.Combo:MenuElement({id = "sheen", name = "Don't spell if under Sheen/Triforce/lich buff", value = false, leftIcon = Tard_Icon.Sheen})
+                                            Tard_TardMenu.Combo:MenuElement({id = "sheen", name = "Don't cast if under Sheen/Tri/lich buff", value = false, leftIcon = Tard_Icon.Sheen, tooltip = "Don't cast spell if you have Sheen buff"})
                                             Tard_TardMenu.Combo:MenuElement({id = "ComboQ", name = "Use Q", value = true})
                                             Tard_TardMenu.Combo:MenuElement({id = "ComboW", name = "Use W", value = true})
                                             Tard_TardMenu.Combo:MenuElement({id = "ComboQmana", name = "Min. Mana to Q", value = 0, min = 0, max = 100, tooltip = "It's %"})
@@ -725,20 +725,17 @@ local Tard_Menu                     = function()
                                             Tard_TardMenu.Misc:MenuElement({id = "KeepRmana", name = "Keep mana for R", value = false, tooltip = "KillSteal never keep mana"})
                                             Tard_TardMenu.Misc:MenuElement({id = "SelectedTarget", name = "Focus Spell target", value = true, tooltip = "Focus Spell on selected target"})
                                         Tard_TardMenu:MenuElement({type = MENU, id = "P", name = "Prediction Settings"})
-                                            Tard_TardMenu.P:MenuElement({type = SPACE, id = "info",  name = "Disable Hpred to use Eternal Pred, need reload"})
-                                            Tard_TardMenu.P:MenuElement({type = SPACE, id = "info2",  name = "Disable all preds to use Noddy pred, need reload"})
-                                            Tard_TardMenu.P:MenuElement({id = "hpred", name = "Use HPred -- need reload",  value = true, tooltip = "use Noddy's pred if both pred are disable, Reload script"})
-                                            if not Tard_TardMenu.P.hpred:Value() then
-                                                Tard_TardMenu.P:MenuElement({id = "Epred", name = "Use Eternal Pred -- need reload",  value = true, tooltip = "use Noddy's pred if both pred are disable, Reload script"})
-                                            end    
-                                            if Tard_TardMenu.P.hpred:Value() and Tard_TardMenu.P.Epred == nil then
-                                                Tard_TardMenu.P:MenuElement({id = "AccuracyQ", name = "Accuracy Q", value = 2, min = 1, max = 5, step = 1})
-                                                Tard_TardMenu.P:MenuElement({id = "AccuracyW", name = "Accuracy W", value = 2, min = 1, max = 5, step = 1})
-                                                Tard_TardMenu.P:MenuElement({id = "AccuracyR", name = "Accuracy R", value = 2, min = 1, max = 5, step = 1})
+                                            Tard_TardMenu.P:MenuElement({id = "Pred", name = "Which Prediction (Need Reload)",  value = 1, drop= {"HPred", "Eternal Pred", "Noddy's Pred"}})
+                                            if Tard_TardMenu.P.Pred:Value() == 1 then
+                                                Tard_TardMenu.P:MenuElement({id = "AccuracyQ", name = "HPred Accuracy Q", value = 2, min = 1, max = 5, step = 1})
+                                                Tard_TardMenu.P:MenuElement({id = "AccuracyW", name = "HPred Accuracy W", value = 2, min = 1, max = 5, step = 1})
+                                                Tard_TardMenu.P:MenuElement({id = "AccuracyR", name = "HPred Accuracy R", value = 2, min = 1, max = 5, step = 1})
+                                                Tard_TardMenu.P:MenuElement({type = SPACE, id = "info",  name = "Recommended value is 2, perfect is 3 but cast less"})
+                                            elseif Tard_TardMenu.P.Pred:Value() == 2 then
+                                                Tard_TardMenu.P:MenuElement({id = "PredHitChance", name = "Eternal Pred HitChance (default 25)", value = 25, min = 0, max = 100, tooltip = "higher value better pred but slower||don't change it if don't know what is it||"})    
+                                                Tard_TardMenu.P:MenuElement({type = SPACE, id = "info",  name = "Higher value better pred but slower"})
                                             end
-                                            if not Tard_TardMenu.P.hpred:Value() and Tard_TardMenu.P.Epred:Value() then
-                                                Tard_TardMenu.P:MenuElement({id = "PredHitChance", name = "HitChance (default 25)", value = 25, min = 0, max = 100, tooltip = "higher value better pred but slower(%)||don't change it if don't know what is it||"})
-                                            end
+
                                         Tard_TardMenu:MenuElement({type = MENU, id = "Draw", name = "Drawing Settings"})
                                             Tard_TardMenu.Draw:MenuElement({id = "DrawReady", name = "Draw Only Ready Spells [?]", value = true, tooltip = "Only draws spells when they're ready"})
                                             Tard_TardMenu.Draw:MenuElement({id = "DrawQ", name = "Draw Q Range", value = true})
@@ -771,14 +768,14 @@ local GotSheen                      = function()
                                     end
 
 local Tard_CastQ                    = function(unit, collision, cancelifcollision)
-                                        if HpredV then
+                                        if TardPred == 1 then
                                             local hitChance, Tard_QPred = GetHitchance(Tard_myHero.pos, unit, Tard_EzrealSpells[0].range, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].width, false)
                                             if hitChance and hitChance >= Tard_TardMenu.P.AccuracyQ:Value() and Tard_GetDistanceSqr(Tard_QPred) < 1440000 then
                                                 local Tard_Collision = (collision ~= false and mCollision(unit, 0, Tard_myHero.pos, Tard_QPred) + hCollision(unit, 0, Tard_myHero.pos, Tard_QPred)) or 0
                                                 if cancelifcollision and Tard_Collision ~= 0 then return end
                                                 if Tard_Collision == 0 and unit.health > 0 then Tard_CastSpell(HK_Q, Tard_QPred, 250) end
                                             end
-                                        elseif Tard_EternalPred then
+                                        elseif TardPred == 2 then
                                             local Tard_QPred = Tard_SpellstoPred[0]:GetPrediction(unit, Tard_myHero.pos)
                                             local Tard_Collision = (collision ~= false and mCollision(unit, 0, Tard_myHero.pos, Tard_QPred.castPos) + hCollision(unit, 0, Tard_myHero.pos, Tard_QPred.castPos)) or 0 
                                             if cancelifcollision and Tard_Collision ~= 0 then return end
@@ -795,17 +792,16 @@ local Tard_CastQ                    = function(unit, collision, cancelifcollisio
                                     end
 
 local Tard_CastW                    = function(unit)
-                                        if HpredV then
+                                        if TardPred == 1 then
                                             local hitChance, Tard_WPred = GetHitchance(Tard_myHero.pos, unit, Tard_EzrealSpells[1].range, Tard_EzrealSpells[1].delay, Tard_EzrealSpells[1].speed, Tard_EzrealSpells[1].width, false)
                                             if hitChance and hitChance >= Tard_TardMenu.P.AccuracyW:Value() and Tard_GetDistanceSqr(Tard_WPred) < 1102500 then
                                                 Tard_CastSpell(HK_W, Tard_WPred, 540)
                                             end
-                                        elseif Tard_EternalPred then
+                                        elseif TardPred == 2 then
                                             local Tard_WPred = Tard_SpellstoPred[1]:GetPrediction(unit, Tard_myHero.pos)
                                             if Tard_WPred and Tard_WPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100 and Tard_GetDistanceSqr(Tard_WPred.castPos) < 1102500 then
                                                 Tard_CastSpell(HK_W, Tard_WPred.castPos, 540)
                                             end
-
                                         else local Tard_WPred = GetPred(unit, 1600, 0.54 + TardLatency()*.001)
                                             if Tard_WPred and Tard_GetDistanceSqr(Tard_WPred) < 1102500 then
                                                 Tard_CastSpell(HK_W, Tard_WPred, 540)
@@ -814,14 +810,14 @@ local Tard_CastW                    = function(unit)
                                     end
 
 local Tard_CastR                    = function(unit)
-                                        if HpredV then 
+                                        if TardPred == 1 then 
                                             local hitChance, Tard_RPred = GetHitchance(Tard_myHero.pos, unit, 20000, 1.76, 2000, 160, false)
                                             if hitChance and hitChance >= Tard_TardMenu.P.AccuracyR:Value() then
                                                 local Vec = TardVector(Tard_RPred) 
                                                 local NormalizedPos = Tard_myHero.pos + TardVector(Vec - Tard_myHero.pos):Normalized() * 500
                                                 Tard_CastSpell(HK_R, NormalizedPos, 1760)
                                             end
-                                        elseif Tard_EternalPred then
+                                        elseif TardPred == 2 then
                                             local Tard_RPred = Tard_SpellstoPred[3]:GetPrediction(unit, Tard_myHero.pos)
                                             if Tard_RPred and (Tard_RPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100) then
                                                 local Vec = TardVector(Tard_RPred.castPos) 
@@ -1022,28 +1018,43 @@ local Tard_LastHit                  = function()
                                         end
                                     end
 
+local CantUse                       = function()
+                                        if Tard_myHero.dead or TardIsChatOpen() or IsEvading() then
+                                            return
+                                        end
+                                    end
+
+local ModeTranslation               = function(Mode)
+                                        local KeepRMana = Tard_TardMenu.Misc.KeepRmana:Value() 
+                                        if (KeepRMana and TardIsRSpell(3) == 0 and Tard_myHero.mana >= 140) or (TardIsRSpell(3) ~= 0 or not KeepRMana) then
+                                            if Mode == "Combo" then
+                                                Tard_Combo()
+                                            elseif Mode == "Harass" then
+                                                Tard_Harass()
+                                            elseif Mode == "Lasthit" then
+                                                Tard_LastHit()
+                                            elseif Mode == "Clear" then
+                                                Tard_Farm()
+                                                Tard_JungleClear()
+                                            end
+                                        end
+                                    end
+
+local UpdatePrediction              = function()
+                                        if TardPred == 1 then UpdateMovementHistory() 
+                                        elseif TardPred == 3 then OnVisionF() 
+                                        end
+                                    end
 -----------------------------------------------------</FONCTIONS>---------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------<CALLBACKS>---------------------------------------------------
 
 LocalCallbackAdd                    ("Tick", function()
-                                        if Tard_myHero.dead or TardIsChatOpen() or IsEvading() then
-                                            return
-                                        end
+                                        CantUse()
                                         Tard_Mode = Tard_GetMode()
-                                        if (Tard_TardMenu.Misc.KeepRmana:Value() and TardIsRSpell(3) == 0 and Tard_myHero.mana >= 140) or (TardIsRSpell(3) ~= 0 or not Tard_TardMenu.Misc.KeepRmana:Value()) then
-                                            if Tard_Mode == "Combo" then
-                                                Tard_Combo()
-                                            elseif Tard_Mode == "Harass" then
-                                                Tard_Harass()
-                                            elseif Tard_Mode == "Lasthit" then
-                                                Tard_LastHit()
-                                            elseif Tard_Mode == "Clear" then
-                                                Tard_Farm()
-                                                Tard_JungleClear()
-                                            end
-                                        end
+                                        ModeTranslation(Tard_Mode)
+                                        UpdatePrediction()
                                         Tard_KillSteal()
                                         Tard_RonKey()
                                     end
@@ -1075,9 +1086,9 @@ LocalCallbackAdd                    ("Draw", function()
 LocalCallbackAdd                    ("Load", function()
                                         Tard_Menu()
                                         print("Hello ", Tard_myHero.name, ", TardEzreal v", Tard_version, " is ready to feed")
-                                        if Tard_TardMenu.P.hpred:Value() and Tard_TardMenu.P.Epred == nil then HpredV = true; print("HPred loaded")
-                                        elseif not Tard_TardMenu.P.hpred:Value() and Tard_TardMenu.P.Epred:Value() then 
-                                            Tard_EternalPred = true
+                                        TardPred = Tard_TardMenu.P.Pred:Value() 
+                                        if TardPred == 1 then print("HPred loaded")
+                                        elseif TardPred == 2 then 
                                             require "Eternal Prediction"
                                             print("Tosh Pred loaded ;)")
                                             Tard_SpellstoPred = {
@@ -1085,7 +1096,7 @@ LocalCallbackAdd                    ("Load", function()
                                                 [1] = Prediction:SetSpell(Tard_EzrealSpells[1], Tard_EzrealSpells[1].spellType, Tard_EzrealSpells[1].hitBox),
                                                 [3] = Prediction:SetSpell(Tard_EzrealSpells[3], Tard_EzrealSpells[3].spellType, Tard_EzrealSpells[3].hitBox)
                                             }
-                                        else print("Noddy's pred loaded")
+                                        else print("Noddy's pred loaded");
                                         end
                                         if _G.EOWLoaded then Tard_Orb = 1 elseif _G.SDK and _G.SDK.Orbwalker then Tard_Orb = 2 elseif _G.__gsoOrbwalker then Tard_Orb = 3 end
                                         if Tard_Orb == 1 then print("New Eternal Orb is good but Tosh is still toxic ^^")
@@ -1137,12 +1148,12 @@ LocalCallbackAdd                    ("Load", function()
                                                     local Tard_level = Tard_myHero:GetSpellData(i).level
                                                     local Tard_initialdmg = ({350, 500, 650})[Tard_level] + 0.9 * Tard_myHero.ap + Tard_myHero.bonusDamage
                                                     local Tard_Collision
-                                                    if HpredV then
+                                                    if TardPred == 1 then
                                                         local hitChance, Tard_RPred = GetHitchance(Tard_myHero.pos, unit, 20000, 1.76, 2000, 160, false)
                                                         if hitChance and hitChance >= Tard_TardMenu.P.AccuracyR:Value() and Tard_RPred then
                                                             Tard_Collision = mCollision(unit, 3, Tard_myHero.pos, Tard_RPred) + hCollision(unit, 3, Tard_myHero.pos, Tard_RPred)
                                                         end
-                                                    elseif Tard_EternalPred then
+                                                    elseif TardPred == 2 then
                                                         local Tard_RPred = Tard_SpellstoPred[i]:GetPrediction(unit, Tard_myHero.pos)
                                                         Tard_Collision = mCollision(unit, 3, Tard_myHero.pos, Tard_RPred.castPos) + hCollision(unit, 3, Tard_myHero.pos, Tard_RPred.castPos)
                                                     else local Tard_RPred = GetPred(unit, 2000, 1.76 + TardLatency()*.001)
@@ -1151,7 +1162,7 @@ LocalCallbackAdd                    ("Load", function()
                                                         end
                                                     end
                                                     if Tard_Collision then
-                                                        local Tard_nerf = (Tard_Collision ~= nil and TardMin(Tard_Collision, 7)) 
+                                                        local Tard_nerf = (Tard_Collision ~= nil and TardMathMin(Tard_Collision, 7)) 
                                                         local Tard_finaldmg = Tard_initialdmg * ((10 - Tard_nerf) / 10)
                                                         return CalcMagicalDamage(Tard_myHero, unit, Tard_finaldmg)
                                                     end
