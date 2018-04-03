@@ -228,8 +228,7 @@ local GetEnemyHeroes                = function()
                                         for i = 1, TardHeroCount() do
                                             local unit = TardHero(i)
                                             if unit.team == TEAM_ENEMY then
-                                                _EnemyHeroes[i] = unit
-                                                print(_EnemyHeroes[i].name)
+                                                _EnemyHeroes[i+1] = unit
                                                 --TardInsert(_EnemyHeroes, unit)
                                             end
                                         end
@@ -324,10 +323,10 @@ local OnWaypoint                    = function(unit)
                                             _OnWaypoint[unit.networkID] = {startPos = unit.pos, pos = unit.posTo , speed = unit.ms, time = TardGameTimer()}
                                                 DelayAction(function()
                                                     local time = (TardGameTimer() - _OnWaypoint[unit.networkID].time)
-                                                    local speed = TardMathSqrt(Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos))/(TardGameTimer() - _OnWaypoint[unit.networkID].time)
+                                                    local speed = Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos)/(TardGameTimer() - _OnWaypoint[unit.networkID].time)*(TardGameTimer() - _OnWaypoint[unit.networkID].time)
                                                     if speed > 1250 and time > 0 and unit.posTo == _OnWaypoint[unit.networkID].pos and Tard_GetDistanceSqr(unit.pos,_OnWaypoint[unit.networkID].pos) > 40000 then
-                                                        _OnWaypoint[unit.networkID].speed = TardMathSqrt(Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos))/(TardGameTimer() - _OnWaypoint[unit.networkID].time)
-                                                        print("OnDash: "..unit.charName)
+                                                        _OnWaypoint[unit.networkID].speed = Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos)/(TardGameTimer() - _OnWaypoint[unit.networkID].time)*(TardGameTimer() - _OnWaypoint[unit.networkID].time)
+                                                        --print("OnDash: "..unit.charName)
                                                     end
                                                 end,0.05)
                                         end
@@ -341,7 +340,7 @@ local GetPred                       = function(unit, speed, delay)
                                         if OnWaypoint(unit).speed > unitSpeed then unitSpeed = OnWaypoint(unit).speed end
                                         if OnVision(unit).state == false then
                                             local unitPos = unit.pos + TardVector(unit.pos,unit.posTo):Normalized() * ((TardTickCount() - OnVision(unit).tick)*.001 * unitSpeed)
-                                            local predPos = unitPos + TardVector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + (TardMathSqrt(Tard_GetDistanceSqr(Tard_myHero.pos,unitPos))/speed)))
+                                            local predPos = unitPos + TardVector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + (Tard_GetDistanceSqr(Tard_myHero.pos,unitPos))/speed*speed))
                                             if Tard_GetDistanceSqr(unit.pos,predPos) > Tard_GetDistanceSqr(unit.pos,unit.posTo) then predPos = unit.posTo end
                                             return predPos
                                         else
