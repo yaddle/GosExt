@@ -51,7 +51,10 @@ local Tard_EzrealSpells             = { [0] = {range = 1200, delay = 0.25, speed
                                         [2] = {range = 475},
                                         [3] = {range = 20000, delay = 1.76, speed = 2000, width = 160, spellType = TYPE_LINE, hitBox = false}
                                     }
-local Tard_Icon                     = { ["Ezreal"] = "https://raw.githubusercontent.com/yaddle/GosExt/master/Icons/EzrealSquare.png"}
+local Tard_Icon                     = { ["Ezreal"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/EzrealSquare.png",
+                                        ["Sheen"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Sheen.png"
+                                    }
+
 local Tard_TardMenu                 = MenuElement({type = MENU, id = "TardEzrealMenu", name = "TardEzreal", leftIcon = Tard_Icon.Ezreal})
 local DamageReductionTable          = { ["Braum"] = {
                                             buff = "BraumShieldRaise",
@@ -692,7 +695,7 @@ local GetHitchance                  = function(source, target, range, delay, spe
 -----------------------------------------------------<MENU>---------------------------------------------------
 local Tard_Menu                     = function()
                                         Tard_TardMenu:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
-                                            Tard_TardMenu.Combo:MenuElement({id = "sheen", name = "Don't spell if under Sheen/Triforce/lich buff", value = false})
+                                            Tard_TardMenu.Combo:MenuElement({id = "sheen", name = "Don't spell if under Sheen/Triforce/lich buff", value = false, leftIcon = Tard_Icon.Sheen})
                                             Tard_TardMenu.Combo:MenuElement({id = "ComboQ", name = "Use Q", value = true})
                                             Tard_TardMenu.Combo:MenuElement({id = "ComboW", name = "Use W", value = true})
                                             Tard_TardMenu.Combo:MenuElement({id = "ComboQmana", name = "Min. Mana to Q", value = 0, min = 0, max = 100, tooltip = "It's %"})
