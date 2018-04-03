@@ -6,7 +6,7 @@ if myHero.charName ~= "Ezreal" then return end
 
 --------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------</VARIABLES>---------------------------------------------------
-local TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardGSOOrbwalker, TardGSOGetTarget, TardGSOMode, TardGSOObjects, TardGSOState, _EnemyHeroes
+local Tard_IsSelected, TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardGSOOrbwalker, TardGSOGetTarget, TardGSOMode, TardGSOObjects, TardGSOState, _EnemyHeroes
 local Tard_myHero                   = _G.myHero
 local Tard_version                  = 2.1
 local Tard_SelectedTarget           = nil
@@ -723,7 +723,7 @@ local Tard_Menu                     = function()
                                         Tard_TardMenu:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})
                                             Tard_TardMenu.Misc:MenuElement({id = "Rkey", name = "Ulti Champ targeted on key", key = string.byte("T"), tooltip = "the target need to be targeted by spell focus first, mouse clic on it, a blue circle should be on the target"})
                                             Tard_TardMenu.Misc:MenuElement({id = "KeepRmana", name = "Keep mana for R", value = false, tooltip = "KillSteal never keep mana"})
-                                            Tard_TardMenu.Misc:MenuElement({id = "SelectedTarget", name = "Focus Spell target", value = true, tooltip = "Focus Spell on selected target"})
+                                            Tard_TardMenu.Misc:MenuElement({id = "SelectedTarget", name = "Focus Spell on Selected Target (need reload)", value = true, tooltip = "Focus Spell on selected target"})
                                         Tard_TardMenu:MenuElement({type = MENU, id = "P", name = "Prediction Settings"})
                                             Tard_TardMenu.P:MenuElement({id = "Pred", name = "Which Prediction (Need Reload)",  value = 1, drop= {"HPred", "Eternal Pred", "Noddy's Pred"}})
                                             if Tard_TardMenu.P.Pred:Value() == 1 then
@@ -735,14 +735,25 @@ local Tard_Menu                     = function()
                                                 Tard_TardMenu.P:MenuElement({id = "PredHitChance", name = "Eternal Pred HitChance (default 25)", value = 25, min = 0, max = 100, tooltip = "higher value better pred but slower||don't change it if don't know what is it||"})    
                                                 Tard_TardMenu.P:MenuElement({type = SPACE, id = "info",  name = "Higher value better pred but slower"})
                                             end
-
                                         Tard_TardMenu:MenuElement({type = MENU, id = "Draw", name = "Drawing Settings"})
-                                            Tard_TardMenu.Draw:MenuElement({id = "DrawReady", name = "Draw Only Ready Spells [?]", value = true, tooltip = "Only draws spells when they're ready"})
-                                            Tard_TardMenu.Draw:MenuElement({id = "DrawQ", name = "Draw Q Range", value = true})
-                                            Tard_TardMenu.Draw:MenuElement({id = "DrawW", name = "Draw W Range", value = true})
-                                            Tard_TardMenu.Draw:MenuElement({id = "DrawE", name = "Draw E Range", value = true})
-                                            Tard_TardMenu.Draw:MenuElement({id = "DrawSpellTarget", name = "Draw Spell Target Focus [?]", value = true, tooltip = "Draws spell target focus"})
-                                            Tard_TardMenu.Draw:MenuElement({id = "DisableDraw", name = "Disable all Draws [?]", value = false})
+                                            Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawQ", name = "Draw Q"})
+                                                Tard_TardMenu.Draw.DrawQ:MenuElement({id = "ON", name = "Draw Q range", value = true})
+                                                Tard_TardMenu.Draw.DrawQ:MenuElement({id = "Width", name = "Width", value = 1, min = 1, max = 5, step = 1})
+                                                Tard_TardMenu.Draw.DrawQ:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 0, 0, 255)})
+                                            Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawW", name = "Draw W"})
+                                                Tard_TardMenu.Draw.DrawW:MenuElement({id = "ON", name = "Draw W range", value = false})
+                                                Tard_TardMenu.Draw.DrawW:MenuElement({id = "Width", name = "Width", value = 1, min = 1, max = 5, step = 1})
+                                                Tard_TardMenu.Draw.DrawW:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 255, 255, 255)})
+                                            Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawE", name = "Draw E"})
+                                                Tard_TardMenu.Draw.DrawE:MenuElement({id = "ON", name = "Draw E range", value = false})
+                                                Tard_TardMenu.Draw.DrawE:MenuElement({id = "Width", name = "Width", value = 1, min = 1, max = 5, step = 1})
+                                                Tard_TardMenu.Draw.DrawE:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 255, 255, 255)})
+                                            Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawT", name = "Draw Selected Spell Target"})
+                                                Tard_TardMenu.Draw.DrawT:MenuElement({id = "ON", name = "Draw circle under Selected Target", value = true})
+                                                Tard_TardMenu.Draw.DrawT:MenuElement({id = "Width", name = "Width", value = 3, min = 1, max = 5, step = 1})
+                                                Tard_TardMenu.Draw.DrawT:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 0, 0, 255)})
+                                            Tard_TardMenu.Draw:MenuElement({id = "DrawReady", name = "Draw Only Ready Spells", value = true, tooltip = "Only draws spells when they're ready"})
+                                            Tard_TardMenu.Draw:MenuElement({id = "DisableDraw", name = "Disable all Draws", value = false})
                                         Tard_TardMenu:MenuElement({name = "by Yaddle", drop = {"Tard_Version : "..Tard_version}})
                                         end
 -----------------------------------------------------</MENU>---------------------------------------------------
@@ -985,7 +996,7 @@ local Tard_JungleClear              = function()
                                         end
                                         for i = 1, TardMinionCount() do
                                             local Tard_JungleMinion = TardMinion(i)
-                                            if Tard_JungleMinion.team == 300 and Tard_IsValidTarget(Tard_JungleMinion, 1200) then
+                                            if Tard_JungleMinion.team == 300 and Tard_IsValidTarget(Tard_JungleMinion, 1200) and Tard_myHero.attackData.target == Tard_JungleMinion.handle  then
                                                 Control.CastSpell(HK_Q, Tard_JungleMinion)
                                                 break
                                             end
@@ -1066,18 +1077,21 @@ LocalCallbackAdd                    ("Draw", function()
                                         end
                                         local Tard_EzrealPos = Tard_myHero.pos
                                         local Tard_DrawMenu = Tard_TardMenu.Draw
-                                        if Tard_DrawMenu.DrawQ:Value() and (TardIsRSpell(_Q) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
-                                            Tard_DrawCircle(Tard_EzrealPos, 1200, 1, Tard_DrawColor(255, 96, 203, 67))
+                                        local Tard_DrawMenuQ, Tard_DrawMenuW, Tard_DrawMenuE, Tard_DrawMenuT = Tard_DrawMenu.DrawQ, Tard_DrawMenu.DrawW, Tard_DrawMenu.DrawE, Tard_DrawMenu.DrawT
+                                        local Tard_WidthQ, Tard_WidthW, Tard_WidthE, Tard_WidthT  = Tard_DrawMenuQ.Width:Value(), Tard_DrawMenuW.Width:Value(), Tard_DrawMenuE.Width:Value(), Tard_DrawMenuT.Width:Value()
+                                        local Tard_ColorQ, Tard_ColorW, Tard_ColorE, Tard_ColorT = Tard_DrawMenuQ.Color:Value(), Tard_DrawMenuW.Color:Value(), Tard_DrawMenuE.Color:Value(), Tard_DrawMenuT.Color:Value()
+                                        if Tard_DrawMenuQ.ON:Value() and (TardIsRSpell(_Q) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
+                                            Tard_DrawCircle(Tard_EzrealPos, 1200, Tard_WidthQ, Tard_ColorQ)
                                         end
-                                        if Tard_DrawMenu.DrawW:Value() and (TardIsRSpell(_W) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
-                                            Tard_DrawCircle(Tard_EzrealPos, 1050, 1, Tard_DrawColor(255, 255, 255, 255))
+                                        if Tard_DrawMenuW.ON:Value() and (TardIsRSpell(_W) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
+                                            Tard_DrawCircle(Tard_EzrealPos, 1050, Tard_WidthW, Tard_ColorW)
                                         end
-                                        if Tard_DrawMenu.DrawE:Value() and (TardIsRSpell(_E) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
-                                            Tard_DrawCircle(Tard_EzrealPos, 475, 1, Tard_DrawColor(255, 255, 255, 255))
+                                        if Tard_DrawMenuE.ON:Value() and (TardIsRSpell(_E) == 0 or not Tard_DrawMenu.DrawReady:Value()) then
+                                            Tard_DrawCircle(Tard_EzrealPos, 475, Tard_ColorE)
                                         end
-                                        if Tard_DrawMenu.DrawSpellTarget:Value() then
-                                            if Tard_TardMenu.Misc.SelectedTarget:Value() and Tard_IsValidTarget(Tard_SelectedTarget) then
-                                                Tard_DrawCircle(Tard_SelectedTarget.pos, 80, 3, Tard_DrawColor(255, 0, 0, 255))
+                                        if Tard_DrawMenuT.ON:Value() then
+                                            if Tard_IsSelected and Tard_SelectedTarget and Tard_SelectedTarget.visible and Tard_SelectedTarget.alive and Tard_SelectedTarget.team == TEAM_ENEMY then
+                                                Tard_DrawCircle(Tard_SelectedTarget.pos, 80, Tard_WidthT, Tard_ColorT)
                                             end
                                         end
                                     end
@@ -1086,7 +1100,8 @@ LocalCallbackAdd                    ("Draw", function()
 LocalCallbackAdd                    ("Load", function()
                                         Tard_Menu()
                                         print("Hello ", Tard_myHero.name, ", TardEzreal v", Tard_version, " is ready to feed")
-                                        TardPred = Tard_TardMenu.P.Pred:Value() 
+                                        TardPred = Tard_TardMenu.P.Pred:Value()
+                                        Tard_IsSelected = Tard_TardMenu.Misc.SelectedTarget:Value()
                                         if TardPred == 1 then print("HPred loaded")
                                         elseif TardPred == 2 then 
                                             require "Eternal Prediction"
@@ -1173,16 +1188,17 @@ LocalCallbackAdd                    ("Load", function()
                                     )
 LocalCallbackAdd                    ("WndMsg", function(msg, wParam)
                                         if msg == WM_LBUTTONDOWN then
-                                            if Tard_TardMenu.Misc.SelectedTarget:Value() then
+                                            if Tard_IsSelected then
                                                 for i = 1, TardHeroCount() do
                                                     local H = TardHero(i)
-                                                    if Tard_GetDistanceSqr(H.pos, _G.mousePos) <= 10000 then
+                                                    if Tard_GetDistanceSqr(H.pos, mousePos) <= 10000 then
                                                         if (H ~= nil and Tard_SelectedTarget ~= nil) and Tard_SelectedTarget.networkID == H.networkID then
                                                             Tard_SelectedTarget = nil
-                                                        else
+                                                            break
+                                                        else 
                                                             Tard_SelectedTarget = H
+                                                            break
                                                         end
-                                                        break
                                                     end
                                                 end
                                             end
