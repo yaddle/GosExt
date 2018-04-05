@@ -8,11 +8,12 @@ if myHero.charName ~= "Ezreal" then return end
 -----------------------------------------------------</VARIABLES>---------------------------------------------------
 local Tard_IsSelected, TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardGSOOrbwalker, TardGSOGetTarget, TardGSOMode, TardGSOObjects, TardGSOState, _EnemyHeroes
 local Tard_myHero                   = _G.myHero
-local Tard_version                  = 2.1
+local Tard_version                  = 2.2
 local Tard_SelectedTarget           = nil
 local LocalCallbackAdd              = Callback.Add
 local Tard_DrawCircle               = Draw.Circle
 local Tard_DrawColor                = Draw.Color
+local Tard_DrawText                 = Draw.Text
 local TardIsRSpell                  = Game.CanUseSpell
 local TardLatency                   = Game.Latency
 local TardGameTimer                 = Game.Timer
@@ -225,11 +226,12 @@ local Tard_GetTarget                = function(range)
 local GetEnemyHeroes                = function()
                                         if _EnemyHeroes then return _EnemyHeroes end
                                         _EnemyHeroes = {}
+                                        local count = 1
                                         for i = 1, TardHeroCount() do
                                             local unit = TardHero(i)
                                             if unit.team == TEAM_ENEMY then
-                                                _EnemyHeroes[i+1] = unit
-                                                --TardInsert(_EnemyHeroes, unit)
+                                                _EnemyHeroes[count] = unit
+                                                count = count + 1
                                             end
                                         end
                                         return _EnemyHeroes
@@ -311,7 +313,7 @@ local OnVision                      = function(unit)
 local OnVisionF                           = function()
                                         if TardTickCount() - visionTick > 100 then
                                             for i=1, #GetEnemyHeroes() do
-                                                OnVision(GetEnemyHeroes()[i])
+                                                OnVision(_EnemyHeroes[i])
                                             end
                                         end
                                     end
@@ -323,9 +325,9 @@ local OnWaypoint                    = function(unit)
                                             _OnWaypoint[unit.networkID] = {startPos = unit.pos, pos = unit.posTo , speed = unit.ms, time = TardGameTimer()}
                                                 DelayAction(function()
                                                     local time = (TardGameTimer() - _OnWaypoint[unit.networkID].time)
-                                                    local speed = Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos)/(TardGameTimer() - _OnWaypoint[unit.networkID].time)*(TardGameTimer() - _OnWaypoint[unit.networkID].time)
+                                                    local speed = TardMathSqrt(Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos))/(TardGameTimer() - _OnWaypoint[unit.networkID].time)
                                                     if speed > 1250 and time > 0 and unit.posTo == _OnWaypoint[unit.networkID].pos and Tard_GetDistanceSqr(unit.pos,_OnWaypoint[unit.networkID].pos) > 40000 then
-                                                        _OnWaypoint[unit.networkID].speed = Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos)/(TardGameTimer() - _OnWaypoint[unit.networkID].time)*(TardGameTimer() - _OnWaypoint[unit.networkID].time)
+                                                        _OnWaypoint[unit.networkID].speed = TardMathSqrt(Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos))/(TardGameTimer() - _OnWaypoint[unit.networkID].time)
                                                         --print("OnDash: "..unit.charName)
                                                     end
                                                 end,0.05)
@@ -340,7 +342,7 @@ local GetPred                       = function(unit, speed, delay)
                                         if OnWaypoint(unit).speed > unitSpeed then unitSpeed = OnWaypoint(unit).speed end
                                         if OnVision(unit).state == false then
                                             local unitPos = unit.pos + TardVector(unit.pos,unit.posTo):Normalized() * ((TardTickCount() - OnVision(unit).tick)*.001 * unitSpeed)
-                                            local predPos = unitPos + TardVector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + (Tard_GetDistanceSqr(Tard_myHero.pos,unitPos))/speed*speed))
+                                            local predPos = unitPos + TardVector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + TardMathSqrt(Tard_GetDistanceSqr(Tard_myHero.pos,unitPos))/speed))
                                             if Tard_GetDistanceSqr(unit.pos,predPos) > Tard_GetDistanceSqr(unit.pos,unit.posTo) then predPos = unit.posTo end
                                             return predPos
                                         else
@@ -720,6 +722,13 @@ local Tard_Menu                     = function()
                                             Tard_TardMenu.KS:MenuElement({id = "R_KS", name = "Use R to try to KillSteal", value = true, tooltip = "only if target is out of AA range"})
                                             Tard_TardMenu.KS:MenuElement({id = "R_Ksrange", name = "R Max Range", value = 7000, min = 300, max = 20000, step = 100, tooltip = "It's %"})
                                         Tard_TardMenu:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})
+                                            Tard_TardMenu.Misc:MenuElement({type = MENU, id = "autoQ", name = "Auto Q"})
+                                                Tard_TardMenu.Misc.autoQ:MenuElement({id = "ON", name = "Enable Auto cast Q", key = string.byte("M"), toggle = true})
+                                                Tard_TardMenu.Misc.autoQ:MenuElement({id = "OutR", name = "Try to Cast only if out of attack range", value = false})
+                                                Tard_TardMenu.Misc.autoQ:MenuElement({id = "Qmana", name = "Min. Mana to Auto Q", value = 60, min = 0, max = 100, tooltip = "It's %"})
+                                                Tard_TardMenu.Misc.autoQ:MenuElement({id = "health", name = "Min. Health to Auto Q", value = 40, min = 0, max = 100, tooltip = "It's %"})
+                                                Tard_TardMenu.Misc.autoQ:MenuElement({id = "disable", name = "Disable Auto Q : ",  value = 1, drop = {"Disable on Combo", "Disable in all mode"}})
+                                                Tard_TardMenu.Misc.autoQ:MenuElement({name = "Auto Cast Q on :", id = "CastOn", type = MENU })
                                             Tard_TardMenu.Misc:MenuElement({id = "Rkey", name = "Ulti Champ targeted on key", key = string.byte("T"), tooltip = "the target need to be targeted by spell focus first, mouse clic on it, a blue circle should be on the target"})
                                             Tard_TardMenu.Misc:MenuElement({id = "KeepRmana", name = "Keep mana for R", value = false, tooltip = "KillSteal never keep mana"})
                                             Tard_TardMenu.Misc:MenuElement({id = "SelectedTarget", name = "Focus Spell on Selected Target (need reload)", value = true, tooltip = "Focus Spell on selected target"})
@@ -751,6 +760,7 @@ local Tard_Menu                     = function()
                                                 Tard_TardMenu.Draw.DrawT:MenuElement({id = "ON", name = "Draw circle under Selected Target", value = true})
                                                 Tard_TardMenu.Draw.DrawT:MenuElement({id = "Width", name = "Width", value = 3, min = 1, max = 5, step = 1})
                                                 Tard_TardMenu.Draw.DrawT:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 0, 0, 255)})
+                                            Tard_TardMenu.Draw:MenuElement({id = "dautoQ", name = "Draw Auto Q status under your Champ", value = true})
                                             Tard_TardMenu.Draw:MenuElement({id = "DrawReady", name = "Draw Only Ready Spells", value = true, tooltip = "Only draws spells when they're ready"})
                                             Tard_TardMenu.Draw:MenuElement({id = "DisableDraw", name = "Disable all Draws", value = false})
                                         Tard_TardMenu:MenuElement({name = "by Yaddle", drop = {"Tard_Version : "..Tard_version}})
@@ -819,6 +829,7 @@ local Tard_CastW                    = function(unit)
                                         end
                                     end
 
+
 local Tard_CastR                    = function(unit)
                                         if TardPred == 1 then 
                                             local hitChance, Tard_RPred = GetHitchance(Tard_myHero.pos, unit, 20000, 1.76, 2000, 160, false)
@@ -842,6 +853,24 @@ local Tard_CastR                    = function(unit)
                                             end 
                                         end
                                     end
+
+local Tard_AutoQ                    = function(Mode)
+                                        local TardMenu = Tard_TardMenu.Misc.autoQ
+                                        local TardQ = TardMenu.ON:Value() and ((TardMenu.disable:Value() == 1 and Mode ~= "Combo") or (TardMenu.disable:Value() == 2 and Mode == ""))  
+                                        TardQ = TardQ and TardIsRSpell(0) == 0 and (Tard_PercentMP(Tard_myHero) >= TardMenu.Qmana:Value()) and (Tard_PercentHP(Tard_myHero) >= TardMenu.health:Value())
+                                        TardQ = TardQ and myHero.attackDataState ~= 2
+                                        if TardQ then
+                                            local myH = Tard_myHero
+                                            local AArange = myH.range + myH.boundingRadius
+                                            local myPos = myH.pos
+                                            local target = Tard_GetTarget(1200)
+                                            if target and TardMenu.CastOn[target.charName] and TardMenu.CastOn[target.charName]:Value() then
+                                                local Dist =  target.distance
+                                                local OutofRange = (TardMenu.OutR:Value() and Dist > AArange) or (TardMenu.OutR:Value() == false)
+                                                if OutofRange and Dist < 1200 then Tard_CastQ(target) end
+                                            end
+                                        end
+                                    end                                  
 
 local Tard_RonKey                   = function()
                                         if Tard_TardMenu.Misc.Rkey:Value() and TardIsRSpell(3) == 0 and Tard_SelectedTarget ~= nil then
@@ -1064,6 +1093,7 @@ LocalCallbackAdd                    ("Tick", function()
                                         CantUse()
                                         Tard_Mode = Tard_GetMode()
                                         ModeTranslation(Tard_Mode)
+                                        Tard_AutoQ(Tard_Mode)
                                         UpdatePrediction()
                                         Tard_KillSteal()
                                         Tard_RonKey()
@@ -1093,12 +1123,23 @@ LocalCallbackAdd                    ("Draw", function()
                                                 Tard_DrawCircle(Tard_SelectedTarget.pos, 80, Tard_WidthT, Tard_ColorT)
                                             end
                                         end
+                                        if Tard_DrawMenu.dautoQ:Value() then
+                                            local Pos2D = myHero.pos:To2D()
+                                            if Tard_TardMenu.Misc.autoQ.ON:Value() then
+                                                Tard_DrawText("Auto Q Enabled", 20, Pos2D.x - 60, Pos2D.y + 15, Tard_DrawColor(255, 255, 255, 0))
+                                            else Tard_DrawText("Auto Q Disable", 20, Pos2D.x - 60, Pos2D.y + 15, Tard_DrawColor(255, 220, 050, 000))
+                                            end
+                                        end 
                                     end
                                     )
 
 LocalCallbackAdd                    ("Load", function()
                                         Tard_Menu()
                                         print("Hello ", Tard_myHero.name, ", TardEzreal v", Tard_version, " is ready to feed")
+                                        for i = 1, #GetEnemyHeroes() do
+                                            local hero = _EnemyHeroes[i]
+                                            Tard_TardMenu.Misc.autoQ.CastOn:MenuElement({id = hero.charName, name = hero.charName, value = true})
+                                        end
                                         TardPred = Tard_TardMenu.P.Pred:Value()
                                         Tard_IsSelected = Tard_TardMenu.Misc.SelectedTarget:Value()
                                         if TardPred == 1 then print("HPred loaded")
