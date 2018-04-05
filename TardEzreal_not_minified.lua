@@ -22,7 +22,6 @@ local TardHero                      = Game.Hero
 local TardMinionCount               = Game.MinionCount
 local TardMinion                    = Game.Minion
 local TardIsChatOpen                = Game.IsChatOpen
-local TardInsert                    = table.insert
 local TardMathHuge                  = math.huge
 local TardMathSqrt                  = math.sqrt
 local TardMathMin                   = math.min
@@ -225,13 +224,11 @@ local Tard_GetTarget                = function(range)
 
 local GetEnemyHeroes                = function()
                                         if _EnemyHeroes then return _EnemyHeroes end
-                                        _EnemyHeroes = {}
                                         local count = 1
                                         for i = 1, TardHeroCount() do
                                             local unit = TardHero(i)
                                             if unit.team == TEAM_ENEMY then
-                                                _EnemyHeroes[count] = unit
-                                                count = count + 1
+                                                _EnemyHeroes[#_EnemyHeroes+1] = unit
                                             end
                                         end
                                         return _EnemyHeroes
@@ -546,13 +543,12 @@ local GetTargetMS                   = function(target)
 
 local GetPathNodes                  = function(unit)
                                         local nodes = {}
-                                        local truc = {}
-                                        TardInsert(nodes, unit.pos)
+										nodes[1] = unit.pos
                                         if unit.pathing.hasMovePath then
                                             local init = unit.pathing.pathIndex
                                             for i = init, unit.pathing.pathCount do
                                                 local path = unit:GetPath(i)
-                                                TardInsert(nodes, path)
+												nodes[#nodes + 1] = path
 	                                    	end
 	                                    end		
 	                                    return nodes
