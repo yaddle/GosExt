@@ -1,7 +1,7 @@
 local Tard_Icon = {["Quinn"] = "https://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Behind_Enemy_Lines.png"}
 class "Need"
 function Need:__init()
-  self.Tard_version = 1.22
+  self.Tard_version = 1.3
   print("Hello ", myHero.name, ", TardQuinn v", self.Tard_version, " is ready to feed")
 
   self.DamageReductionTable = {
@@ -220,6 +220,13 @@ function Need:Tard_CastSpell(spell, pos, delay)
       Control.SetCursorPos(castSpell.mouse)
       castSpell.state = 0
     end
+  end
+end
+
+function Need:Tard_IsEvading()
+  if ExtLibEvade and ExtLibEvade.Evading then 
+    print("it's evading")
+    return true
   end
 end
 
@@ -524,7 +531,7 @@ end
 
 function TardQuinn:Tard_Tick()
   -- Put everything you want to update every time the game ticks here (don't put too many calculations here or you'll drop FPS)
-  if myHero.dead then
+  if myHero.dead or Need:Tard_IsEvading() or Game.IsChatOpen() then
     return
   end
   local Tard_Mode = Need:Tard_GetMode()
@@ -566,7 +573,7 @@ end
 function TardQuinn:Tard_Combo()
   -- COMBO LOGIC HERE
   local Tard_target = Need:Tard_QuinnTarget(925)
-  if Tard_target == nil then
+  if Tard_target == nil or Need:Tard_IsEvading() then
     return
   end
   if Need:Tard_IsValidTarget(Tard_target, 925) then
@@ -607,7 +614,7 @@ end
 function TardQuinn:Tard_Harass()
   -- HARASS LOGIC HERE
   local Tard_target = Need:Tard_QuinnTarget(925)
-  if Tard_target == nil then
+  if Tard_target == nil or Need:Tard_IsEvading() then
     return
   end
   if Need:Tard_IsValidTarget(Tard_target, 925) then
