@@ -8,7 +8,7 @@ if myHero.charName ~= "Ezreal" then return end
 -----------------------------------------------------</VARIABLES>---------------------------------------------------
 local Tard_IsSelected, TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardGSOOrbwalker, TardGSOGetTarget, TardGSOMode, TardGSOObjects, TardGSOState, _EnemyHeroes
 local Tard_myHero                   = _G.myHero
-local Tard_version                  = 2.2
+local Tard_version                  = 2.3
 local Tard_SelectedTarget           = nil
 local LocalCallbackAdd              = Callback.Add
 local Tard_DrawCircle               = Draw.Circle
@@ -224,7 +224,7 @@ local Tard_GetTarget                = function(range)
 
 local GetEnemyHeroes                = function()
                                         if _EnemyHeroes then return _EnemyHeroes end
-                                        local count = 1
+                                        _EnemyHeroes = {}
                                         for i = 1, TardHeroCount() do
                                             local unit = TardHero(i)
                                             if unit.team == TEAM_ENEMY then
@@ -784,70 +784,61 @@ local GotSheen                      = function()
                                     end
 
 local Tard_CastQ                    = function(unit, collision, cancelifcollision)
+                                        local Qpos
                                         if TardPred == 1 then
                                             local hitChance, Tard_QPred = GetHitchance(Tard_myHero.pos, unit, Tard_EzrealSpells[0].range, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].width, false)
-                                            if hitChance and hitChance >= Tard_TardMenu.P.AccuracyQ:Value() and Tard_GetDistanceSqr(Tard_QPred) < 1440000 then
-                                                local Tard_Collision = (collision ~= false and mCollision(unit, 0, Tard_myHero.pos, Tard_QPred) + hCollision(unit, 0, Tard_myHero.pos, Tard_QPred)) or 0
-                                                if cancelifcollision and Tard_Collision ~= 0 then return end
-                                                if Tard_Collision == 0 and unit.health > 0 then Tard_CastSpell(HK_Q, Tard_QPred, 250) end
-                                            end
+                                            Qpos = (hitChance and hitChance >= Tard_TardMenu.P.AccuracyQ:Value()) and Tard_QPred
                                         elseif TardPred == 2 then
                                             local Tard_QPred = Tard_SpellstoPred[0]:GetPrediction(unit, Tard_myHero.pos)
-                                            local Tard_Collision = (collision ~= false and mCollision(unit, 0, Tard_myHero.pos, Tard_QPred.castPos) + hCollision(unit, 0, Tard_myHero.pos, Tard_QPred.castPos)) or 0 
+                                            Qpos = Tard_QPred and Tard_QPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100 and Tard_QPred.castPos
+                                        else  Qpos = GetPred(unit, 2000, 0.25 + TardLatency()*.001)
+                                        end
+                                        if Qpos and Tard_GetDistanceSqr(Qpos) < 1440000 then
+                                            local Tard_Collision = (collision ~= false and mCollision(unit, 0, Tard_myHero.pos, Qpos) + hCollision(unit, 0, Tard_myHero.pos, Qpos)) or 0
                                             if cancelifcollision and Tard_Collision ~= 0 then return end
-                                            if Tard_QPred and Tard_GetDistanceSqr(Tard_QPred.castPos) < 1440000 and (Tard_QPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100) and Tard_Collision == 0 and unit.health > 0 then
-                                                Tard_CastSpell(HK_Q, Tard_QPred.castPos, 250) 
-                                            end    
-                                        else local Tard_QPred = GetPred(unit, 2000, 0.25 + TardLatency()*.001)
-                                            if Tard_QPred and Tard_GetDistanceSqr(Tard_QPred) < 1440000 then
-                                                local Tard_Collision = (collision ~= false and mCollision(unit, 0, Tard_myHero.pos, Tard_QPred) + hCollision(unit, 0, Tard_myHero.pos, Tard_QPred)) or 0
-                                                if cancelifcollision and Tard_Collision ~= 0 then return end
-                                                if Tard_Collision == 0 and unit.health > 0  then Tard_CastSpell(HK_Q, Tard_QPred, 250) end
+                                            if Tard_Collision == 0 and unit.health > 0 then 
+                                                Tard_CastSpell(HK_Q, Qpos, 250) 
                                             end
                                         end
                                     end
 
 local Tard_CastW                    = function(unit)
+                                        local Wpos
                                         if TardPred == 1 then
                                             local hitChance, Tard_WPred = GetHitchance(Tard_myHero.pos, unit, Tard_EzrealSpells[1].range, Tard_EzrealSpells[1].delay, Tard_EzrealSpells[1].speed, Tard_EzrealSpells[1].width, false)
-                                            if hitChance and hitChance >= Tard_TardMenu.P.AccuracyW:Value() and Tard_GetDistanceSqr(Tard_WPred) < 1102500 then
-                                                Tard_CastSpell(HK_W, Tard_WPred, 540)
-                                            end
+                                            Wpos = hitChance and hitChance >= Tard_TardMenu.P.AccuracyW:Value() and Tard_WPred 
                                         elseif TardPred == 2 then
                                             local Tard_WPred = Tard_SpellstoPred[1]:GetPrediction(unit, Tard_myHero.pos)
-                                            if Tard_WPred and Tard_WPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100 and Tard_GetDistanceSqr(Tard_WPred.castPos) < 1102500 then
-                                                Tard_CastSpell(HK_W, Tard_WPred.castPos, 540)
-                                            end
-                                        else local Tard_WPred = GetPred(unit, 1600, 0.54 + TardLatency()*.001)
-                                            if Tard_WPred and Tard_GetDistanceSqr(Tard_WPred) < 1102500 then
-                                                Tard_CastSpell(HK_W, Tard_WPred, 540)
-                                            end
+                                            Wpos = Tard_WPred and Tard_WPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100 and Tard_WPred.castPos 
+                                        else Wpos = GetPred(unit, 1600, 0.54 + TardLatency()*.001) 
+                                        end
+                                        if Wpos and Tard_GetDistanceSqr(Wpos) < 1102500 then
+                                            Tard_CastSpell(HK_W, Wpos, 540)
                                         end
                                     end
 
 
 local Tard_CastR                    = function(unit)
+                                        local Rpos
                                         if TardPred == 1 then 
                                             local hitChance, Tard_RPred = GetHitchance(Tard_myHero.pos, unit, 20000, 1.76, 2000, 160, false)
-                                            if hitChance and hitChance >= Tard_TardMenu.P.AccuracyR:Value() then
+                                            Rpos = hitChance and hitChance >= Tard_TardMenu.P.AccuracyR:Value() 
                                                 local Vec = TardVector(Tard_RPred) 
                                                 local NormalizedPos = Tard_myHero.pos + TardVector(Vec - Tard_myHero.pos):Normalized() * 500
                                                 Tard_CastSpell(HK_R, NormalizedPos, 1760)
-                                            end
+                                            
                                         elseif TardPred == 2 then
                                             local Tard_RPred = Tard_SpellstoPred[3]:GetPrediction(unit, Tard_myHero.pos)
-                                            if Tard_RPred and (Tard_RPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100) then
+                                            Rpos = Tard_RPred and (Tard_RPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100) and Tard_RPred.castPos 
                                                 local Vec = TardVector(Tard_RPred.castPos) 
                                                 local NormalizedPos = Tard_myHero.pos + TardVector(Vec - Tard_myHero.pos):Normalized() * 500
                                                 Tard_CastSpell(HK_R, NormalizedPos, 1760)
-                                            end
-                                        else local Tard_RPred = GetPred(unit, 2000, 1.76 + TardLatency()*.001)
-                                            if Tard_RPred then 
-                                                local Vec = TardVector(Tard_RPred) 
-                                                local NormalizedPos = Tard_myHero.pos + TardVector(Vec - Tard_myHero.pos):Normalized() * 500
-                                                Tard_CastSpell(HK_R, NormalizedPos, 1760)
-                                            end 
+                                        else Rpos = GetPred(unit, 2000, 1.76 + TardLatency()*.001)
                                         end
+                                        if Rpos then 
+                                            local NormalizedPos = Tard_myHero.pos + TardVector(Rpos - Tard_myHero.pos):Normalized() * 500
+                                            Tard_CastSpell(HK_R, NormalizedPos, 1760)
+                                        end 
                                     end
 
 local Tard_AutoQ                    = function(Mode)
