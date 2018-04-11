@@ -8,7 +8,7 @@ if myHero.charName ~= "Ezreal" then return end
 -----------------------------------------------------</VARIABLES>---------------------------------------------------
 local Tard_IsSelected, TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardGSOOrbwalker, TardGSOGetTarget, TardGSOMode, TardGSOObjects, TardGSOState, _EnemyHeroes
 local Tard_myHero                   = _G.myHero
-local Tard_version                  = 2.3
+local Tard_version                  = 2.4
 local Tard_SelectedTarget           = nil
 local LocalCallbackAdd              = Callback.Add
 local Tard_DrawCircle               = Draw.Circle
@@ -226,20 +226,15 @@ local GetEnemyHeroes                = function()
                                         if _EnemyHeroes then return _EnemyHeroes end
                                         _EnemyHeroes = {}
                                         for i = 1, TardHeroCount() do
-                                            local unit = TardHero(i)
-                                            if unit.team == TEAM_ENEMY then
-                                                _EnemyHeroes[#_EnemyHeroes+1] = unit
-                                            end
+                                            local unit = TardHero(i) and unit and unit.team == TEAM_ENEMY
+                                            _EnemyHeroes[#_EnemyHeroes+1] = unit
                                         end
                                         return _EnemyHeroes
                                     end
                                          
 local IsImmobileTarget              = function(unit)
                                         for i = 0, unit.buffCount do
-                                            local buff = unit:GetBuff(i)
-                                            if buff and (buff.type == 5 or buff.type == 11 or buff.type == 29 or buff.type == 24 or buff.name == "recall") and buff.count > 0 then
-                                                return true
-                                            end
+                                            local buff = unit:GetBuff(i) and buff and (buff.type == 5 or buff.type == 11 or buff.type == 29 or buff.type == 24 or buff.name == "recall") and buff.count > 0 and true 
                                         end
                                         return false	
                                     end
@@ -269,39 +264,39 @@ local VectorPntProjecOnLineSegment  = function(v1, v2, v) -- Thx Tosh :)
 local mCollision                    = function(unit, spell, sourcePos, castPos) -- Thx Tosh :)
                                         local Count = 0
                                         for i = TardMinionCount(), 1, -1 do
-                                            local m = TardMinion(i)
-                                            if m ~= unit and m.team ~= TEAM_ALLY and m.dead == false and m.isTargetable then
+                                            local m = TardMinion(i) 
+                                            if  m ~= unit and m.team ~= TEAM_ALLY and m.dead == false and m.isTargetable then
                                                 local pointSegment, pointLine, isOnSegment = VectorPntProjecOnLineSegment(sourcePos, castPos, m.pos)
                                                 local w = Tard_EzrealSpells[spell].width + m.boundingRadius
                                                 local pos = m.pos
                                                 if isOnSegment and Tard_GetDistanceSqr(pointSegment, pos) < w * w and Tard_GetDistanceSqr(sourcePos, castPos) > Tard_GetDistanceSqr(sourcePos, pos) then
                                                     Count = Count + 1
-                                                end
+                                                end 
                                             end
                                         end
-                                        return Count
+                                        return Count 
                                     end
 
 local hCollision                    = function(unit, spell, sourcePos, castPos) -- Thx Tosh :)
                                         local Count = 0
                                         for i = TardHeroCount(), 1, -1 do
-                                            local m = TardHero(i)
+                                            local m = TardHero(i)   
                                             if m ~= unit and m.team == TEAM_ENEMY and m.dead == false and m.isTargetable then
                                                 local pointSegment, pointLine, isOnSegment = VectorPntProjecOnLineSegment(sourcePos, castPos, m.pos)
                                                 local w = Tard_EzrealSpells[spell].width + m.boundingRadius
                                                 local pos = m.pos
-                                                if isOnSegment and Tard_GetDistanceSqr(pointSegment, pos) < w * w and Tard_GetDistanceSqr(sourcePos, castPos) > Tard_GetDistanceSqr(sourcePos, pos) then
-                                                    Count = Count + 1
+                                                if sOnSegment and Tard_GetDistanceSqr(pointSegment, pos) < w * w and Tard_GetDistanceSqr(sourcePos, castPos) > Tard_GetDistanceSqr(sourcePos, pos) then
+                                                    Count = Count + 1 
                                                 end
                                             end
-                                        end
+                                        end                                        
                                         return Count
                                     end
                                         
 ---------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------<NODDY FONCTIONS, THX TO HIM :)>---------------------------------------------------
 local OnVision                      = function(unit)
-                                        if _OnVision[unit.networkID] == nil then _OnVision[unit.networkID] = {state = unit.visible , tick = TardTickCount(), pos = unit.pos} end
+                                        _OnVision[unit.networkID] = _OnVision[unit.networkID] == nil and {state = unit.visible , tick = TardTickCount(), pos = unit.pos} or _OnVision[unit.networkID]
                                         if _OnVision[unit.networkID].state == true and not unit.visible then _OnVision[unit.networkID].state = false _OnVision[unit.networkID].tick = TardTickCount() end
                                         if _OnVision[unit.networkID].state == false and unit.visible then _OnVision[unit.networkID].state = true _OnVision[unit.networkID].tick = TardTickCount() end
                                         return _OnVision[unit.networkID]
@@ -316,12 +311,12 @@ local OnVisionF                           = function()
                                     end
 
 local OnWaypoint                    = function(unit)
-                                        if _OnWaypoint[unit.networkID] == nil then _OnWaypoint[unit.networkID] = {pos = unit.posTo , speed = unit.ms, time = TardGameTimer()} end
+                                        _OnWaypoint[unit.networkID] = (_OnWaypoint[unit.networkID] == nil and {pos = unit.posTo , speed = unit.ms, time = TardGameTimer()}) or _OnWaypoint[unit.networkID]
                                         if _OnWaypoint[unit.networkID].pos ~= unit.posTo then 
                                             -- print("OnWayPoint:"..unit.charName.." | "..TardMathFloor(LocalGameTimer()))
                                             _OnWaypoint[unit.networkID] = {startPos = unit.pos, pos = unit.posTo , speed = unit.ms, time = TardGameTimer()}
                                                 DelayAction(function()
-                                                    local time = (TardGameTimer() - _OnWaypoint[unit.networkID].time)
+                                                    local time = _OnWaypoint[unit.networkID].time and (TardGameTimer() - _OnWaypoint[unit.networkID].time)
                                                     local speed = TardMathSqrt(Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos))/(TardGameTimer() - _OnWaypoint[unit.networkID].time)
                                                     if speed > 1250 and time > 0 and unit.posTo == _OnWaypoint[unit.networkID].pos and Tard_GetDistanceSqr(unit.pos,_OnWaypoint[unit.networkID].pos) > 40000 then
                                                         _OnWaypoint[unit.networkID].speed = TardMathSqrt(Tard_GetDistanceSqr(_OnWaypoint[unit.networkID].startPos,unit.pos))/(TardGameTimer() - _OnWaypoint[unit.networkID].time)
@@ -335,8 +330,7 @@ local OnWaypoint                    = function(unit)
 local GetPred                       = function(unit, speed, delay)
                                         local speed = speed or TardMathHuge
                                         local delay = delay or 0.25
-                                        local unitSpeed = unit.ms
-                                        if OnWaypoint(unit).speed > unitSpeed then unitSpeed = OnWaypoint(unit).speed end
+                                        local unitSpeed = (OnWaypoint(unit).speed > unit.ms and OnWaypoint(unit).speed) or unit.ms
                                         if OnVision(unit).state == false then
                                             local unitPos = unit.pos + TardVector(unit.pos,unit.posTo):Normalized() * ((TardTickCount() - OnVision(unit).tick)*.001 * unitSpeed)
                                             local predPos = unitPos + TardVector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + TardMathSqrt(Tard_GetDistanceSqr(Tard_myHero.pos,unitPos))/speed))
@@ -870,7 +864,7 @@ local Tard_RonKey                   = function()
 
 local Tard_KillSteal                = function()
                                         local DebugMenu = Tard_TardMenu.KS.debug:Value()
-                                        if Tard_myHero.attackData.state == 2 then
+                                        if Tard_myHero.attackData.state == 2 or Tard_myHero.activeSpell.valid then
                                             return
                                         end
                                         for i = 1, TardHeroCount() do
@@ -983,19 +977,20 @@ local Tard_Harass                   = function()
                                     end
 
 local Tard_Farm                     = function()
-                                        if not Tard_TardMenu.Farm.FarmQ:Value() or Tard_PercentMP(Tard_myHero) < Tard_TardMenu.Farm.FarmMana:Value() or
-                                                Tard_myHero.attackData.state == 2 or TardIsRSpell(0) ~= 0 or IsEvading() then
+                                        if not Tard_TardMenu.Farm.FarmQ:Value() or Tard_PercentMP(Tard_myHero) < Tard_TardMenu.Farm.FarmMana:Value() or TardIsRSpell(0) ~= 0 or IsEvading() then
                                             return
                                         end
                                         local Tard_AArange = Tard_myHero.range + Tard_myHero.boundingRadius
                                         local Qlvl = Tard_myHero:GetSpellData(0).level
-                                        local Qdmg = ({15, 40, 65, 90, 115})[Qlvl] + 1.1 * Tard_myHero.totalDamage + 0.4 * Tard_myHero.ap
+                                        local Totdmg = Tard_myHero.totalDamage
+                                        local Qdmg = ({15, 40, 65, 90, 115})[Qlvl] + 1.1 * Totdmg + 0.4 * Tard_myHero.ap
                                         for i = 1, TardMinionCount() do
                                             local Tard_Minion = TardMinion(i)
                                             if Tard_IsValidTarget(Tard_Minion, 1200) and Tard_Minion.team ~= 300 then
                                                 local AAEnd = Tard_GetDistanceSqr(Tard_Minion.pos) / 4000000
                                                 local minionHP = AAEnd and Tard_HP_PRED(Tard_Minion, AAEnd) - Qdmg
-                                                if minionHP <= 0 or (Tard_Minion.distance > Tard_AArange and Qdmg >= Tard_Minion.health) then
+                                                local AAData = Tard_myHero.attackData
+                                                if (Tard_Minion.health <= Qdmg and Tard_Minion.health > Totdmg) or (AAData.state == 3 and Tard_Minion.health <= Qdmg and AAData.target ~= Tard_Minion.handle) or (Tard_Minion.distance > Tard_AArange + Tard_Minion.boundingRadius and Qdmg >= Tard_Minion.health) then
                                                         Tard_CastQ(Tard_Minion, true, false)
                                                         break
                                                 end
@@ -1020,8 +1015,7 @@ local Tard_JungleClear              = function()
 
 local Tard_LastHit                  = function()
                                         if not Tard_TardMenu.LastHit.LastHitQ:Value() or
-                                                Tard_PercentMP(Tard_myHero) < Tard_TardMenu.LastHit.LastHitMana:Value() or
-                                                Tard_myHero.attackData.state == 2 or TardIsRSpell(_Q) ~= 0 or IsEvading() then
+                                                Tard_PercentMP(Tard_myHero) < Tard_TardMenu.LastHit.LastHitMana:Value() or Tard_AAstate == 2 or TardIsRSpell(_Q) ~= 0 or IsEvading() then
                                             return
                                         end
                                         local Tard_AArange = Tard_myHero.range + Tard_myHero.boundingRadius
@@ -1035,8 +1029,8 @@ local Tard_LastHit                  = function()
                                             --if Tard_AAtarget ~= Tard_Minion.handle and Tard_IsValidTarget(Tard_Minion, 1200) and Qdmg >= Tard_Minion.health then
                                             if Tard_IsValidTarget(Tard_Minion, 1200) and Qdmg >= Tard_Minion.health then
                                                 local AAEnd = Tard_GetDistanceSqr(Tard_Minion.pos) / 4000000
-                                                local minionHP = AAEnd and Tard_HP_PRED(Tard_Minion, AAEnd) - Qdmg
-                                                if (Tard_AAstate == 3 and minionHP <= 0 and Tard_myHero.attackData.target ~= Tard_Minion.handle) or Tard_Minion.distance > Tard_AArange + Tard_Minion.boundingRadius then
+                                                local minionHP = AAEnd and Tard_HP_PRED(Tard_Minion, AAData.endTime - TardGameTimer())
+                                                if (Tard_AAstate == 3 and minionHP <= Qdmg and Tard_AAtarget ~= Tard_Minion.handle) or Tard_Minion.distance > Tard_AArange + Tard_Minion.boundingRadius then
                                                         Tard_CastQ(Tard_Minion)
                                                         break
                                                 end
@@ -1113,8 +1107,8 @@ LocalCallbackAdd                    ("Draw", function()
                                         if Tard_DrawMenu.dautoQ:Value() then
                                             local Pos2D = myHero.pos:To2D()
                                             if Tard_TardMenu.Misc.autoQ.ON:Value() then
-                                                Tard_DrawText("Auto Q Enabled", 20, Pos2D.x - 60, Pos2D.y + 15, Tard_DrawColor(255, 255, 255, 0))
-                                            else Tard_DrawText("Auto Q Disable", 20, Pos2D.x - 60, Pos2D.y + 15, Tard_DrawColor(255, 220, 050, 000))
+                                                Tard_DrawText("Auto Q Enabled", 20, Pos2D.x - 60, Pos2D.y + 30, Tard_DrawColor(255, 255, 255, 0))
+                                            else Tard_DrawText("Auto Q Disable", 20, Pos2D.x - 60, Pos2D.y + 30, Tard_DrawColor(255, 220, 050, 000))
                                             end
                                         end 
                                     end
