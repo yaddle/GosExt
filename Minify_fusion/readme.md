@@ -6,3 +6,9 @@ Before using it you need to have installed first :
 * npm
 * lua
 * luamin (https://github.com/mathiasbynens/luamin)
+
+The 7z files is just here if you want to check source.
+
+After all requires are setup, download Yaddle Minify fusion tool.exe, put it in the same folder than the script you want to minify.
+
+Then execute it and follow steps.
