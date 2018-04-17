@@ -1,7 +1,8 @@
 local Tard_Icon = {["Quinn"] = "https://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Behind_Enemy_Lines.png"}
+local myHero, TardTotalHero = _G.myHero, Game.HeroCount()
 class "Need"
 function Need:__init()
-  self.Tard_version = 1.3
+  self.Tard_version = 1.4
   print("Hello ", myHero.name, ", TardQuinn v", self.Tard_version, " is ready to feed")
 
   self.DamageReductionTable = {
@@ -77,20 +78,26 @@ function Need:__init()
     self.Tard_SDKFlee = _G.SDK.ORBWALKER_MODE_FLEE
     self.Tard_SDKSelector = _G.SDK.TargetSelector
     self.Tard_SDKDamagePhysical = _G.SDK.DAMAGE_TYPE_PHYSICAL
-  elseif _G.__gsoOrbwalker then
+  elseif _G.gsoSDK then
     self.Tard_Orb = 3
+    print("gamsteronOrb v2 Loaded by Gamsteron, The return of the Genius Dev")
+    self.TardgsoOrbwalker = __gsoOrbwalker()
+    self.TardgsoSDK = _G.gsoSDK
+    self.TardgsoTS = __gsoTS()
+    self.TardgsoObjects = self.TardgsoSDK.ObjectManager
+  elseif _G.__gsoOrbwalker then
+    self.Tard_Orb = 4
     print("gamsteronOrb Loaded by Gamsteron the Genius Dev")
-    self.LocalgsoOrbwalker = __gsoOrbwalker()
-    self.LocalgsoGetTarget = self.LocalgsoOrbwalker.GetTarget
-    self.LocalGSOMode = self.LocalgsoOrbwalker.Mode
-    self.LocalgsoObjects = self.LocalgsoOrbwalker.Objects
-    self.LocalGSOState = self.LocalgsoOrbwalker.State
+    self.TardgsoOrbwalker = __gsoOrbwalker()
+    self.TardgsoGetTarget = self.TardgsoOrbwalker.GetTarget
+    self.TardgsoMode = self.TardgsoOrbwalker.Mode
+    self.TardgsoObjects = self.TardgsoOrbwalker.Objects
   else
     if Orbwalker.Enabled:Value() then
-      self.Tard_Orb = 4
+      self.Tard_Orb = 5
       print("Noddy rocks")
     else
-      self.Tard_Orb = 5
+      self.Tard_Orb = 6
       print("WARNING : you're not using any Orb")
     end
   end
@@ -126,11 +133,12 @@ end
 
 function Need:Tard_IsValidTarget(unit, range)
   local range = range or math.huge
-  return unit and unit.team ~= myHero.team and unit.valid and Need:Tard_GetDistanceSqr(unit.pos) <= (range * range) and
-    unit.visible and
+  return unit and unit.team ~= myHero.team and unit.valid and unit.distance < range and unit.visible and
     unit.isTargetable and
     not unit.dead and
-    not unit.isImmune
+    not unit.isImmortal and
+    not (GotBuff(unit, "FioraW") == 1) and
+    not (GotBuff(unit, "XinZhaoRRangedImmunity") == 1 and unit.distance < 450)
 end
 
 --Thx Weedle :)
@@ -157,14 +165,14 @@ function Need:Tard_GetMode()
     elseif self.Tard_SDK.Modes[self.Tard_SDKFlee] then
       return "Flee"
     end
-  elseif Orb == 3 then
-    if self.LocalGSOMode.isCombo() then
+  elseif Orb == 4 then
+    if self.TardgsoMode.isCombo() then
       return "Combo"
-    elseif self.LocalGSOMode.isHarass() then
+    elseif self.TardgsoMode.isHarass() then
       return "Harass"
-    elseif self.LocalGSOMode.isLaneClear() then
+    elseif self.TardgsoMode.isLaneClear() then
       return "Clear"
-    elseif self.LocalGSOMode.isLastHit() then
+    elseif self.TardgsoMode.isLastHit() then
       return "LastHit"
     end
   else
@@ -180,8 +188,11 @@ function Need:Tard_QuinnTarget(range)
   elseif self.Tard_Orb == 2 then
     Tard_target = self.Tard_SDKSelector:GetTarget(range, self.Tard_SDKDamagePhysical)
   elseif self.Tard_Orb == 3 then
-    local enemyHeroes_spell = self.LocalgsoObjects.enemyHeroes_spell
-    Tard_target = self.LocalgsoGetTarget(range, enemyHeroes_spell, myHero.pos, false, false)
+    local enemyHeroes_ADdmg = self.TardgsoObjects:GetEnemyHeroes(range, false, "attack")
+    Tard_target = self.TardgsoTS:GetTarget(enemyHeroes_ADdmg)
+  elseif self.Tard_Orb == 4 then
+    local enemyHeroes_ADdmg = self.TardgsoObjects.enemyHeroes_attack
+    Tard_target = self.TardgsoGetTarget(range, enemyHeroes_ADdmg, myHero.pos, false, false)
   else
     Tard_target = GOS:GetTarget(range, "AD")
   end
@@ -224,7 +235,7 @@ function Need:Tard_CastSpell(spell, pos, delay)
 end
 
 function Need:Tard_IsEvading()
-  if ExtLibEvade and ExtLibEvade.Evading then 
+  if ExtLibEvade and ExtLibEvade.Evading then
     print("it's evading")
     return true
   end
@@ -375,7 +386,6 @@ end
 ----------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------
 class "TardQuinn"
-
 function TardQuinn:__init()
   require("Eternal Prediction")
   self.Tard_QuinnSpells = {
@@ -430,11 +440,6 @@ function TardQuinn:__init()
     print("Tosh Pred loaded ;)")
     self.Tard_QPred = Prediction:SetSpell(self.Tard_QuinnSpells[0], TYPE_LINE, true)
   end
-  if myHero.team == 100 then
-    self.Tard_RecallPosition = Vector(396, 182.132507324219, 462)
-  else
-    self.Tard_RecallPosition = Vector(14340, 171.977722167969, 14390)
-  end
   self.mathsqrt = math.sqrt
   self:Tard_Menu()
   Callback.Add(
@@ -453,7 +458,6 @@ end
 
 function TardQuinn:Tard_Menu()
   self.Tard_TardMenu = MenuElement({type = MENU, id = "TardQuinnMenu", name = "TardQuinn", leftIcon = Tard_Icon.Quinn})
-
   --[[Combo]]
   self.Tard_TardMenu:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
   self.Tard_TardMenu.Combo:MenuElement({id = "ComboQ", name = "Use Q", value = true})
@@ -542,24 +546,18 @@ function TardQuinn:Tard_Tick()
   end
   -------------------------------------------------------------------------------------------------------------------------------------------
   --ANTI GAP CLOSER
-
   if self.Tard_TardMenu.Misc.AntiGap:Value() then
     self:Tard_AntiGapCloser()
   end
-
   ---------------------------------------------------------------------------------------------------------------------------------------------
   --KillSteal
-
   if self.Tard_TardMenu.KS.Q_KS:Value() or self.Tard_TardMenu.KS.E_KS:Value() or self.Tard_TardMenu.KS.R_KS:Value() then
     self:Tard_KillSteal()
   end
   -----------------------------------------------------------------------------------------------------------------------------------
   --Auto W
   -- self:Tard_Vision()
-
   -----------------------------------------------------------------------------------------------------------------------------------
-  --Auto R at base
-  self:Tard_AutoRatBase()
 end
 ----------------------------------------------------------------------------------------------------------------------------------------
 --[[TO DO
@@ -664,12 +662,9 @@ end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function TardQuinn:Tard_KillSteal()
-  for i = 1, Game.HeroCount() do
+  for i = 1, TardTotalHero do
     local Tard_hero = Game.Hero(i)
-    if
-      Need:Tard_GetDistanceSqr(Tard_hero.pos) <= (self.Tard_QuinnSpells[0].range * self.Tard_QuinnSpells[0].range) and
-        Need:Tard_IsValidTarget(Tard_hero)
-     then
+    if Need:Tard_IsValidTarget(Tard_hero, self.Tard_QuinnSpells[0].range) then
       local Tard_Q_DMG = 0
       local Tard_E_DMG = 0
       local Tard_R_DMG = 0
@@ -724,7 +719,7 @@ function TardQuinn:Tard_KillSteal()
 end
 
 function TardQuinn:Tard_AntiGapCloser()
-  for i = 1, Game.HeroCount() do
+  for i = 1, TardTotalHero do
     local Tard_Hero = Game.Hero(i)
     if
       Game.CanUseSpell(_E) == 0 and Need:Tard_IsValidTarget(Tard_Hero, 300) and
@@ -784,7 +779,7 @@ end
 
 function TardQuinn:Tard_Vision(range)
   if Game.CanUseSpell(1) == 0 then
-    for i = 1, Game.HeroCount() do
+    for i = 1, TardTotalHero do
       local Tard_Hero = Game.Hero(i)
       if
         Tard_Hero and Tard_Hero.team ~= myHero.team and not Tard_Hero.visible and not Tard_Hero.dead and
@@ -793,18 +788,6 @@ function TardQuinn:Tard_Vision(range)
        then
         Control.CastSpell(HK_W)
         break
-      end
-    end
-  end
-end
-
-function TardQuinn:Tard_AutoRatBase()
-  if self.Tard_TardMenu.Misc.Rrecall:Value() then
-    if Game.CanUseSpell(_R) == 0 and myHero:GetSpellData(_R).name == "QuinnR" then
-      local Tard_Pos = myHero.pos
-      local Tard_distance = Need:Tard_GetDistanceSqr(Tard_Pos, self.Tard_RecallPosition)
-      if Tard_distance < (self.Tard_RecallPosition.y * self.Tard_RecallPosition.y) then
-        Control.CastSpell(HK_R)
       end
     end
   end
@@ -856,4 +839,3 @@ Callback.Add(
     end
   end
 )
-
