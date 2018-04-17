@@ -6,9 +6,9 @@ if myHero.charName ~= "Ezreal" then return end
 
 --------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------</VARIABLES>---------------------------------------------------
-local Tard_IsSelected, TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardGSOOrbwalker, TardGSOGetTarget, TardGSOMode, TardGSOObjects, TardGSOState, _EnemyHeroes
+local TardTotalEnemy, TardgsoSDK, TardgsoTS, Tard_IsSelected, TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardgsoOrbwalker, TardgsoGetTarget, TardgsoMode, TardgsoObjects, TardgsoState, _EnemyHeroes
 local Tard_myHero                   = _G.myHero
-local Tard_version                  = 2.4
+local Tard_version                  = 2.5
 local Tard_SelectedTarget           = nil
 local LocalCallbackAdd              = Callback.Add
 local Tard_DrawCircle               = Draw.Circle
@@ -22,6 +22,7 @@ local TardHero                      = Game.Hero
 local TardMinionCount               = Game.MinionCount
 local TardMinion                    = Game.Minion
 local TardIsChatOpen                = Game.IsChatOpen
+local TardTotalHero                 = TardHeroCount()
 local TardMathHuge                  = math.huge
 local TardMathSqrt                  = math.sqrt
 local TardMathMin                   = math.min
@@ -42,7 +43,8 @@ local ITEM_4                        = ITEM_4
 local ITEM_5                        = ITEM_5
 local ITEM_6                        = ITEM_6
 local ITEM_7                        = ITEM_7
-local Tard_Orb                      = 4
+local Tard_Orb                      = 5
+local TCount 						= 1
 local TEAM_ALLY                     = Tard_myHero.team
 local TEAM_JUNGLE                   = 300
 local TEAM_ENEMY                    = 300 - TEAM_ALLY
@@ -54,12 +56,11 @@ local Tard_ItemHotKey               = {[ITEM_1] = HK_ITEM_1, [ITEM_2] = HK_ITEM_
 local Tard_EzrealSpells             = { [0] = {range = 1200, delay = 0.25, speed = 2000, width = 80, spellType = TYPE_LINE, hitBox = true},
                                         [1] = {range = 1050, delay = 0.54, speed = 1600, width = 80, spellType = TYPE_LINE, hitBox = false},
                                         [2] = {range = 475},
-                                        [3] = {range = 20000, delay = 1.76, speed = 2000, width = 160, spellType = TYPE_LINE, hitBox = false}
+                                        [3] = {range = 20000, delay = 1.7666, speed = 2000, width = 160, spellType = TYPE_LINE, hitBox = false}
                                     }
 local Tard_Icon                     = { ["Ezreal"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/EzrealSquare.png",
                                         ["Sheen"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Sheen.png"
                                     }
-
 local Tard_TardMenu                 = MenuElement({type = MENU, id = "TardEzrealMenu", name = "TardEzreal", leftIcon = Tard_Icon.Ezreal})
 local DamageReductionTable          = { ["Braum"] = {
                                             buff = "BraumShieldRaise",
@@ -142,7 +143,7 @@ local Tard_PercentMP                = function(unit)
 local Tard_IsValidTarget            = function(unit, range)
                                         local range = range or TardMathHuge
                                         return unit and unit.isEnemy and unit.valid and Tard_GetDistanceSqr(unit.pos) <= (range * range) and
-                                            unit.visible and unit.isTargetable and not unit.dead and not unit.isImmune
+                                            unit.visible and unit.isTargetable and not unit.dead and not unit.isImmortal and not (GotBuff(unit, "FioraW") == 1) and not (GotBuff(unit, "XinZhaoRRangedImmunity") == 1 and unit.distance < 450)
                                     end
 
 local Tard_HasBuff                  = function(unit, buffname)
@@ -180,14 +181,14 @@ local Tard_GetMode                  = function()
                                             elseif TardSDKModes[Tard_SDKFlee] then
                                                 return "Flee"
                                             end
-                                        elseif Orb == 3 then
-                                            if TardGSOMode.isCombo() then
+                                        elseif Orb == 4 then
+                                            if TardgsoMode.isCombo() then
                                                 return "Combo"
-                                            elseif TardGSOMode.isHarass() then
+                                            elseif TardgsoMode.isHarass() then
                                                 return "Harass"
-                                            elseif TardGSOMode.isLaneClear() then
+                                            elseif TardgsoMode.isLaneClear() then
                                                 return "Clear"
-                                            elseif TardGSOMode.isLastHit() then
+                                            elseif TardgsoMode.isLastHit() then
                                                 return "LastHit"
                                             end
                                         else
@@ -210,11 +211,20 @@ local Tard_GetTarget                = function(range)
                                                 Tard_target = Tard_SDKSelector:GetTarget(range, Tard_SDKDamageMagical)
                                             end
                                         elseif Tard_Orb == 3 then 
-                                            local enemyHeroes_spell = TardGSOObjects.enemyHeroes_spell
-                                            if Tard_myHero.totalDamage >= Tard_myHero.ap then
-                                                Tard_target = TardGSOGetTarget(range, enemyHeroes_spell, Tard_myHero.pos, false, false)
+                                            if Tard_myHero.totalDamage > Tard_myHero.ap then
+                                                local enemyHeroes_ADdmg = TardgsoObjects:GetEnemyHeroes(range, false, "attack")
+                                                Tard_target = TardgsoTS:GetTarget(enemyHeroes_ADdmg)
                                             else
-                                                Tard_target = TardGSOGetTarget(range, enemyHeroes_spell, Tard_myHero.pos, true, false)
+                                                local enemyHeroes_APdmg = TardgsoObjects:GetEnemyHeroes(range, false, "spell")
+                                                Tard_target = TardgsoTS:GetTarget(enemyHeroes_APdmg, 1)
+                                            end
+                                        elseif Tard_Orb == 4 then 
+                                            if Tard_myHero.totalDamage > Tard_myHero.ap then
+                                                local enemyHeroes_ADdmg = TardgsoObjects.enemyHeroes_attack
+                                                Tard_target = TardgsoGetTarget(range, enemyHeroes_ADdmg, Tard_myHero.pos, false, false)
+                                            else
+                                                local enemyHeroes_APdmg = TardgsoObjects.enemyHeroes_spell
+                                                Tard_target = TardgsoGetTarget(range, enemyHeroes_APdmg, myHero.pos, true, false)
                                             end
                                         else
                                             Tard_target = GOS:GetTarget(range)
@@ -225,11 +235,15 @@ local Tard_GetTarget                = function(range)
 local GetEnemyHeroes                = function()
                                         if _EnemyHeroes then return _EnemyHeroes end
                                         _EnemyHeroes = {}
-                                        for i = 1, TardHeroCount() do
-                                            local unit = TardHero(i) and unit and unit.team == TEAM_ENEMY
-                                            _EnemyHeroes[#_EnemyHeroes+1] = unit
+                                        for i = 1, TardTotalHero do
+                                            local unit = TardHero(i)
+                                            if unit.team == TEAM_ENEMY then
+                                                _EnemyHeroes[TCount] = unit
+                                                TCount = TCount+1
+                                            end
                                         end
-                                        return _EnemyHeroes
+                                        TCount = 1
+                                        return #_EnemyHeroes
                                     end
                                          
 local IsImmobileTarget              = function(unit)
@@ -245,7 +259,9 @@ local Tard_HP_PRED                  = function(unit, time)
                                         elseif Tard_Orb == 2 then
                                             return Tard_SDKHealthPrediction:GetPrediction(unit, time)
                                         elseif Tard_Orb == 3 then
-                                            return TardGSOHPPred(unit.health, unit.handle, time)
+                                            return TardgsoFarm:MinionHpPredAccuracy(unit, time)
+                                        elseif Tard_Orb == 4 then
+                                            return TardgsoHPPred(unit.health, unit.handle, time)
                                         else
                                             return GOS:HP_Pred(unit, time)
                                         end
@@ -279,7 +295,7 @@ local mCollision                    = function(unit, spell, sourcePos, castPos) 
 
 local hCollision                    = function(unit, spell, sourcePos, castPos) -- Thx Tosh :)
                                         local Count = 0
-                                        for i = TardHeroCount(), 1, -1 do
+                                        for i = TardTotalHero, 1, -1 do
                                             local m = TardHero(i)   
                                             if m ~= unit and m.team == TEAM_ENEMY and m.dead == false and m.isTargetable then
                                                 local pointSegment, pointLine, isOnSegment = VectorPntProjecOnLineSegment(sourcePos, castPos, m.pos)
@@ -304,7 +320,7 @@ local OnVision                      = function(unit)
 
 local OnVisionF                           = function()
                                         if TardTickCount() - visionTick > 100 then
-                                            for i=1, #GetEnemyHeroes() do
+                                            for i=1, TardTotalEnemy do
                                                 OnVision(_EnemyHeroes[i])
                                             end
                                         end
@@ -536,17 +552,18 @@ local GetTargetMS                   = function(target)
                                     end  
 
 local GetPathNodes                  = function(unit)
-                                        local nodes = {}
-										nodes[1] = unit.pos
-                                        if unit.pathing.hasMovePath then
-                                            local init = unit.pathing.pathIndex
-                                            for i = init, unit.pathing.pathCount do
-                                                local path = unit:GetPath(i)
-												nodes[#nodes + 1] = path
-	                                    	end
-	                                    end		
-	                                    return nodes
-                                    end   
+										local nodes = {}
+										nodes[TCount] = unit.pos
+										if unit.pathing.hasMovePath then
+											for i = unit.pathing.pathIndex, unit.pathing.pathCount do
+												local path = unit:GetPath(i)
+												TCount = TCount + 1 
+												nodes[TCount] = path
+											end											
+										end	
+										TCount = 1	
+										return nodes, #nodes
+									end
 
 local PredictUnitPosition           = function(unit, delay)
                                         local predictedPosition = unit.pos
@@ -623,7 +640,7 @@ local Angle                         = function(A, B)
                                     end  
 
 local UpdateMovementHistory         = function()
-                                        for i = 1, TardHeroCount() do
+                                        for i = 1, TardTotalEnemy do
                                             local unit = TardHero(i)
                                             if not _movementHistory[unit.charName] then
                                                 _movementHistory[unit.charName] = {}
@@ -817,22 +834,17 @@ local Tard_CastR                    = function(unit)
                                         if TardPred == 1 then 
                                             local hitChance, Tard_RPred = GetHitchance(Tard_myHero.pos, unit, 20000, 1.76, 2000, 160, false)
                                             Rpos = hitChance and hitChance >= Tard_TardMenu.P.AccuracyR:Value() 
-                                                local Vec = TardVector(Tard_RPred) 
-                                                local NormalizedPos = Tard_myHero.pos + TardVector(Vec - Tard_myHero.pos):Normalized() * 500
+                                                local NormalizedPos = Tard_myHero.pos + (Tard_RPred - Tard_myHero.pos):Normalized() * 500
                                                 Tard_CastSpell(HK_R, NormalizedPos, 1760)
-                                            
                                         elseif TardPred == 2 then
                                             local Tard_RPred = Tard_SpellstoPred[3]:GetPrediction(unit, Tard_myHero.pos)
                                             Rpos = Tard_RPred and (Tard_RPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100) and Tard_RPred.castPos 
-                                                local Vec = TardVector(Tard_RPred.castPos) 
-                                                local NormalizedPos = Tard_myHero.pos + TardVector(Vec - Tard_myHero.pos):Normalized() * 500
+                                                local NormalizedPos = Tard_myHero.pos + (Tard_RPred.castPos - Tard_myHero.pos):Normalized() * 500
                                                 Tard_CastSpell(HK_R, NormalizedPos, 1760)
                                         else Rpos = GetPred(unit, 2000, 1.76 + TardLatency()*.001)
-                                        end
-                                        if Rpos then 
-                                            local NormalizedPos = Tard_myHero.pos + TardVector(Rpos - Tard_myHero.pos):Normalized() * 500
+                                            local NormalizedPos = Rpos and Tard_myHero.pos + (Rpos - Tard_myHero.pos):Normalized()*500
                                             Tard_CastSpell(HK_R, NormalizedPos, 1760)
-                                        end 
+                                        end
                                     end
 
 local Tard_AutoQ                    = function(Mode)
@@ -867,7 +879,7 @@ local Tard_KillSteal                = function()
                                         if Tard_myHero.attackData.state == 2 or Tard_myHero.activeSpell.valid then
                                             return
                                         end
-                                        for i = 1, TardHeroCount() do
+                                        for i = 1, TardTotalEnemy do
                                             local Tard_Hero = TardHero(i)
                                             if Tard_IsValidTarget(Tard_Hero) then
                                                 local Tard_Q_DMG, Tard_W_DMG, Tard_R_DMG
@@ -1107,8 +1119,8 @@ LocalCallbackAdd                    ("Draw", function()
                                         if Tard_DrawMenu.dautoQ:Value() then
                                             local Pos2D = myHero.pos:To2D()
                                             if Tard_TardMenu.Misc.autoQ.ON:Value() then
-                                                Tard_DrawText("Auto Q Enabled", 20, Pos2D.x - 60, Pos2D.y + 30, Tard_DrawColor(255, 255, 255, 0))
-                                            else Tard_DrawText("Auto Q Disable", 20, Pos2D.x - 60, Pos2D.y + 30, Tard_DrawColor(255, 220, 050, 000))
+                                                Tard_DrawText("Auto Q ON", 20, Pos2D.x - 60, Pos2D.y + 30, Tard_DrawColor(255, 255, 255, 0))
+                                            else Tard_DrawText("Auto Q OFF", 20, Pos2D.x - 60, Pos2D.y + 30, Tard_DrawColor(255, 220, 050, 000))
                                             end
                                         end 
                                     end
@@ -1117,7 +1129,8 @@ LocalCallbackAdd                    ("Draw", function()
 LocalCallbackAdd                    ("Load", function()
                                         Tard_Menu()
                                         print("Hello ", Tard_myHero.name, ", TardEzreal v", Tard_version, " is ready to feed")
-                                        for i = 1, #GetEnemyHeroes() do
+                                        TardTotalEnemy = GetEnemyHeroes()
+                                        for i = 1, TardTotalEnemy do
                                             local hero = _EnemyHeroes[i]
                                             Tard_TardMenu.Misc.autoQ.CastOn:MenuElement({id = hero.charName, name = hero.charName, value = true})
                                         end
@@ -1134,7 +1147,7 @@ LocalCallbackAdd                    ("Load", function()
                                             }
                                         else print("Noddy's pred loaded");
                                         end
-                                        if _G.EOWLoaded then Tard_Orb = 1 elseif _G.SDK and _G.SDK.Orbwalker then Tard_Orb = 2 elseif _G.__gsoOrbwalker then Tard_Orb = 3 end
+                                        if _G.EOWLoaded then Tard_Orb = 1 elseif _G.SDK and _G.SDK.Orbwalker then Tard_Orb = 2 elseif _G.gsoSDK then Tard_Orb = 3 elseif _G.__gsoOrbwalker then Tard_Orb = 4 end
                                         if Tard_Orb == 1 then print("New Eternal Orb is good but Tosh is still toxic ^^")
                                         elseif Tard_Orb == 2 then print("IC is a good Orb")
                                             Tard_SDK                    = SDK.Orbwalker
@@ -1148,16 +1161,24 @@ LocalCallbackAdd                    ("Load", function()
                                             Tard_SDKHealthPrediction    = SDK.HealthPrediction
                                             Tard_SDKDamagePhysical      = SDK.DAMAGE_TYPE_PHYSICAL
                                             Tard_SDKDamageMagical       = SDK.DAMAGE_TYPE_MAGICAL
-                                        elseif Tard_Orb == 3 then print("gamsteronOrb Loaded by Gamsteron the Genius Dev")
-                                            TardGSOOrbwalker            = __gsoOrbwalker()
-                                            TardGSOGetTarget            = TardGSOOrbwalker.GetTarget
-                                            TardGSOMode                 = TardGSOOrbwalker.Mode
-                                            TardGSOObjects              = TardGSOOrbwalker.Objects
-                                            TardGSOState                = TardGSOOrbwalker.State
-                                            TardGSOHPPred = TardGSOOrbwalker.MinionHealthPrediction
-                                        elseif Tard_Orb == 4 then
+                                        elseif Tard_Orb == 3 then print("gamsteronOrb v2 Loaded by Gamsteron, The return of the Genius Dev")
+                                            TardgsoOrbwalker = __gsoOrbwalker()
+                                            TardgsoSDK = _G.gsoSDK
+                                            TardgsoTS = __gsoTS()
+                                            TardgsoFarm = __gsoFarm()
+                                            TardgsoMode = TardgsoOrbwalker:UOL_GetMode()
+                                            TardgsoObjects = TardgsoSDK.ObjectManager
+                                            TardgsoHPPred = TardgsoFarm.MinionHealthPrediction
+                                        elseif Tard_Orb == 4 then print("gamsteronOrb Loaded by Gamsteron the Genius Dev")
+                                            TardgsoOrbwalker            = __gsoOrbwalker()
+                                            TardgsoGetTarget            = TardgsoOrbwalker.GetTarget
+                                            TardgsoMode                 = TardgsoOrbwalker.Mode
+                                            TardgsoObjects              = TardgsoOrbwalker.Objects
+                                            TardgsoState                = TardgsoOrbwalker.State
+                                            TardgsoHPPred = TardgsoOrbwalker.MinionHealthPrediction
+                                        elseif Tard_Orb == 5 then
                                             if Orbwalker.Enabled:Value() then print("Noddy rocks")
-                                            else Tard_Orb = 5; print("WARNING : you're not using any Orbwalker") end
+                                            else Tard_Orb = 6; print("WARNING : you're not using any Orbwalker") end
                                         end
                                         for i = 0, 3 do
                                             if i == 0 then
@@ -1210,7 +1231,7 @@ LocalCallbackAdd                    ("Load", function()
 LocalCallbackAdd                    ("WndMsg", function(msg, wParam)
                                         if msg == WM_LBUTTONDOWN then
                                             if Tard_IsSelected then
-                                                for i = 1, TardHeroCount() do
+                                                for i = 1, TardTotalHero do
                                                     local H = TardHero(i)
                                                     if Tard_GetDistanceSqr(H.pos, mousePos) <= 10000 then
                                                         if (H ~= nil and Tard_SelectedTarget ~= nil) and Tard_SelectedTarget.networkID == H.networkID then
