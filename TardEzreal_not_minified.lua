@@ -1,3 +1,32 @@
+--                        ░▒▓█▓▒░                   
+--                     ▒▓██████████▓▒               
+--                   ▓████████████████▓░            
+--                 ░████████████████████▓           
+--                ▒███████████████████████          
+--               ▓█▓███████████████████████         
+--              ▓█▓▓▓█▓███████████████▓████▒        
+--              ▓▓▓▓▓██▓███████████▓██▓▓▓▓██        
+--             ▒▓▓██████████████▓▓▒▒▒▓▓▓▓███▒       
+--             ░▓▓▓▓▓████████▓▓▒▓▓██▓▓▓▓▓▓██▒       
+--              ▓▒▒▒░░▒▒▓▓▓▓▓▒▒▓▓████▓▓▓▓▓▓█▒       
+--              ▓▒▓▓▒░  ▒▓█▓▓▒▒▒░░▒▒▓▓▓▓▓▓▓██▓░     
+--              ▓▓░ ░▒▓▓▓███▓█▓▓▒▒▒▓███▓▓▓▓▓▓█░     
+--              ▓██▓▓▓█▓▓██▓▓██▓▓▓█████▓▓▓█▓▓█░     
+--              ▓██████▓███▓▓▓████████▓▓▓▓▓▓██▒     
+--              ▓▓▓▓██▓▓█████▓▓▓███▓█▓▓▓▓▓▓▓██▒     
+--             ░▓▓▒▓██▓▒▓█▓▒▒▓█▓▓█▓▓▓▓▓▓▓▓▓▓█▓      
+--              ▒▓▓▓▓█▓   ░▒▓███▓▓▓▓▓▓▓▓▓▓█▒▓▒      
+--               ▒▓▓▓▓▓▓▓███████▓▓▓▓▓▓▓▓▓██  ▓██▓▓▒▒
+--        ░░░░▒▒▒▒▓▓▒▒▒▓▓▓▓▒▓▓▓▓▓▓▓▓▓▓▓▓█▓▓  ▒▓▓▓▓▓█
+-- ░▒▓████▓▓▓▓▒░  ▒▒▓▓▓█▓▒▒▒▒░▒▓▓▓▓▓▓▓▓▓▓░▒▓▒░▒▓▓▓▓▓
+--███▓▓▓▓▓▓▓▓▓▒▓▓▒▓███▓▒ ░▒▒▓▓█▓▓▓▓▓▓▓▓▒░▒▓▓▓░▒▒▓▓▓▓
+--▓█▓▓▓▓▓▓▓▓▓▓▓█▓██▓░  ▒▓▓██████▓▓██▓▒░▒▓▓▓▓▒▒▒▓▓▓▓▓
+--▓▓▓▓▓▓▓▓▓▓▓███▓▒▓█▓▓▓▓▓▒▓▓▓▓▓▒▓▓▒░ ░▓▓▓▓▓▒▒▓▓▓▓▓▓▓
+--▓▓▓▓▓▓▓▓▓▓█████▓███████      ░   ▒▓▓▓▓▓▒▒▒▓▓▓▓▓▓▓▓
+--▓▓▓▓▓▓▓▒▓███▓▒▓▓ ▓██▓██░   ░░░▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+--▓▓▓▓▓▓▒▓████▒░   ██▓▓███▒▓░▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+--▓▓▓▓▓▒█████▓▒██▒▓█▓▓█▓█▓██▒▒▓▒▒▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+--▓█▓▓▓██████▓███▓█▓▒█▓▓██▓▓▓▓▓▓▓▓▓█▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 --------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------<INIT>---------------------------------------------------
 if myHero.charName ~= "Ezreal" then return end
@@ -6,9 +35,9 @@ if myHero.charName ~= "Ezreal" then return end
 
 --------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------</VARIABLES>---------------------------------------------------
-local TardTotalEnemy, TardgsoSDK, TardgsoTS, Tard_IsSelected, TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardgsoOrbwalker, TardgsoGetTarget, TardgsoMode, TardgsoObjects, TardgsoState, _EnemyHeroes
+local Tard_Menu, TardTotalEnemy, TardgsoSDK, TardgsoTS, Tard_IsSelected, TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardgsoOrbwalker, TardgsoGetTarget, TardgsoMode, TardgsoObjects, TardgsoState, _EnemyHeroes
 local Tard_myHero                   = _G.myHero
-local Tard_version                  = 2.5
+local Tard_version                  = 2.6
 local Tard_SelectedTarget           = nil
 local LocalCallbackAdd              = Callback.Add
 local Tard_DrawCircle               = Draw.Circle
@@ -58,10 +87,7 @@ local Tard_EzrealSpells             = { [0] = {range = 1200, delay = 0.25, speed
                                         [2] = {range = 475},
                                         [3] = {range = 20000, delay = 1.7666, speed = 2000, width = 160, spellType = TYPE_LINE, hitBox = false}
                                     }
-local Tard_Icon                     = { ["Ezreal"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/EzrealSquare.png",
-                                        ["Sheen"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Sheen.png"
-                                    }
-local Tard_TardMenu                 = MenuElement({type = MENU, id = "TardEzrealMenu", name = "TardEzreal", leftIcon = Tard_Icon.Ezreal})
+local Tard_TardMenu                 = MenuElement({type = MENU, id = "TardEzrealMenu", name = "Tard Ezreal", leftIcon = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/EzrealIcon.png"})
 local DamageReductionTable          = { ["Braum"] = {
                                             buff = "BraumShieldRaise",
                                             amount = function(target)
@@ -123,7 +149,7 @@ local DamageReductionTable          = { ["Braum"] = {
 --------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------
------------------------------------------------------<FONCTIONS>---------------------------------------------------
+-----------------------------------------------------<FONCTIONS COMMON---------------------------------------------------
 
 local Tard_GetDistanceSqr           = function(Pos1, Pos2)
                                         local Pos2 = Pos2 or Tard_myHero.pos
@@ -142,8 +168,7 @@ local Tard_PercentMP                = function(unit)
 
 local Tard_IsValidTarget            = function(unit, range)
                                         local range = range or TardMathHuge
-                                        return unit and unit.isEnemy and unit.valid and Tard_GetDistanceSqr(unit.pos) <= (range * range) and
-                                            unit.visible and unit.isTargetable and not unit.dead and not unit.isImmortal and not (GotBuff(unit, "FioraW") == 1) and not (GotBuff(unit, "XinZhaoRRangedImmunity") == 1 and unit.distance < 450)
+                                        return unit and unit.isEnemy and unit.valid and unit.distance <= range and unit.isTargetable and not unit.dead and not unit.isImmortal and not (GotBuff(unit, "FioraW") == 1) and not (GotBuff(unit, "XinZhaoRRangedImmunity") == 1 and unit.distance < 450)
                                     end
 
 local Tard_HasBuff                  = function(unit, buffname)
@@ -349,7 +374,7 @@ local GetPred                       = function(unit, speed, delay)
                                         local unitSpeed = (OnWaypoint(unit).speed > unit.ms and OnWaypoint(unit).speed) or unit.ms
                                         if OnVision(unit).state == false then
                                             local unitPos = unit.pos + TardVector(unit.pos,unit.posTo):Normalized() * ((TardTickCount() - OnVision(unit).tick)*.001 * unitSpeed)
-                                            local predPos = unitPos + TardVector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + TardMathSqrt(Tard_GetDistanceSqr(Tard_myHero.pos,unitPos))/speed))
+                                            local predPos = unitPos + TardVector(unit.pos,unit.posTo):Normalized() * (unitSpeed * (delay + unitPos:DistanceTo()/speed))
                                             if Tard_GetDistanceSqr(unit.pos,predPos) > Tard_GetDistanceSqr(unit.pos,unit.posTo) then predPos = unit.posTo end
                                             return predPos
                                         else
@@ -365,7 +390,7 @@ local GetPred                       = function(unit, speed, delay)
                                         end	
                                     end
 
-local Tard_CastSpell                = function(spell, pos, delay)
+local Tard_CastSpell                = function(spell, pos, delay) -- Noddy CastSpell
                                         local delay = delay or 250
                                         if pos == nil then
                                             return
@@ -692,88 +717,32 @@ local GetHitchance                  = function(source, target, range, delay, spe
                                             end
                                         end
                                         --Check for out of range
-                                        if (Tard_GetDistanceSqr(myHero.pos, aimPosition)) > range*range then
+                                        if aimPosition:DistanceTo() > range then
                                             hitChance = -1
                                         end
                                         return hitChance, aimPosition
                                     end
 -----------------------------------------------------</LOCAL HPRED, THX TO SIKAKA & DAMNEB NOOB :)>---------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------<MENU>---------------------------------------------------
-local Tard_Menu                     = function()
-                                        Tard_TardMenu:MenuElement({type = MENU, id = "Combo", name = "Combo Settings"})
-                                            Tard_TardMenu.Combo:MenuElement({id = "sheen", name = "Don't cast if under Sheen/Tri/lich buff", value = false, leftIcon = Tard_Icon.Sheen, tooltip = "Don't cast spell if you have Sheen buff"})
-                                            Tard_TardMenu.Combo:MenuElement({id = "ComboQ", name = "Use Q", value = true})
-                                            Tard_TardMenu.Combo:MenuElement({id = "ComboW", name = "Use W", value = true})
-                                            Tard_TardMenu.Combo:MenuElement({id = "ComboQmana", name = "Min. Mana to Q", value = 0, min = 0, max = 100, tooltip = "It's %"})
-                                            Tard_TardMenu.Combo:MenuElement({id = "ComboWmana", name = "Min. Mana to W", value = 75, min = 0, max = 100, tooltip = "It's %"})
-                                        Tard_TardMenu:MenuElement({type = MENU, id = "Harass", name = "Harass Settings"})
-                                            Tard_TardMenu.Harass:MenuElement({id = "HarassQ", name = "Use Q", value = true})
-                                            Tard_TardMenu.Harass:MenuElement({id = "HarassW", name = "Use W", value = true})
-                                            Tard_TardMenu.Harass:MenuElement({id = "HarassQMana", name = "Min. Mana to Q", value = 40, min = 0, max = 100, tooltip = "It's %"})
-                                            Tard_TardMenu.Harass:MenuElement({id = "HarassWMana", name = "Min. Mana to W", value = 75, min = 0, max = 100, tooltip = "It's %"})
-                                        Tard_TardMenu:MenuElement({type = MENU, id = "Farm", name = "Farm Settings"})
-                                            Tard_TardMenu.Farm:MenuElement({id = "FarmQ", name = "Use Q", value = true})
-                                            Tard_TardMenu.Farm:MenuElement({id = "FarmMana", name = "Min. Mana", value = 70, min = 0, max = 100, tooltip = "It's %"})
-                                        Tard_TardMenu:MenuElement({type = MENU, id = "LastHit", name = "LastHit"})
-                                            Tard_TardMenu.LastHit:MenuElement({id = "LastHitQ", name = "Use Q", value = true})
-                                            Tard_TardMenu.LastHit:MenuElement({id = "LastHitMana", name = "Min Mana To Lasthit", value = 40, min = 0, max = 100, tooltip = "It's %"})
-                                        Tard_TardMenu:MenuElement({type = MENU, id = "JungleClear", name = "JungleClear"})
-                                            Tard_TardMenu.JungleClear:MenuElement({id = "JungleQ", name = "Use Q", value = true})
-                                            Tard_TardMenu.JungleClear:MenuElement({id = "JungleMana", name = "Min Mana To JungleClear", value = 60,min = 0, max = 100, step = 1, tooltip = "It's %"})
-                                        Tard_TardMenu:MenuElement({type = MENU, id = "KS", name = "KillSteal Settings"})
-                                            Tard_TardMenu.KS:MenuElement({id = "debug", name = "print debug KS", value = false, tooltip = "message when script try to ks, with total dmg to target"})
-                                            Tard_TardMenu.KS:MenuElement({id = "Q_KS", name = "Use Q to try to KillSteal", value = true})
-                                            Tard_TardMenu.KS:MenuElement({id = "W_KS", name = "Use W to try to KillSteal", value = true})
-                                            Tard_TardMenu.KS:MenuElement({id = "R_KS", name = "Use R to try to KillSteal", value = true, tooltip = "only if target is out of AA range"})
-                                            Tard_TardMenu.KS:MenuElement({id = "R_Ksrange", name = "R Max Range", value = 7000, min = 300, max = 20000, step = 100, tooltip = "It's %"})
-                                        Tard_TardMenu:MenuElement({type = MENU, id = "Misc", name = "Misc Settings"})
-                                            Tard_TardMenu.Misc:MenuElement({type = MENU, id = "autoQ", name = "Auto Q"})
-                                                Tard_TardMenu.Misc.autoQ:MenuElement({id = "ON", name = "Enable Auto cast Q", key = string.byte("M"), toggle = true})
-                                                Tard_TardMenu.Misc.autoQ:MenuElement({id = "OutR", name = "Try to Cast only if out of attack range", value = false})
-                                                Tard_TardMenu.Misc.autoQ:MenuElement({id = "Qmana", name = "Min. Mana to Auto Q", value = 60, min = 0, max = 100, tooltip = "It's %"})
-                                                Tard_TardMenu.Misc.autoQ:MenuElement({id = "health", name = "Min. Health to Auto Q", value = 40, min = 0, max = 100, tooltip = "It's %"})
-                                                Tard_TardMenu.Misc.autoQ:MenuElement({id = "disable", name = "Disable Auto Q : ",  value = 1, drop = {"Disable on Combo", "Disable in all mode"}})
-                                                Tard_TardMenu.Misc.autoQ:MenuElement({name = "Auto Cast Q on :", id = "CastOn", type = MENU })
-                                            Tard_TardMenu.Misc:MenuElement({id = "Rkey", name = "Ulti Champ targeted on key", key = string.byte("T"), tooltip = "the target need to be targeted by spell focus first, mouse clic on it, a blue circle should be on the target"})
-                                            Tard_TardMenu.Misc:MenuElement({id = "KeepRmana", name = "Keep mana for R", value = false, tooltip = "KillSteal never keep mana"})
-                                            Tard_TardMenu.Misc:MenuElement({id = "SelectedTarget", name = "Focus Spell on Selected Target (need reload)", value = true, tooltip = "Focus Spell on selected target"})
-                                        Tard_TardMenu:MenuElement({type = MENU, id = "P", name = "Prediction Settings"})
-                                            Tard_TardMenu.P:MenuElement({id = "Pred", name = "Which Prediction (Need Reload)",  value = 1, drop= {"HPred", "Eternal Pred", "Noddy's Pred"}})
-                                            if Tard_TardMenu.P.Pred:Value() == 1 then
-                                                Tard_TardMenu.P:MenuElement({id = "AccuracyQ", name = "HPred Accuracy Q", value = 2, min = 1, max = 5, step = 1})
-                                                Tard_TardMenu.P:MenuElement({id = "AccuracyW", name = "HPred Accuracy W", value = 2, min = 1, max = 5, step = 1})
-                                                Tard_TardMenu.P:MenuElement({id = "AccuracyR", name = "HPred Accuracy R", value = 2, min = 1, max = 5, step = 1})
-                                                Tard_TardMenu.P:MenuElement({type = SPACE, id = "info",  name = "Recommended value is 2, perfect is 3 but cast less"})
-                                            elseif Tard_TardMenu.P.Pred:Value() == 2 then
-                                                Tard_TardMenu.P:MenuElement({id = "PredHitChance", name = "Eternal Pred HitChance (default 25)", value = 25, min = 0, max = 100, tooltip = "higher value better pred but slower||don't change it if don't know what is it||"})    
-                                                Tard_TardMenu.P:MenuElement({type = SPACE, id = "info",  name = "Higher value better pred but slower"})
+-----------------------------------------------------</FONCTIONS COMMON>---------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------<FONCTIONS CORE---------------------------------------------------
+local UpdatePrediction              = function()
+                                        if TardPred == 1 then
+                                            if LocalTickCount() - hpredTick > 100 then
+                                                UpdateMovementHistory()
                                             end
-                                        Tard_TardMenu:MenuElement({type = MENU, id = "Draw", name = "Drawing Settings"})
-                                            Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawQ", name = "Draw Q"})
-                                                Tard_TardMenu.Draw.DrawQ:MenuElement({id = "ON", name = "Draw Q range", value = true})
-                                                Tard_TardMenu.Draw.DrawQ:MenuElement({id = "Width", name = "Width", value = 1, min = 1, max = 5, step = 1})
-                                                Tard_TardMenu.Draw.DrawQ:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 0, 0, 255)})
-                                            Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawW", name = "Draw W"})
-                                                Tard_TardMenu.Draw.DrawW:MenuElement({id = "ON", name = "Draw W range", value = false})
-                                                Tard_TardMenu.Draw.DrawW:MenuElement({id = "Width", name = "Width", value = 1, min = 1, max = 5, step = 1})
-                                                Tard_TardMenu.Draw.DrawW:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 255, 255, 255)})
-                                            Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawE", name = "Draw E"})
-                                                Tard_TardMenu.Draw.DrawE:MenuElement({id = "ON", name = "Draw E range", value = false})
-                                                Tard_TardMenu.Draw.DrawE:MenuElement({id = "Width", name = "Width", value = 1, min = 1, max = 5, step = 1})
-                                                Tard_TardMenu.Draw.DrawE:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 255, 255, 255)})
-                                            Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawT", name = "Draw Selected Spell Target"})
-                                                Tard_TardMenu.Draw.DrawT:MenuElement({id = "ON", name = "Draw circle under Selected Target", value = true})
-                                                Tard_TardMenu.Draw.DrawT:MenuElement({id = "Width", name = "Width", value = 3, min = 1, max = 5, step = 1})
-                                                Tard_TardMenu.Draw.DrawT:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 0, 0, 255)})
-                                            Tard_TardMenu.Draw:MenuElement({id = "dautoQ", name = "Draw Auto Q status under your Champ", value = true})
-                                            Tard_TardMenu.Draw:MenuElement({id = "DrawReady", name = "Draw Only Ready Spells", value = true, tooltip = "Only draws spells when they're ready"})
-                                            Tard_TardMenu.Draw:MenuElement({id = "DisableDraw", name = "Disable all Draws", value = false})
-                                        Tard_TardMenu:MenuElement({name = "by Yaddle", drop = {"Tard_Version : "..Tard_version}})
+                                        elseif TardPred == 3 then 
+                                            if LocalTickCount() - noddyTick > 100 then
+                                                for i=1, TotalEnemy do
+                                                    OnVision(_EnemyHeroes[i])
+                                                    OnWaypoint(_EnemyHeroes[i])
+                                                end
+                                            end
                                         end
------------------------------------------------------</MENU>---------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------------------
+                                    end
 
 local IsEvading                     = function()
                                         if ExtLibEvade and ExtLibEvade.Evading then 
@@ -782,8 +751,15 @@ local IsEvading                     = function()
                                         end
                                     end
 
+local CantUse                       = function()
+                                        if Tard_myHero.dead or TardIsChatOpen() or IsEvading() then
+                                            return
+                                        end
+                                    end
+                                                                        
+
 local GotSheen                      = function()
-                                        if not Tard_TardMenu.Combo.sheen:Value() then return false end
+                                        if not Tard_TardMenu.B.Combo.sheen:Value() then return false end
                                         local Sheen = (GetItemSlot(Tard_myHero, 3057) >= 1 and GetItemSlot(Tard_myHero, 3057)) or 
                                                     (GetItemSlot(Tard_myHero, 3025) >= 1 and GetItemSlot(Tard_myHero, 3025)) or 
                                                     (GetItemSlot(Tard_myHero, 3100) >= 1 and GetItemSlot(Tard_myHero, 3100)) or 
@@ -798,17 +774,17 @@ local Tard_CastQ                    = function(unit, collision, cancelifcollisio
                                         local Qpos
                                         if TardPred == 1 then
                                             local hitChance, Tard_QPred = GetHitchance(Tard_myHero.pos, unit, Tard_EzrealSpells[0].range, Tard_EzrealSpells[0].delay, Tard_EzrealSpells[0].speed, Tard_EzrealSpells[0].width, false)
-                                            Qpos = (hitChance and hitChance >= Tard_TardMenu.P.AccuracyQ:Value()) and Tard_QPred
+                                            Qpos = (hitChance and hitChance >= Tard_TardMenu.A.P.AccuracyQ:Value()) and Tard_QPred
                                         elseif TardPred == 2 then
                                             local Tard_QPred = Tard_SpellstoPred[0]:GetPrediction(unit, Tard_myHero.pos)
-                                            Qpos = Tard_QPred and Tard_QPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100 and Tard_QPred.castPos
+                                            Qpos = Tard_QPred and Tard_QPred.hitChance >= Tard_TardMenu.A.P.PredHitChance:Value() / 100 and Tard_QPred.castPos
                                         else  Qpos = GetPred(unit, 2000, 0.25 + TardLatency()*.001)
                                         end
-                                        if Qpos and Tard_GetDistanceSqr(Qpos) < 1440000 then
+                                        if Qpos and Qpos:DistanceTo() < 1200 then
                                             local Tard_Collision = (collision ~= false and mCollision(unit, 0, Tard_myHero.pos, Qpos) + hCollision(unit, 0, Tard_myHero.pos, Qpos)) or 0
                                             if cancelifcollision and Tard_Collision ~= 0 then return end
                                             if Tard_Collision == 0 and unit.health > 0 then 
-                                                Tard_CastSpell(HK_Q, Qpos, 250) 
+                                                Tard_CastSpell(HK_Q, Qpos, 200) 
                                             end
                                         end
                                     end
@@ -817,14 +793,14 @@ local Tard_CastW                    = function(unit)
                                         local Wpos
                                         if TardPred == 1 then
                                             local hitChance, Tard_WPred = GetHitchance(Tard_myHero.pos, unit, Tard_EzrealSpells[1].range, Tard_EzrealSpells[1].delay, Tard_EzrealSpells[1].speed, Tard_EzrealSpells[1].width, false)
-                                            Wpos = hitChance and hitChance >= Tard_TardMenu.P.AccuracyW:Value() and Tard_WPred 
+                                            Wpos = hitChance and hitChance >= Tard_TardMenu.A.P.AccuracyW:Value() and Tard_WPred 
                                         elseif TardPred == 2 then
                                             local Tard_WPred = Tard_SpellstoPred[1]:GetPrediction(unit, Tard_myHero.pos)
-                                            Wpos = Tard_WPred and Tard_WPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100 and Tard_WPred.castPos 
+                                            Wpos = Tard_WPred and Tard_WPred.hitChance >= Tard_TardMenu.A.P.PredHitChance:Value() / 100 and Tard_WPred.castPos 
                                         else Wpos = GetPred(unit, 1600, 0.54 + TardLatency()*.001) 
                                         end
-                                        if Wpos and Tard_GetDistanceSqr(Wpos) < 1102500 then
-                                            Tard_CastSpell(HK_W, Wpos, 540)
+                                        if Wpos and Wpos:DistanceTo() < 1050 then
+                                            Tard_CastSpell(HK_W, Wpos)
                                         end
                                     end
 
@@ -833,22 +809,22 @@ local Tard_CastR                    = function(unit)
                                         local Rpos
                                         if TardPred == 1 then 
                                             local hitChance, Tard_RPred = GetHitchance(Tard_myHero.pos, unit, 20000, 1.76, 2000, 160, false)
-                                            Rpos = hitChance and hitChance >= Tard_TardMenu.P.AccuracyR:Value() 
+                                            Rpos = hitChance and hitChance >= Tard_TardMenu.A.P.AccuracyR:Value() 
                                                 local NormalizedPos = Tard_myHero.pos + (Tard_RPred - Tard_myHero.pos):Normalized() * 500
-                                                Tard_CastSpell(HK_R, NormalizedPos, 1760)
-                                        elseif TardPred == 2 then
+                                                Tard_CastSpell(HK_R, NormalizedPos, 1000)
+                                            elseif TardPred == 2 then
                                             local Tard_RPred = Tard_SpellstoPred[3]:GetPrediction(unit, Tard_myHero.pos)
-                                            Rpos = Tard_RPred and (Tard_RPred.hitChance >= Tard_TardMenu.P.PredHitChance:Value() / 100) and Tard_RPred.castPos 
+                                            Rpos = Tard_RPred and (Tard_RPred.hitChance >= Tard_TardMenu.A.P.PredHitChance:Value() / 100) and Tard_RPred.castPos 
                                                 local NormalizedPos = Tard_myHero.pos + (Tard_RPred.castPos - Tard_myHero.pos):Normalized() * 500
-                                                Tard_CastSpell(HK_R, NormalizedPos, 1760)
-                                        else Rpos = GetPred(unit, 2000, 1.76 + TardLatency()*.001)
+                                                Tard_CastSpell(HK_R, NormalizedPos, 1000)
+                                            else Rpos = GetPred(unit, 2000, 1.76 + TardLatency()*.001)
                                             local NormalizedPos = Rpos and Tard_myHero.pos + (Rpos - Tard_myHero.pos):Normalized()*500
-                                            Tard_CastSpell(HK_R, NormalizedPos, 1760)
+                                            Tard_CastSpell(HK_R, NormalizedPos, 1000)
                                         end
                                     end
 
 local Tard_AutoQ                    = function(Mode)
-                                        local TardMenu = Tard_TardMenu.Misc.autoQ
+                                        local TardMenu = Tard_TardMenu.A.autoQ
                                         local TardQ = TardMenu.ON:Value() and ((TardMenu.disable:Value() == 1 and Mode ~= "Combo") or (TardMenu.disable:Value() == 2 and Mode == ""))  
                                         TardQ = TardQ and TardIsRSpell(0) == 0 and (Tard_PercentMP(Tard_myHero) >= TardMenu.Qmana:Value()) and (Tard_PercentHP(Tard_myHero) >= TardMenu.health:Value())
                                         TardQ = TardQ and myHero.attackDataState ~= 2
@@ -866,7 +842,7 @@ local Tard_AutoQ                    = function(Mode)
                                     end                                  
 
 local Tard_RonKey                   = function()
-                                        if Tard_TardMenu.Misc.Rkey:Value() and TardIsRSpell(3) == 0 and Tard_SelectedTarget ~= nil then
+                                        if Tard_TardMenu.A.Rkey:Value() and TardIsRSpell(3) == 0 and Tard_SelectedTarget ~= nil then
                                             local Tard_Rtarget = Tard_SelectedTarget
                                             if Tard_Rtarget then
                                                 Tard_CastR(Tard_Rtarget)
@@ -875,7 +851,7 @@ local Tard_RonKey                   = function()
                                     end
 
 local Tard_KillSteal                = function()
-                                        local DebugMenu = Tard_TardMenu.KS.debug:Value()
+                                        local DebugMenu = Tard_TardMenu.A.KS.debug:Value()
                                         if Tard_myHero.attackData.state == 2 or Tard_myHero.activeSpell.valid then
                                             return
                                         end
@@ -883,13 +859,13 @@ local Tard_KillSteal                = function()
                                             local Tard_Hero = TardHero(i)
                                             if Tard_IsValidTarget(Tard_Hero) then
                                                 local Tard_Q_DMG, Tard_W_DMG, Tard_R_DMG
-                                                if Tard_TardMenu.KS.Q_KS:Value() and TardIsRSpell(0) == 0 and Tard_GetDistanceSqr(Tard_Hero.pos) <= Tard_EzrealSpells[0].range * Tard_EzrealSpells[0].range then
+                                                if Tard_TardMenu.A.KS.Q_KS:Value() and TardIsRSpell(0) == 0 and Tard_Hero.distance < Tard_EzrealSpells[0].range  then
                                                     Tard_Q_DMG = Tard_EzrealSpells[0].dmg(Tard_Hero)
                                                 end
-                                                if Tard_TardMenu.KS.W_KS:Value() and TardIsRSpell(1) == 0 and Tard_GetDistanceSqr(Tard_Hero.pos) <= Tard_EzrealSpells[1].range * Tard_EzrealSpells[1].range then
+                                                if Tard_TardMenu.A.KS.W_KS:Value() and TardIsRSpell(1) == 0 and Tard_Hero.distance < Tard_EzrealSpells[1].range then
                                                     Tard_W_DMG = Tard_EzrealSpells[1].dmg(Tard_Hero)
                                                 end
-                                                if Tard_TardMenu.KS.R_KS:Value() and TardIsRSpell(3) == 0 and Tard_GetDistanceSqr(Tard_Hero.pos) <= Tard_TardMenu.KS.R_Ksrange:Value() * Tard_TardMenu.KS.R_Ksrange:Value() then
+                                                if Tard_TardMenu.A.KS.R_KS:Value() and TardIsRSpell(3) == 0 and Tard_Hero.distance < Tard_TardMenu.A.KS.R_Ksrange:Value() then
                                                     Tard_R_DMG = Tard_EzrealSpells[3].dmg(Tard_Hero)
                                                 end
                                                 if Tard_W_DMG ~= nil and Tard_W_DMG > Tard_Hero.health + Tard_Hero.shieldAP then
@@ -916,10 +892,10 @@ local Tard_KillSteal                = function()
                                                 if Tard_R_DMG and Tard_R_DMG > Tard_Hero.health + Tard_Hero.shieldAP then
                                                     if DebugMenu then print("KS R"); print(Tard_R_DMG) end
                                                     local Tard_AArange = Tard_myHero.range + Tard_myHero.boundingRadius + Tard_Hero.boundingRadius
-                                                    local Dist = Tard_GetDistanceSqr(Tard_Hero.pos)
+                                                    local Dist = Tard_Hero.distance
                                                     if
-                                                        Dist > Tard_AArange * Tard_AArange and
-                                                            Tard_HP_PRED(Tard_Hero, Dist/4000000) > 0
+                                                        Dist > Tard_AArange and
+                                                            Tard_HP_PRED(Tard_Hero, Dist/2000) > 0
                                                     then
                                                         Tard_CastR(Tard_Hero)
                                                         Tard_CurrentTarget = Tard_Hero
@@ -931,7 +907,7 @@ local Tard_KillSteal                = function()
 
 local Tard_Combo                    = function()
                                         local Tard_target
-                                        if Tard_SelectedTarget ~= nil and Tard_GetDistanceSqr(Tard_SelectedTarget.pos) > 6250000 then --2500*2500
+                                        if Tard_SelectedTarget ~= nil and Tard_SelectedTarget.distance > 2500 then 
                                             Tard_SelectedTarget = nil
                                         end
                                         if Tard_SelectedTarget == nil or not Tard_IsValidTarget(Tard_SelectedTarget, 1200) then
@@ -939,18 +915,19 @@ local Tard_Combo                    = function()
                                         else
                                             Tard_target = Tard_SelectedTarget
                                         end
-                                        if Tard_target == nil or Tard_myHero.attackData.state == 2 or IsEvading() then
+                                        local AA_State = Tard_myHero.attackData.state
+                                        if Tard_target == nil or (AA_State == 2 and Tard_myHero.activeSpell.windup > 0) or AA_State == 2 or IsEvading() then
                                             return
                                         end
                                         if GotSheen() and Tard_target.distance <= 700  then return end
-                                        if Tard_TardMenu.Combo.ComboQ:Value() and
-                                                Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.Combo.ComboQmana:Value() and
+                                        if Tard_TardMenu.B.Combo.ComboQ:Value() and
+                                                Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.B.Combo.ComboQmana:Value() and
                                                 TardIsRSpell(_Q) == 0 and Tard_IsValidTarget(Tard_target, 1200) then
                                             Tard_CastQ(Tard_target)
                                             Tard_CurrentTarget = Tard_target
                                         end
-                                        if Tard_TardMenu.Combo.ComboW:Value() and
-                                                Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.Combo.ComboWmana:Value() and
+                                        if Tard_TardMenu.B.Combo.ComboW:Value() and
+                                                Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.B.Combo.ComboWmana:Value() and
                                                 TardIsRSpell(_W) == 0 and Tard_IsValidTarget(Tard_target, 1050) then
                                             Tard_CastW(Tard_target)
                                             Tard_CurrentTarget = Tard_target
@@ -959,7 +936,7 @@ local Tard_Combo                    = function()
 
 local Tard_Harass                   = function()
                                         local Tard_target
-                                        if Tard_SelectedTarget ~= nil and Tard_GetDistanceSqr(Tard_SelectedTarget.pos) > 6250000 then --2500*2500
+                                        if Tard_SelectedTarget ~= nil and Tard_SelectedTarget.distance > 2500 then 
                                             Tard_SelectedTarget = nil
                                         end
                                         if Tard_SelectedTarget == nil or not Tard_IsValidTarget(Tard_SelectedTarget, 1200) then
@@ -967,19 +944,20 @@ local Tard_Harass                   = function()
                                         else
                                             Tard_target = Tard_SelectedTarget
                                         end
-                                        if Tard_target == nil or Tard_myHero.attackData.state == 2 or IsEvading() then
+                                        local AA_State = Tard_myHero.attackData.state
+                                        if Tard_target == nil or (AA_State == 2 and Tard_myHero.activeSpell.windup > 0) or AA_State == 2 or IsEvading() then
                                             return
                                         end
-                                        if Tard_TardMenu.Harass.HarassQ:Value() and
-                                                Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.Harass.HarassQMana:Value() and
+                                        if Tard_TardMenu.B.Harass.HarassQ:Value() and
+                                                Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.B.Harass.HarassQMana:Value() and
                                                 TardIsRSpell(_Q) == 0 and Tard_IsValidTarget(Tard_target, 1200) then
                                             if Tard_myHero.activeSpell.valid ~= true then
                                                 Tard_CastQ(Tard_target)
                                                 Tard_CurrentTarget = Tard_target
                                             end
                                         end
-                                        if Tard_TardMenu.Harass.HarassW:Value() and
-                                                Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.Harass.HarassWMana:Value() and
+                                        if Tard_TardMenu.B.Harass.HarassW:Value() and
+                                                Tard_PercentMP(Tard_myHero) >= Tard_TardMenu.B.Harass.HarassWMana:Value() and
                                                 TardIsRSpell(_W) == 0 and Tard_IsValidTarget(Tard_target, 1050) then
                                             if Tard_myHero.activeSpell.valid ~= true then
                                                 Tard_CastW(Tard_target)
@@ -989,7 +967,7 @@ local Tard_Harass                   = function()
                                     end
 
 local Tard_Farm                     = function()
-                                        if not Tard_TardMenu.Farm.FarmQ:Value() or Tard_PercentMP(Tard_myHero) < Tard_TardMenu.Farm.FarmMana:Value() or TardIsRSpell(0) ~= 0 or IsEvading() then
+                                        if not Tard_TardMenu.B.Farm.FarmQ:Value() or Tard_PercentMP(Tard_myHero) < Tard_TardMenu.B.Farm.FarmMana:Value() or TardIsRSpell(0) ~= 0 or IsEvading() then
                                             return
                                         end
                                         local Tard_AArange = Tard_myHero.range + Tard_myHero.boundingRadius
@@ -999,7 +977,7 @@ local Tard_Farm                     = function()
                                         for i = 1, TardMinionCount() do
                                             local Tard_Minion = TardMinion(i)
                                             if Tard_IsValidTarget(Tard_Minion, 1200) and Tard_Minion.team ~= 300 then
-                                                local AAEnd = Tard_GetDistanceSqr(Tard_Minion.pos) / 4000000
+                                                local AAEnd = Tard_Minion.distance / 2000
                                                 local minionHP = AAEnd and Tard_HP_PRED(Tard_Minion, AAEnd) - Qdmg
                                                 local AAData = Tard_myHero.attackData
                                                 if (Tard_Minion.health <= Qdmg and Tard_Minion.health > Totdmg) or (AAData.state == 3 and Tard_Minion.health <= Qdmg and AAData.target ~= Tard_Minion.handle) or (Tard_Minion.distance > Tard_AArange + Tard_Minion.boundingRadius and Qdmg >= Tard_Minion.health) then
@@ -1011,8 +989,8 @@ local Tard_Farm                     = function()
                                     end
 
 local Tard_JungleClear              = function()
-                                        if not Tard_TardMenu.JungleClear.JungleQ:Value() or
-                                                Tard_PercentMP(Tard_myHero) < Tard_TardMenu.JungleClear.JungleMana:Value() or
+                                        if not Tard_TardMenu.B.JungleClear.JungleQ:Value() or
+                                                Tard_PercentMP(Tard_myHero) < Tard_TardMenu.B.JungleClear.JungleMana:Value() or
                                                 Tard_myHero.attackData.state == 2 or TardIsRSpell(_Q) ~= 0 or IsEvading()  then
                                             return
                                         end
@@ -1026,8 +1004,8 @@ local Tard_JungleClear              = function()
                                     end
 
 local Tard_LastHit                  = function()
-                                        if not Tard_TardMenu.LastHit.LastHitQ:Value() or
-                                                Tard_PercentMP(Tard_myHero) < Tard_TardMenu.LastHit.LastHitMana:Value() or Tard_AAstate == 2 or TardIsRSpell(_Q) ~= 0 or IsEvading() then
+                                        if not Tard_TardMenu.B.LastHit.LastHitQ:Value() or
+                                                Tard_PercentMP(Tard_myHero) < Tard_TardMenu.B.LastHit.LastHitMana:Value() or Tard_AAstate == 2 or TardIsRSpell(_Q) ~= 0 or IsEvading() then
                                             return
                                         end
                                         local Tard_AArange = Tard_myHero.range + Tard_myHero.boundingRadius
@@ -1040,7 +1018,7 @@ local Tard_LastHit                  = function()
                                             local Tard_AAstate = AAData.state
                                             --if Tard_AAtarget ~= Tard_Minion.handle and Tard_IsValidTarget(Tard_Minion, 1200) and Qdmg >= Tard_Minion.health then
                                             if Tard_IsValidTarget(Tard_Minion, 1200) and Qdmg >= Tard_Minion.health then
-                                                local AAEnd = Tard_GetDistanceSqr(Tard_Minion.pos) / 4000000
+                                                local AAEnd = Tard_Minion.distance / 2000
                                                 local minionHP = AAEnd and Tard_HP_PRED(Tard_Minion, AAData.endTime - TardGameTimer())
                                                 if (Tard_AAstate == 3 and minionHP <= Qdmg and Tard_AAtarget ~= Tard_Minion.handle) or Tard_Minion.distance > Tard_AArange + Tard_Minion.boundingRadius then
                                                         Tard_CastQ(Tard_Minion)
@@ -1050,14 +1028,8 @@ local Tard_LastHit                  = function()
                                         end
                                     end
 
-local CantUse                       = function()
-                                        if Tard_myHero.dead or TardIsChatOpen() or IsEvading() then
-                                            return
-                                        end
-                                    end
-
 local ModeTranslation               = function(Mode)
-                                        local KeepRMana = Tard_TardMenu.Misc.KeepRmana:Value() 
+                                        local KeepRMana = Tard_TardMenu.A.KeepRmana:Value() 
                                         if (KeepRMana and TardIsRSpell(3) == 0 and Tard_myHero.mana >= 140) or (TardIsRSpell(3) ~= 0 or not KeepRMana) then
                                             if Mode == "Combo" then
                                                 Tard_Combo()
@@ -1070,14 +1042,8 @@ local ModeTranslation               = function(Mode)
                                                 Tard_JungleClear()
                                             end
                                         end
-                                    end
-
-local UpdatePrediction              = function()
-                                        if TardPred == 1 then UpdateMovementHistory() 
-                                        elseif TardPred == 3 then OnVisionF() 
-                                        end
-                                    end
------------------------------------------------------</FONCTIONS>---------------------------------------------------
+                                    end                                    
+-----------------------------------------------------</FONCTIONS CORE>---------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------<CALLBACKS>---------------------------------------------------
@@ -1118,7 +1084,7 @@ LocalCallbackAdd                    ("Draw", function()
                                         end
                                         if Tard_DrawMenu.dautoQ:Value() then
                                             local Pos2D = myHero.pos:To2D()
-                                            if Tard_TardMenu.Misc.autoQ.ON:Value() then
+                                            if Tard_TardMenu.A.autoQ.ON:Value() then
                                                 Tard_DrawText("Auto Q ON", 20, Pos2D.x - 60, Pos2D.y + 30, Tard_DrawColor(255, 255, 255, 0))
                                             else Tard_DrawText("Auto Q OFF", 20, Pos2D.x - 60, Pos2D.y + 30, Tard_DrawColor(255, 220, 050, 000))
                                             end
@@ -1132,10 +1098,10 @@ LocalCallbackAdd                    ("Load", function()
                                         TardTotalEnemy = GetEnemyHeroes()
                                         for i = 1, TardTotalEnemy do
                                             local hero = _EnemyHeroes[i]
-                                            Tard_TardMenu.Misc.autoQ.CastOn:MenuElement({id = hero.charName, name = hero.charName, value = true})
+                                            Tard_TardMenu.A.autoQ.CastOn:MenuElement({id = hero.charName, name = hero.charName, value = true})
                                         end
-                                        TardPred = Tard_TardMenu.P.Pred:Value()
-                                        Tard_IsSelected = Tard_TardMenu.Misc.SelectedTarget:Value()
+                                        TardPred = Tard_TardMenu.A.P.Pred:Value()
+                                        Tard_IsSelected = Tard_TardMenu.A.SelectedTarget:Value()
                                         if TardPred == 1 then print("HPred loaded")
                                         elseif TardPred == 2 then 
                                             require "Eternal Prediction"
@@ -1169,6 +1135,9 @@ LocalCallbackAdd                    ("Load", function()
                                             TardgsoMode = TardgsoOrbwalker:UOL_GetMode()
                                             TardgsoObjects = TardgsoSDK.ObjectManager
                                             TardgsoHPPred = TardgsoFarm.MinionHealthPrediction
+                                            _G.gsoTicks.Utilities = false
+                                            _G.gsoTicks.Cursor = false
+                                            _G.gsoTicks.Noddy = false
                                         elseif Tard_Orb == 4 then print("gamsteronOrb Loaded by Gamsteron the Genius Dev")
                                             TardgsoOrbwalker            = __gsoOrbwalker()
                                             TardgsoGetTarget            = TardgsoOrbwalker.GetTarget
@@ -1207,7 +1176,7 @@ LocalCallbackAdd                    ("Load", function()
                                                     local Tard_Collision
                                                     if TardPred == 1 then
                                                         local hitChance, Tard_RPred = GetHitchance(Tard_myHero.pos, unit, 20000, 1.76, 2000, 160, false)
-                                                        if hitChance and hitChance >= Tard_TardMenu.P.AccuracyR:Value() and Tard_RPred then
+                                                        if hitChance and hitChance >= Tard_TardMenu.A.P.AccuracyR:Value() and Tard_RPred then
                                                             Tard_Collision = mCollision(unit, 3, Tard_myHero.pos, Tard_RPred) + hCollision(unit, 3, Tard_myHero.pos, Tard_RPred)
                                                         end
                                                     elseif TardPred == 2 then
@@ -1247,4 +1216,111 @@ LocalCallbackAdd                    ("WndMsg", function(msg, wParam)
                                         end
                                     end
                                     )
-                                    
+-----------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------<MENU>---------------------------------------------------
+local Tard_Icon                     = { ["Sheen"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/Sheen.png",
+                                        ["Draw"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/draw.png",
+                                        ["Color"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/color.png",
+                                        ["Width"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/width.png",
+                                        ["ON"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/ON.png",
+                                        ["PredHitChance"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/hitchance.png",
+                                        ["Pred"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/prediction.png",
+                                        ["SelectedTarget"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/selected.png",
+                                        ["Key"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/key.png",
+                                        ["disable"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/disable.png",
+                                        ["Health"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/Health.png",
+                                        ["Mana"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/Mana.png",
+                                        ["range"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/range.png",
+                                        ["EzrealR"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/EzrealR.png",
+                                        ["EzrealE"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/EzrealE.png",
+                                        ["EzrealW"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/EzrealW.png",
+                                        ["EzrealQ"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/EzrealQ.png",
+                                        ["Debug"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/Debug.png",
+                                        ["KS"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/KS.png",
+                                        ["basic"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/basic.png",
+                                        ["advanced"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/advanced.png",
+                                        ["JungleAD"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/JungleAD.png",
+                                        ["ClearAD"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/ClearAD.png",
+                                        ["LastHitAD"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/LastHitAD.png",
+                                        ["HarassAD"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/HarassAD.png",
+                                        ["ComboAD"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/ComboAD.png",
+                                        ["info"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/info.png",
+                                        ["yaddle"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/yaddle.png"
+                                    }
+
+Tard_Menu                           = function()
+    Tard_TardMenu:MenuElement({type = MENU, id = "B", name = "Basic Settings", leftIcon = Tard_Icon.basic})
+        Tard_TardMenu.B:MenuElement({type = MENU, id = "Combo", name = "Combo", leftIcon = Tard_Icon.ComboAD})
+            Tard_TardMenu.B.Combo:MenuElement({id = "sheen", name = "Don't cast if under Sheen/Tri/lich buff", value = false, leftIcon = Tard_Icon.Sheen, tooltip = "Don't cast spell if you have Sheen buff"})
+            Tard_TardMenu.B.Combo:MenuElement({id = "ComboQ", name = "Use Q", value = true, leftIcon = Tard_Icon.EzrealQ})
+            Tard_TardMenu.B.Combo:MenuElement({id = "ComboW", name = "Use W", value = true, leftIcon = Tard_Icon.EzrealW})
+            Tard_TardMenu.B.Combo:MenuElement({id = "ComboQmana", name = "Min. Mana to Q", value = 0, min = 0, max = 100, tooltip = "It's %", leftIcon = Tard_Icon.Mana})
+            Tard_TardMenu.B.Combo:MenuElement({id = "ComboWmana", name = "Min. Mana to W", value = 75, min = 0, max = 100, tooltip = "It's %", leftIcon = Tard_Icon.Mana})
+        Tard_TardMenu.B:MenuElement({type = MENU, id = "Harass", name = "Harass", leftIcon = Tard_Icon.HarassAD})
+            Tard_TardMenu.B.Harass:MenuElement({id = "HarassQ", name = "Use Q", value = true, leftIcon = Tard_Icon.EzrealQ})
+            Tard_TardMenu.B.Harass:MenuElement({id = "HarassW", name = "Use W", value = true, leftIcon = Tard_Icon.EzrealW})
+            Tard_TardMenu.B.Harass:MenuElement({id = "HarassQMana", name = "Min. Mana to Q", value = 40, min = 0, max = 100, tooltip = "It's %", leftIcon = Tard_Icon.Mana})
+            Tard_TardMenu.B.Harass:MenuElement({id = "HarassWMana", name = "Min. Mana to W", value = 75, min = 0, max = 100, tooltip = "It's %", leftIcon = Tard_Icon.Mana})
+        Tard_TardMenu.B:MenuElement({type = MENU, id = "LastHit", name = "LastHit", leftIcon = Tard_Icon.LastHitAD})
+            Tard_TardMenu.B.LastHit:MenuElement({id = "LastHitQ", name = "Use Q", value = true, leftIcon = Tard_Icon.EzrealQ})
+            Tard_TardMenu.B.LastHit:MenuElement({id = "LastHitMana", name = "Min Mana To Lasthit", value = 40, min = 0, max = 100, tooltip = "It's %", leftIcon = Tard_Icon.Mana})
+        Tard_TardMenu.B:MenuElement({type = MENU, id = "Farm", name = "Clear", leftIcon = Tard_Icon.ClearAD})
+            Tard_TardMenu.B.Farm:MenuElement({id = "FarmQ", name = "Use Q", value = true, leftIcon = Tard_Icon.EzrealQ})
+            Tard_TardMenu.B.Farm:MenuElement({id = "FarmMana", name = "Min. Mana", value = 70, min = 0, max = 100, tooltip = "It's %", leftIcon = Tard_Icon.Mana})
+        Tard_TardMenu.B:MenuElement({type = MENU, id = "JungleClear", name = "JungleClear", leftIcon = Tard_Icon.JungleAD})
+            Tard_TardMenu.B.JungleClear:MenuElement({id = "JungleQ", name = "Use Q", value = true, leftIcon = Tard_Icon.EzrealQ})
+            Tard_TardMenu.B.JungleClear:MenuElement({id = "JungleMana", name = "Min Mana To JungleClear", value = 60,min = 0, max = 100, step = 1, tooltip = "It's %", leftIcon = Tard_Icon.Mana})
+    Tard_TardMenu:MenuElement({type = MENU, id = "A", name = "Advanced Settings", leftIcon = Tard_Icon.advanced})
+        Tard_TardMenu.A:MenuElement({type = MENU, id = "autoQ", name = "Auto Q", leftIcon = Tard_Icon.EzrealQ})
+            Tard_TardMenu.A.autoQ:MenuElement({id = "ON", name = "Enable Auto cast Q", key = string.byte("M"), toggle = true, leftIcon = Tard_Icon.ON})
+            Tard_TardMenu.A.autoQ:MenuElement({id = "OutR", name = "Try to Cast only if out of attack range", value = false, leftIcon = Tard_Icon.range})
+            Tard_TardMenu.A.autoQ:MenuElement({id = "Qmana", name = "Min. Mana to Auto Q", value = 60, min = 0, max = 100, tooltip = "It's %", leftIcon = Tard_Icon.Mana})
+            Tard_TardMenu.A.autoQ:MenuElement({id = "health", name = "Min. Health to Auto Q", value = 40, min = 0, max = 100, tooltip = "It's %", leftIcon = Tard_Icon.Health})
+            Tard_TardMenu.A.autoQ:MenuElement({id = "disable", name = "Disable Auto Q : ",  value = 1, drop = {"Disable on Combo", "Disable in all mode"}, leftIcon = Tard_Icon.disable})
+            Tard_TardMenu.A.autoQ:MenuElement({type = MENU, id = "CastOn", name = "Auto Cast Q on :"})
+        Tard_TardMenu.A:MenuElement({type = MENU, id = "KS", name = "KillSteal", leftIcon = Tard_Icon.KS})
+            Tard_TardMenu.A.KS:MenuElement({id = "debug", name = "print debug KS", value = false, tooltip = "message when script try to ks, with total dmg to target", leftIcon = Tard_Icon.Debug})
+            Tard_TardMenu.A.KS:MenuElement({id = "Q_KS", name = "Use Q to try to KillSteal", value = true, leftIcon = Tard_Icon.EzrealQ})
+            Tard_TardMenu.A.KS:MenuElement({id = "W_KS", name = "Use W to try to KillSteal", value = true, leftIcon = Tard_Icon.EzrealW})
+            Tard_TardMenu.A.KS:MenuElement({id = "R_KS", name = "Use R to try to KillSteal", value = true, tooltip = "only if target is out of AA range", leftIcon = Tard_Icon.EzrealR})
+            Tard_TardMenu.A.KS:MenuElement({id = "R_Ksrange", name = "R Max Range", value = 7000, min = 300, max = 20000, step = 100, tooltip = "It's %", leftIcon = Tard_Icon.range})
+        Tard_TardMenu.A:MenuElement({type = MENU, id = "P", name = "Prediction", leftIcon = Tard_Icon.Pred})
+            Tard_TardMenu.A.P:MenuElement({id = "Pred", name = "Which Prediction (Need Reload)",  value = 1, drop= {"HPred", "Eternal Pred", "Noddy's Pred"}})
+            if Tard_TardMenu.A.P.Pred:Value() == 1 then
+                Tard_TardMenu.A.P:MenuElement({id = "AccuracyQ", name = "HPred Accuracy Q", value = 2, min = 1, max = 5, step = 1, leftIcon = Tard_Icon.EzrealQ})
+                Tard_TardMenu.A.P:MenuElement({id = "AccuracyW", name = "HPred Accuracy W", value = 2, min = 1, max = 5, step = 1, leftIcon = Tard_Icon.EzrealW})
+                Tard_TardMenu.A.P:MenuElement({id = "AccuracyR", name = "HPred Accuracy R", value = 2, min = 1, max = 5, step = 1, leftIcon = Tard_Icon.EzrealR})
+                Tard_TardMenu.A.P:MenuElement({type = SPACE, id = "info",  name = "Recommended value is 2, perfect is 3", leftIcon = Tard_Icon.info})
+            elseif Tard_TardMenu.A.P.Pred:Value() == 2 then
+                Tard_TardMenu.A.P:MenuElement({id = "PredHitChance", name = "Eternal Pred HitChance (default 25)", value = 25, min = 0, max = 100, tooltip = "higher value better pred but slower||don't change it if don't know what is it||", leftIcon = Tard_Icon.PredHitChance})    
+                Tard_TardMenu.A.P:MenuElement({type = SPACE, id = "info",  name = "Higher value better pred but slower", leftIcon = Tard_Icon.info})
+            end
+        Tard_TardMenu.A:MenuElement({id = "Rkey", name = "Ulti Champ targeted on key", key = string.byte("T"), tooltip = "the target needs to be targeted by spell focus first, mouse clic on it, a blue circle shoulds be on the target", leftIcon = Tard_Icon.Key})
+        Tard_TardMenu.A:MenuElement({id = "KeepRmana", name = "Keep mana for R", value = false, tooltip = "KillSteal never keep mana", leftIcon = Tard_Icon.Mana})
+        Tard_TardMenu.A:MenuElement({id = "SelectedTarget", name = "Focus on Selected Target - need reload", value = true, tooltip = "Focus Spell on selected target (need reload)", leftIcon = Tard_Icon.SelectedTarget})
+    Tard_TardMenu:MenuElement({type = MENU, id = "Draw", name = "Drawing Settings", leftIcon = Tard_Icon.Draw, leftIcon = Tard_Icon.Draw})
+        Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawQ", name = "Draw Q", leftIcon = Tard_Icon.EzrealQ})
+            Tard_TardMenu.Draw.DrawQ:MenuElement({id = "ON", name = "Draw Q range", value = true, leftIcon = Tard_Icon.range})
+            Tard_TardMenu.Draw.DrawQ:MenuElement({id = "Width", name = "Width", value = 1, min = 1, max = 5, step = 1, leftIcon = Tard_Icon.Width})
+            Tard_TardMenu.Draw.DrawQ:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 0, 0, 255), leftIcon = Tard_Icon.Color})
+        Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawW", name = "Draw W", leftIcon = Tard_Icon.EzrealW})
+            Tard_TardMenu.Draw.DrawW:MenuElement({id = "ON", name = "Draw W range", value = false, leftIcon = Tard_Icon.range})
+            Tard_TardMenu.Draw.DrawW:MenuElement({id = "Width", name = "Width", value = 1, min = 1, max = 5, step = 1, leftIcon = Tard_Icon.Width})
+            Tard_TardMenu.Draw.DrawW:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 255, 255, 255), leftIcon = Tard_Icon.Color})
+        Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawE", name = "Draw E", leftIcon = Tard_Icon.EzrealE})
+            Tard_TardMenu.Draw.DrawE:MenuElement({id = "ON", name = "Draw E range", value = false, leftIcon = Tard_Icon.range})
+            Tard_TardMenu.Draw.DrawE:MenuElement({id = "Width", name = "Width", value = 1, min = 1, max = 5, step = 1, leftIcon = Tard_Icon.Width})
+            Tard_TardMenu.Draw.DrawE:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 255, 255, 255), leftIcon = Tard_Icon.Color})
+        Tard_TardMenu.Draw:MenuElement({type = MENU, id = "DrawT", name = "Draw Selected Spell Target", leftIcon = Tard_Icon.SelectedTarget})
+            Tard_TardMenu.Draw.DrawT:MenuElement({id = "ON", name = "Draw circle under Selected Target", value = true, leftIcon = Tard_Icon.ON})
+            Tard_TardMenu.Draw.DrawT:MenuElement({id = "Width", name = "Width", value = 3, min = 1, max = 5, step = 1, leftIcon = Tard_Icon.Width})
+            Tard_TardMenu.Draw.DrawT:MenuElement({id = "Color", name = "Color", color = Tard_DrawColor(255, 0, 0, 255), leftIcon = Tard_Icon.Color})
+        Tard_TardMenu.Draw:MenuElement({id = "dautoQ", name = "Draw Auto Q status under your Champ", value = true, leftIcon = Tard_Icon.ON})
+        Tard_TardMenu.Draw:MenuElement({id = "DrawReady", name = "Draw Only Ready Spells", value = true, tooltip = "Only draws spells when they're ready", leftIcon = Tard_Icon.ON})
+        Tard_TardMenu.Draw:MenuElement({id = "DisableDraw", name = "Disable all Draws", value = false, leftIcon = Tard_Icon.ON})
+    Tard_TardMenu:MenuElement({name = "         ", drop = {"Tard_Version : "..Tard_version}, leftIcon = Tard_Icon.info})
+    Tard_TardMenu:MenuElement({type = SPACE, name = "                     by Yaddle", leftIcon = Tard_Icon.yaddle, icon = Tard_Icon.yaddle})
+
+end
+-----------------------------------------------------</MENU>---------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------
