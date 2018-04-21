@@ -1,4 +1,4 @@
-local Tard_Icon = {["Quinn"] = "https://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Behind_Enemy_Lines.png"}
+local Tard_Icon = {["Quinn"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/Behind_Enemy_Lines.png"}
 local myHero, TardTotalHero = _G.myHero, Game.HeroCount()
 class "Need"
 function Need:__init()
