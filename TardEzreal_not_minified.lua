@@ -37,7 +37,7 @@ if myHero.charName ~= "Ezreal" then return end
 -----------------------------------------------------</VARIABLES>---------------------------------------------------
 local Tard_Menu, TardTotalEnemy, TardgsoSDK, TardgsoTS, Tard_IsSelected, TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardgsoOrbwalker, TardgsoGetTarget, TardgsoMode, TardgsoObjects, TardgsoState, _EnemyHeroes
 local Tard_myHero                   = _G.myHero
-local Tard_version                  = 2.7
+local Tard_version                  = "2.7.1"
 local Tard_SelectedTarget           = nil
 local LocalCallbackAdd              = Callback.Add
 local Tard_DrawCircle               = Draw.Circle
@@ -738,8 +738,8 @@ local UpdatePrediction              = function()
                                                 UpdateMovementHistory()
                                             end
                                         elseif TardPred == 3 then 
-                                            if TardTickCount() - noddyTick > 100 then
-                                                for i=1, TotalEnemy do
+                                            if TardTickCount() - visionTick > 100 then
+                                                for i=1, TardTotalEnemy do
                                                     OnVision(_EnemyHeroes[i])
                                                     OnWaypoint(_EnemyHeroes[i])
                                                 end
@@ -1096,7 +1096,7 @@ LocalCallbackAdd                    ("Draw", function()
 
 LocalCallbackAdd                    ("Load", function()
                                         Tard_Menu()
-                                        print("Hello ", Tard_myHero.name, ", TardEzreal v", Tard_version, " is ready to feed")
+                                        print("Hello" .. Tard_myHero.name .. ", TardEzreal v" .. Tard_version .. " is ready to feed.")
                                         TardTotalEnemy = GetEnemyHeroes()
                                         for i = 1, TardTotalEnemy do
                                             local hero = _EnemyHeroes[i]
