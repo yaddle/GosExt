@@ -1,8 +1,8 @@
-local Tard_Icon = {["Quinn"] = "http://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Menu_Icons/Behind_Enemy_Lines.png"}
+local Tard_Icon = {["Quinn"] = "https://raw.githubusercontent.com/yaddle/GosExt/master/Icons/Behind_Enemy_Lines.png"}
 local myHero, TardTotalHero = _G.myHero, Game.HeroCount()
 class "Need"
 function Need:__init()
-  self.Tard_version = 1.4
+  self.Tard_version = 1.5
   print("Hello ", myHero.name, ", TardQuinn v", self.Tard_version, " is ready to feed")
 
   self.DamageReductionTable = {
@@ -84,6 +84,7 @@ function Need:__init()
     self.TardgsoOrbwalker = __gsoOrbwalker()
     self.TardgsoSDK = _G.gsoSDK
     self.TardgsoTS = __gsoTS()
+    self.TardgsoMode = self.TardgsoOrbwalker.UOL_GetMode
     self.TardgsoObjects = self.TardgsoSDK.ObjectManager
   elseif _G.__gsoOrbwalker then
     self.Tard_Orb = 4
@@ -165,6 +166,8 @@ function Need:Tard_GetMode()
     elseif self.Tard_SDK.Modes[self.Tard_SDKFlee] then
       return "Flee"
     end
+  elseif Tard_Orb == 3 then
+    return self.TardgsoMode()
   elseif Orb == 4 then
     if self.TardgsoMode.isCombo() then
       return "Combo"
