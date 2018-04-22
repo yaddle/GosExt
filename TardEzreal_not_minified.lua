@@ -37,7 +37,7 @@ if myHero.charName ~= "Ezreal" then return end
 -----------------------------------------------------</VARIABLES>---------------------------------------------------
 local Tard_Menu, TardTotalEnemy, TardgsoSDK, TardgsoTS, Tard_IsSelected, TardPred, Tard_SpellstoPred, Tard_SDK,Tard_SDKCombo,Tard_SDKHarass,Tard_SDKJungleClear,Tard_SDKLaneClear,Tard_SDKLastHit,Tard_SDKFlee,Tard_SDKSelector,Tard_SDKHealthPrediction, Tard_SDKDamagePhysical,Tard_SDKDamageMagical,Tard_CurrentTarget,Tard_SpellstoPred,Tard_Mode,TardgsoOrbwalker, TardgsoGetTarget, TardgsoMode, TardgsoObjects, TardgsoState, _EnemyHeroes
 local Tard_myHero                   = _G.myHero
-local Tard_version                  = 2.6
+local Tard_version                  = 2.7
 local Tard_SelectedTarget           = nil
 local LocalCallbackAdd              = Callback.Add
 local Tard_DrawCircle               = Draw.Circle
@@ -206,7 +206,9 @@ local Tard_GetMode                  = function()
                                             elseif TardSDKModes[Tard_SDKFlee] then
                                                 return "Flee"
                                             end
-                                        elseif Orb == 4 then
+                                        elseif Tard_Orb == 3 then
+                                            return TardgsoMode()
+                                        elseif Tard_Orb == 4 then
                                             if TardgsoMode.isCombo() then
                                                 return "Combo"
                                             elseif TardgsoMode.isHarass() then
@@ -731,11 +733,11 @@ local GetHitchance                  = function(source, target, range, delay, spe
 -----------------------------------------------------<FONCTIONS CORE---------------------------------------------------
 local UpdatePrediction              = function()
                                         if TardPred == 1 then
-                                            if LocalTickCount() - hpredTick > 100 then
+                                            if TardTickCount() - hpredTick > 100 then
                                                 UpdateMovementHistory()
                                             end
                                         elseif TardPred == 3 then 
-                                            if LocalTickCount() - noddyTick > 100 then
+                                            if TardTickCount() - noddyTick > 100 then
                                                 for i=1, TotalEnemy do
                                                     OnVision(_EnemyHeroes[i])
                                                     OnWaypoint(_EnemyHeroes[i])
@@ -1047,7 +1049,6 @@ local ModeTranslation               = function(Mode)
 --------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------<CALLBACKS>---------------------------------------------------
-
 LocalCallbackAdd                    ("Tick", function()
                                         CantUse()
                                         Tard_Mode = Tard_GetMode()
@@ -1128,16 +1129,13 @@ LocalCallbackAdd                    ("Load", function()
                                             Tard_SDKDamagePhysical      = SDK.DAMAGE_TYPE_PHYSICAL
                                             Tard_SDKDamageMagical       = SDK.DAMAGE_TYPE_MAGICAL
                                         elseif Tard_Orb == 3 then print("gamsteronOrb v2 Loaded by Gamsteron, The return of the Genius Dev")
+                                            _G.gsoTicks = { HPred = false, All = false, ObjectManager = false, Utilities = false, Cursor = false,  Farm = false, Noddy = false }
                                             TardgsoOrbwalker = __gsoOrbwalker()
                                             TardgsoSDK = _G.gsoSDK
                                             TardgsoTS = __gsoTS()
                                             TardgsoFarm = __gsoFarm()
-                                            TardgsoMode = TardgsoOrbwalker:UOL_GetMode()
+                                            TardgsoMode = TardgsoOrbwalker.UOL_GetMode
                                             TardgsoObjects = TardgsoSDK.ObjectManager
-                                            TardgsoHPPred = TardgsoFarm.MinionHealthPrediction
-                                            _G.gsoTicks.Utilities = false
-                                            _G.gsoTicks.Cursor = false
-                                            _G.gsoTicks.Noddy = false
                                         elseif Tard_Orb == 4 then print("gamsteronOrb Loaded by Gamsteron the Genius Dev")
                                             TardgsoOrbwalker            = __gsoOrbwalker()
                                             TardgsoGetTarget            = TardgsoOrbwalker.GetTarget
