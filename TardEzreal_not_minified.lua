@@ -78,6 +78,7 @@ local TEAM_ALLY                     = Tard_myHero.team
 local TEAM_JUNGLE                   = 300
 local TEAM_ENEMY                    = 300 - TEAM_ALLY
 local visionTick                    = TardTickCount()
+local hpredTick                     = TardTickCount()
 local _OnVision, _OnWaypoint        = {}, {}
 local _movementHistory              = {}
 local castSpell                     = {state = 0, tick = TardTickCount(), casting = TardTickCount() - 1000, mouse = mousePos}
